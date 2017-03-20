@@ -34,7 +34,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'bootstrap-sass'
-gem 'will-paginate'
+gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 
 group :development, :test do
