@@ -1,0 +1,7 @@
+@mixin default-links {
+    text-decoration: none;
+    color: #F82;
+    &:hover {
+    text-decoration: underline;
+  }
+}
