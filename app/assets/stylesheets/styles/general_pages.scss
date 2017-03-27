@@ -9,3 +9,24 @@ div.jumbotron {
   margin-bottom: 0;
   color: white;
 }
+
+.login-box {
+  width: 400px;
+  height: 200px;
+  margin: auto;
+  position: relative;
+  top: 200px;
+  background-color: #7F7F7F;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  div {
+    .btn {
+      margin-bottom: 15px;
+    }
+    p {
+      margin-bottom: 5px;
+    }
+  }
+}

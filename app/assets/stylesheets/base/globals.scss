@@ -3,15 +3,15 @@
 
 /* universal */
 
-body, td, input, select, textarea, button, footer,
-header, html {
+html, body, td, input, select, textarea, button, footer,
+header, {
   font-size: 13px;
   color: white;
-  background-color: black;
 }
 
 body {
   padding: 45px 0 0 0;
+  background-image: url('/assets/Amarr Fleet wallpaper.jpg');
 }
 
 section {
