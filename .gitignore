@@ -24,4 +24,4 @@
 /config/secrets.yml
 
 # Ignore .idea/
-.idea/workspace.xml
+/.idea
