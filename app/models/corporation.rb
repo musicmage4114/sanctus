@@ -2,6 +2,7 @@ class Corporation < ApplicationRecord
   belongs_to :alliance
   has_many :characters
   
-  validates :name, presence: true
+  validates :name, presence: true,
+                   uniqueness: true
   
 end
