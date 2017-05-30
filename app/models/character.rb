@@ -19,6 +19,7 @@ class Character < ApplicationRecord
   # CalendarApi
   
   has_many :hosted_events, class_name: 'Event', foreign_key: :owner_id, inverse_of: :character
+  has_many :event_responses, inverse_of: :character
   
   # CharacterApi
   belongs_to :alliance, inverse_of: :characters, optional: true
@@ -60,8 +61,8 @@ class Character < ApplicationRecord
   has_many :contacts, inverse_of: :character
   has_many :contact_labels, inverse_of: :character
   has_many :character_contacts, through: :contacts, source: :contact_entity, source_type: 'Character'
-  has_many :corporation_contacts, through: :contacts, source: :contact_entity, :source_type: 'Corporation'
-  has_many :alliance_contacts, through: :contacts, source: :contact_entity, :source_type: 'Alliance'
+  has_many :corporation_contacts, through: :contacts, source: :contact_entity, source_type: 'Corporation'
+  has_many :alliance_contacts, through: :contacts, source: :contact_entity, source_type: 'Alliance'
   
   # CorporationApi
   has_many :roles
@@ -84,7 +85,7 @@ class Character < ApplicationRecord
   has_many :victim_stats, through: :attackers, source: :killmail
   has_many :victims, foreign_key: :attacker_id, inverse_of: :character
   has_many :attackers, foreign_key: :victim_id, inverse_of: :character
-  # has_many :killmails - all killmails involving that player
+  # TODO: has_many :killmails - all killmails involving that player
   
   # LocationApi
   has_one :current_ship, through: :current_ships, source: :ship_type_id
@@ -101,31 +102,23 @@ class Character < ApplicationRecord
   has_many :evemail_deliveries, foreign_key: :recipient_id, inverse_of: :character
   has_many :mail_labels, inverse_of: :character
   has_many :mailing_lists, inverse_of: :character
-  # has_many :unread_mail
-  # has_many/scope :evemails - returns all evemail
+  # TODO: has_many :unread_mail
+  # TODO: has_many/scope :evemails - returns all evemail
   
   alias_attribute :sent_mail, :sent_evemails
   alias_attribute :received_evemails, :evemail_deliveries
   
   # MarketApi
   has_many :market_orders, as: :order_placement
-  # has_many :buy_orders
-  # has_many :sell_orders
+  # TODO: has_many :buy_orders
+  # TODO: has_many :sell_orders
   
   # OpportunitiesApi
   has_many :completed_opportunities, inverse_of: :character
-  # has_many :remaining_opportunities
+  # TODO: has_many :remaining_opportunities
   
   # PlanetaryInteractionApi
   has_many :colonies, foreign_key: :owner_id, inverse_of: :character
-  has_many :colony_extractors, foreign_key: :owner_id, inverse_of: :character
-  has_many :colony_extractor_heads, foreign_key: :owner_id, inverse_of: :character
-  has_many :colony_factories, foreign_key: :owner_id, inverse_of: :character
-  has_many :schematics, through: :colony_factories, source: :schematic
-  has_many :colony_links, foreign_key: :owner_id, inverse_of: :character
-  has_many :colony_pins, foreign_key: :owner_id, inverse_of: :character
-  has_many :colony_routes, foreign_key: :owner_id, inverse_of: :character
-  has_many :colony_waypoints, foreign_key: :owner_id, inverse_of: :character
   
   # WalletApi
   has_many :wallets, inverse_of: :character

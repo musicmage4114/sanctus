@@ -1,2 +1,2 @@
-class Blueprint < ApplicationRecord
+class Blueprint < Item
 end

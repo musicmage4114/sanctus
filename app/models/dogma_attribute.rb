@@ -11,4 +11,6 @@ class DogmaAttribute < ApplicationRecord
   has_many :items, through: :dogma_attribute_values, source: :type
   has_many :possible_values, class_name: 'DogmaAttributeValue', foreign_key: :attribute_id,
                                                                 inverse_of: :dogma_attribute
+  
+  alias_attribute :appears_on, :items
 end

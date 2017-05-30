@@ -1,0 +1,17 @@
+class CreateEventResponses < ActiveRecord::Migration[5.1]
+  def change
+    create_table :event_responses, id: false do |t|
+      t.integer :event_id, null: false, index: true
+      t.integer :character_id, null: false, index: true
+      
+      # enum - supplied parameter: string
+      # 0 = declined, 1 = undecided, 2 = tentative, 3 = accepted
+      t.integer :response, null: false, index: true
+      t.index [:character_id, :event_id]
+
+      t.timestamps
+    end
+    add_foreign_key :event_responses, :events, primary_key: :event_id
+    add_foreign_key :event_responses, :characters, primary_key: :character_id
+  end
+end

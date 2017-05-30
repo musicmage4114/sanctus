@@ -9,6 +9,7 @@ class Alliance < ApplicationRecord
   has_many :corporations, inverse_of: :alliance
   has_many :characters, inverse_of: :alliance
   has_many :alliance_histories, inverse_of: :alliance
+  # TODO: has_many :past_alliances
   
   alias_attribute :executor, :executor_corporation
 end

@@ -10,7 +10,7 @@ class AddForeignKeys < ActiveRecord::Migration[5.0]
     add_foreign_key :personal_blueprints, :blueprints, column: :type_id, primary_key: :type_id
     add_foreign_key :personal_blueprints, :characters, primary_key: :character_id
     add_foreign_key :item_group_memberships, :item_groups, column: :group_id, primary_key: :group_id
-    add_foreign_key :blueprints, :item_groups, column: :group_id, primary_key: :group_id
+    add_foreign_key :items, :item_groups, column: :group_id, primary_key: :group_id
     add_foreign_key :dogma_attribute_values, :dogma_attributes, column: :attribute_id, primary_key: :attribute_id
     add_foreign_key :dogma_attribute_values, :items, column: :type_id, primary_key: :type_id
     add_foreign_key :item_groups, :item_categories, column: :category_id, primary_key: :category_id

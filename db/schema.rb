@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170526235940) do
+ActiveRecord::Schema.define(version: 20170529232944) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -175,18 +175,31 @@ ActiveRecord::Schema.define(version: 20170526235940) do
     t.index ["usage"], name: "index_dogma_attributes_on_usage"
   end
 
+  create_table "event_responses", id: false, force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.integer "character_id", null: false
+    t.integer "response", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id", "event_id"], name: "index_event_responses_on_character_id_and_event_id"
+    t.index ["character_id"], name: "index_event_responses_on_character_id"
+    t.index ["event_id"], name: "index_event_responses_on_event_id"
+    t.index ["response"], name: "index_event_responses_on_response"
+  end
+
   create_table "events", force: :cascade do |t|
-    t.integer "event_id"
-    t.datetime "date"
+    t.integer "event_id", null: false
+    t.datetime "date", null: false
     t.integer "duration"
     t.text "description"
     t.string "title"
     t.string "host_type"
     t.integer "host_id"
     t.string "host_name"
-    t.integer "importance"
+    t.integer "importance", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_events_on_event_id", unique: true
     t.index ["host_type", "host_id"], name: "index_events_on_host_type_and_host_id"
     t.index ["importance"], name: "index_events_on_importance"
   end
@@ -235,7 +248,7 @@ ActiveRecord::Schema.define(version: 20170526235940) do
     t.integer "item_id", null: false
     t.integer "type_id", null: false
     t.integer "character_id", null: false
-    t.string "location_type", null: false
+    t.string "location_type"
     t.integer "location_id", null: false
     t.integer "material_efficiency", null: false
     t.integer "quantity", null: false

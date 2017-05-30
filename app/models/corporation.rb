@@ -10,7 +10,7 @@ class Corporation < ApplicationRecord
   belongs_to :creator, class_name: 'Character', foreign_key: :creator_id, inverse_of: :corporations
   has_many :characters, inverse_of: :corporation
   has_many :alliance_histories, inverse_of: :corporation
-  has_many :past_alliances, through: :alliance_histories, source: :alliance
+  has_many :past_alliances, through: :alliance_histories, source: :alliance # TODO: Tighten scope to not return current
   has_many :structures, inverse_of: :corporation
 
   alias_attribute :members, :characters
@@ -25,7 +25,6 @@ class Corporation < ApplicationRecord
   
 
   # NPC-specific attributes
-  belongs_to :faction, optional: true
+  belongs_to :faction, inverse_of: :corporations, optional: true
   has_many :loyalty_offers, inverse_of: :corporation
-  has_many :loyalty_required_items, inverse_of: :corporation
 end

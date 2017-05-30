@@ -6,5 +6,5 @@ class Event < ApplicationRecord
   enum importance: [ :normal, :important ]
   
   belongs_to :host, polymorphic: true
-  has_many :responses, class_name: 'EventResponse', inverse_of: :events
+  has_many :responses, class_name: 'EventResponse', inverse_of: :event
 end

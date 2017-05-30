@@ -1,8 +1,8 @@
 class CreateEvents < ActiveRecord::Migration[5.0]
   def change
     create_table :events do |t|
-      t.integer :event_id
-      t.datetime :date
+      t.integer :event_id, null: false, index: { unique: true }
+      t.datetime :date, null: false
       t.integer :duration
       t.text :description
       t.string :title
@@ -11,7 +11,7 @@ class CreateEvents < ActiveRecord::Migration[5.0]
       
       # enum - supplied parameter: integer - importance
       # 1 = important, 0 = normal
-      t.integer :importance, index: true
+      t.integer :importance, null: false, default: 0, index: true
       
       t.timestamps
     end
