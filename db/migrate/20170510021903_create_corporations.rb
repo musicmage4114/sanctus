@@ -22,7 +22,7 @@ class CreateCorporations < ActiveRecord::Migration[5.0]
 
       # enum - supplied parameter: boolean - is_deleted
       # true -> 1 -> closed, false -> 0 -> open
-      t.integer :deletion, index: true
+      t.integer :deletion_status, index: true
 
       t.timestamps null: false
     end

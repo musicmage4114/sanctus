@@ -2,7 +2,7 @@ class Corporation < ApplicationRecord
   self.primary_key = 'corporation_id'
 
   # supplied parameter: boolean - is_deleted; true -> 1 -> closed, false -> 0 -> open
-  enum deletion: [:open, :closed]
+  enum deletion_status: [:open, :closed]
   
   # CorporationApi
   belongs_to :alliance, inverse_of: :corporations, optional: true
@@ -12,6 +12,7 @@ class Corporation < ApplicationRecord
   has_many :alliance_histories, inverse_of: :corporation
   has_many :past_alliances, through: :alliance_histories, source: :alliance # TODO: Tighten scope to not return current
   has_many :structures, inverse_of: :corporation
+  has_many :assets, as: :owner
 
   alias_attribute :members, :characters
   alias_attribute :founder, :creator
@@ -22,6 +23,8 @@ class Corporation < ApplicationRecord
   # WarApi
   has_many :aggressive_wars, through: :war_aggressors, source: :war
   has_many :defensive_wars, through: :war_defenders, source: :war
+  # TODO: has_many :current_wars
+  # TODO: has_many :past_wars
   
 
   # NPC-specific attributes

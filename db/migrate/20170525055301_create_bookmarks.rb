@@ -10,7 +10,7 @@ class CreateBookmarks < ActiveRecord::Migration[5.0]
       t.belongs_to :owner, polymorphic: true, index: true
       t.belongs_to :location, null: false, index: true
       t.integer :item_id
-      t.belongs_to :type_id, index: true
+      t.belongs_to :type, index: true
       
       # coordinates relative to solar system's sun
       t.float :x

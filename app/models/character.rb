@@ -29,10 +29,12 @@ class Character < ApplicationRecord
   belongs_to :race, inverse_of: :characters
   has_many :blueprints, through: :personal_blueprints, source: :type
   has_many :medals, through: :medal_awards, source: :medal
-  has_many :past_corporations, through: :corporation_histories, source: :corporation
+  has_many :past_corporations, through: :corporation_histories, source: :corporation # TODO: Shouldn't return current corporation
   has_many :personal_blueprints, inverse_of: :character, dependent: :destroy
   has_many :personal_research_agents, inverse_of: :character, dependent: :destroy
   has_many :research_agents, through: :personal_research_agents, source: :agent
+  
+  alias_attribute :employment_history, :past_corporations
   
   # standings
   has_many :standings, inverse_of: :character
@@ -52,7 +54,7 @@ class Character < ApplicationRecord
   alias_attribute :channels, :chat_channels
   
   # ClonesApi
-  belongs_to :home_station, polymorphic: true
+  belongs_to :home_station, polymorphic: true, optional: true
   has_many :jump_clones, inverse_of: :character
   
   alias_attribute :medical_clone, :home_station
@@ -89,7 +91,7 @@ class Character < ApplicationRecord
   
   # LocationApi
   has_one :current_ship, through: :current_ships, source: :ship_type_id
-  belongs_to :current_location, polymorphic: true
+  belongs_to :current_location, polymorphic: true, optional: true
   
   # LoyaltyApi
   has_many :loyalty_amounts, inverse_of: :character

@@ -1,8 +1,8 @@
 class CreateEventResponses < ActiveRecord::Migration[5.1]
   def change
     create_table :event_responses, id: false do |t|
-      t.integer :event_id, null: false, index: true
-      t.integer :character_id, null: false, index: true
+      t.belongs_to :event, null: false, index: true
+      t.belongs_to :character, null: false, index: true
       
       # enum - supplied parameter: string
       # 0 = declined, 1 = undecided, 2 = tentative, 3 = accepted

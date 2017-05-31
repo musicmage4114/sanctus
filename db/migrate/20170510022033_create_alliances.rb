@@ -12,7 +12,7 @@ class CreateAlliances < ActiveRecord::Migration[5.0]
       t.string :icon_128
       
       # enum - supplied parameter: boolean - is_deleted; true -> 1 -> deleted, false -> 0 -> not_deleted
-      t.integer :deletion, index: true
+      t.integer :deletion_status, index: true
 
       t.timestamps null: false
     end

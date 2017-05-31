@@ -1,6 +1,6 @@
 class CreateEvents < ActiveRecord::Migration[5.0]
   def change
-    create_table :events do |t|
+    create_table :events, id: false do |t|
       t.integer :event_id, null: false, index: { unique: true }
       t.datetime :date, null: false
       t.integer :duration

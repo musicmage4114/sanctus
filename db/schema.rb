@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170529232944) do
+ActiveRecord::Schema.define(version: 20170531051024) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -29,11 +29,11 @@ ActiveRecord::Schema.define(version: 20170529232944) do
     t.integer "executor_corporation_id", null: false
     t.string "icon_64"
     t.string "icon_128"
-    t.integer "deletion"
+    t.integer "deletion_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["alliance_id"], name: "index_alliances_on_alliance_id", unique: true
-    t.index ["deletion"], name: "index_alliances_on_deletion"
+    t.index ["deletion_status"], name: "index_alliances_on_deletion_status"
     t.index ["executor_corporation_id"], name: "index_alliances_on_executor_corporation_id", unique: true
   end
 
@@ -54,6 +54,24 @@ ActiveRecord::Schema.define(version: 20170529232944) do
     t.index ["type_id"], name: "index_assets_on_type_id"
   end
 
+  create_table "bloodlines", id: false, force: :cascade do |t|
+    t.integer "bloodline_id", null: false
+    t.integer "race_id", null: false
+    t.integer "corporation_id"
+    t.integer "ship_type_id"
+    t.string "name"
+    t.text "description"
+    t.integer "charisma"
+    t.integer "intelligence"
+    t.integer "memory"
+    t.integer "perception"
+    t.integer "willpower"
+    t.index ["bloodline_id"], name: "index_bloodlines_on_bloodline_id", unique: true
+    t.index ["corporation_id"], name: "index_bloodlines_on_corporation_id"
+    t.index ["race_id"], name: "index_bloodlines_on_race_id"
+    t.index ["ship_type_id"], name: "index_bloodlines_on_ship_type_id"
+  end
+
   create_table "bookmarks", id: false, force: :cascade do |t|
     t.integer "bookmark_id", null: false
     t.integer "creator_id", null: false
@@ -65,7 +83,7 @@ ActiveRecord::Schema.define(version: 20170529232944) do
     t.integer "owner_id"
     t.integer "location_id", null: false
     t.integer "item_id"
-    t.integer "type_id_id"
+    t.integer "type_id"
     t.float "x"
     t.float "y"
     t.float "z"
@@ -74,7 +92,7 @@ ActiveRecord::Schema.define(version: 20170529232944) do
     t.index ["folder_id"], name: "index_bookmarks_on_folder_id"
     t.index ["location_id"], name: "index_bookmarks_on_location_id"
     t.index ["owner_type", "owner_id"], name: "index_bookmarks_on_owner_type_and_owner_id"
-    t.index ["type_id_id"], name: "index_bookmarks_on_type_id_id"
+    t.index ["type_id"], name: "index_bookmarks_on_type_id"
   end
 
   create_table "bookmarks_folders", id: false, force: :cascade do |t|
@@ -136,14 +154,14 @@ ActiveRecord::Schema.define(version: 20170529232944) do
     t.string "icon_64"
     t.string "icon_128"
     t.string "icon_256"
-    t.integer "deletion"
+    t.integer "deletion_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["alliance_id"], name: "index_corporations_on_alliance_id"
     t.index ["ceo_id"], name: "index_corporations_on_ceo_id", unique: true
     t.index ["corporation_id"], name: "index_corporations_on_corporation_id", unique: true
     t.index ["creator_id"], name: "index_corporations_on_creator_id"
-    t.index ["deletion"], name: "index_corporations_on_deletion"
+    t.index ["deletion_status"], name: "index_corporations_on_deletion_status"
     t.index ["faction_id"], name: "index_corporations_on_faction_id"
   end
 
@@ -187,7 +205,7 @@ ActiveRecord::Schema.define(version: 20170529232944) do
     t.index ["response"], name: "index_event_responses_on_response"
   end
 
-  create_table "events", force: :cascade do |t|
+  create_table "events", id: false, force: :cascade do |t|
     t.integer "event_id", null: false
     t.datetime "date", null: false
     t.integer "duration"
@@ -202,6 +220,22 @@ ActiveRecord::Schema.define(version: 20170529232944) do
     t.index ["event_id"], name: "index_events_on_event_id", unique: true
     t.index ["host_type", "host_id"], name: "index_events_on_host_type_and_host_id"
     t.index ["importance"], name: "index_events_on_importance"
+  end
+
+  create_table "factions", id: false, force: :cascade do |t|
+    t.integer "faction_id", null: false
+    t.integer "corporation_id", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.integer "size_factor"
+    t.integer "solar_system_id"
+    t.integer "station_count"
+    t.integer "station_system_count"
+    t.integer "uniqueness", default: 1, null: false
+    t.index ["corporation_id"], name: "index_factions_on_corporation_id"
+    t.index ["faction_id"], name: "index_factions_on_faction_id", unique: true
+    t.index ["solar_system_id"], name: "index_factions_on_solar_system_id"
+    t.index ["uniqueness"], name: "index_factions_on_uniqueness"
   end
 
   create_table "item_categories", id: false, force: :cascade do |t|
@@ -244,6 +278,35 @@ ActiveRecord::Schema.define(version: 20170529232944) do
     t.index ["usage"], name: "index_items_on_usage"
   end
 
+  create_table "medal_awards", id: false, force: :cascade do |t|
+    t.integer "character_id", null: false
+    t.integer "medal_id", null: false
+    t.integer "issuer_id", null: false
+    t.datetime "date", null: false
+    t.text "reason"
+    t.integer "viewable", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id", "medal_id"], name: "index_medal_awards_on_character_id_and_medal_id"
+    t.index ["character_id"], name: "index_medal_awards_on_character_id"
+    t.index ["issuer_id"], name: "index_medal_awards_on_issuer_id"
+    t.index ["medal_id"], name: "index_medal_awards_on_medal_id"
+    t.index ["viewable"], name: "index_medal_awards_on_viewable"
+  end
+
+  create_table "medals", id: false, force: :cascade do |t|
+    t.integer "medal_id", null: false
+    t.integer "corporation_id", null: false
+    t.string "title", null: false
+    t.text "description"
+    t.string "graphic", null: false
+    t.integer "color"
+    t.integer "layer", null: false
+    t.integer "part", null: false
+    t.index ["corporation_id"], name: "index_medals_on_corporation_id"
+    t.index ["medal_id"], name: "index_medals_on_medal_id", unique: true
+  end
+
   create_table "personal_blueprints", id: false, force: :cascade do |t|
     t.integer "item_id", null: false
     t.integer "type_id", null: false
@@ -261,6 +324,15 @@ ActiveRecord::Schema.define(version: 20170529232944) do
     t.index ["item_id"], name: "index_personal_blueprints_on_item_id", unique: true
     t.index ["location_type", "location_id"], name: "item_location_index"
     t.index ["type_id"], name: "index_personal_blueprints_on_type_id"
+  end
+
+  create_table "races", id: false, force: :cascade do |t|
+    t.integer "race_id", null: false
+    t.integer "alliance_id", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.index ["alliance_id"], name: "index_races_on_alliance_id"
+    t.index ["race_id"], name: "index_races_on_race_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
