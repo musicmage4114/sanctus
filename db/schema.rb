@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531060654) do
+ActiveRecord::Schema.define(version: 20170531065032) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -104,6 +104,50 @@ ActiveRecord::Schema.define(version: 20170531060654) do
     t.index ["owner_type", "owner_id"], name: "index_bookmarks_folders_on_owner_type_and_owner_id"
   end
 
+  create_table "channel_allows", id: false, force: :cascade do |t|
+    t.integer "channel_id", null: false
+    t.string "accessor_type"
+    t.integer "accessor_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accessor_type", "accessor_id"], name: "index_channel_allows_on_accessor_type_and_accessor_id"
+    t.index ["channel_id"], name: "index_channel_allows_on_channel_id"
+  end
+
+  create_table "channel_blocks", id: false, force: :cascade do |t|
+    t.integer "channel_id", null: false
+    t.string "accessor_type"
+    t.integer "accessor_id", null: false
+    t.datetime "ends"
+    t.text "reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accessor_type", "accessor_id"], name: "index_channel_blocks_on_accessor_type_and_accessor_id"
+    t.index ["channel_id"], name: "index_channel_blocks_on_channel_id"
+  end
+
+  create_table "channel_mutes", id: false, force: :cascade do |t|
+    t.integer "channel_id", null: false
+    t.string "accessor_type"
+    t.integer "accessor_id", null: false
+    t.datetime "ends"
+    t.text "reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accessor_type", "accessor_id"], name: "index_channel_mutes_on_accessor_type_and_accessor_id"
+    t.index ["channel_id"], name: "index_channel_mutes_on_channel_id"
+  end
+
+  create_table "channel_operators", id: false, force: :cascade do |t|
+    t.integer "channel_id", null: false
+    t.string "accessor_type"
+    t.integer "accessor_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accessor_type", "accessor_id"], name: "index_channel_operators_on_accessor_type_and_accessor_id"
+    t.index ["channel_id"], name: "index_channel_operators_on_channel_id"
+  end
+
   create_table "characters", id: false, force: :cascade do |t|
     t.integer "character_id", null: false
     t.integer "corporation_id", null: false
@@ -135,6 +179,20 @@ ActiveRecord::Schema.define(version: 20170531060654) do
     t.index ["current_location_type", "current_location_id"], name: "current_location_index"
     t.index ["home_station_type", "home_station_id"], name: "index_characters_on_home_station_type_and_home_station_id"
     t.index ["race_id"], name: "index_characters_on_race_id"
+  end
+
+  create_table "chat_channels", id: false, force: :cascade do |t|
+    t.integer "channel_id", null: false
+    t.integer "owner_id", null: false
+    t.string "comparison_key", null: false
+    t.string "name"
+    t.text "motd"
+    t.integer "password", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_chat_channels_on_channel_id", unique: true
+    t.index ["owner_id"], name: "index_chat_channels_on_owner_id"
+    t.index ["password"], name: "index_chat_channels_on_password"
   end
 
   create_table "corporations", id: false, force: :cascade do |t|
