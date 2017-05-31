@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531055226) do
+ActiveRecord::Schema.define(version: 20170531060654) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -348,6 +348,17 @@ ActiveRecord::Schema.define(version: 20170531055226) do
     t.text "description"
     t.index ["alliance_id"], name: "index_races_on_alliance_id"
     t.index ["race_id"], name: "index_races_on_race_id", unique: true
+  end
+
+  create_table "standings", id: false, force: :cascade do |t|
+    t.integer "character_id", null: false
+    t.string "relationship_type"
+    t.integer "relationship_id", null: false
+    t.float "standing", default: 0.0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_standings_on_character_id"
+    t.index ["relationship_type", "relationship_id"], name: "index_standings_on_relationship_type_and_relationship_id"
   end
 
   create_table "users", force: :cascade do |t|
