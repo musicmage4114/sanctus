@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531051024) do
+ActiveRecord::Schema.define(version: 20170531055226) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -324,6 +324,21 @@ ActiveRecord::Schema.define(version: 20170531051024) do
     t.index ["item_id"], name: "index_personal_blueprints_on_item_id", unique: true
     t.index ["location_type", "location_id"], name: "item_location_index"
     t.index ["type_id"], name: "index_personal_blueprints_on_type_id"
+  end
+
+  create_table "personal_research_agents", id: false, force: :cascade do |t|
+    t.integer "character_id", null: false
+    t.integer "agent_id", null: false
+    t.integer "skill_type_id", null: false
+    t.datetime "started", null: false
+    t.float "points_per_day", null: false
+    t.float "points_remaining", default: 0.0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agent_id"], name: "index_personal_research_agents_on_agent_id"
+    t.index ["character_id", "agent_id"], name: "index_personal_research_agents_on_character_id_and_agent_id"
+    t.index ["character_id"], name: "index_personal_research_agents_on_character_id"
+    t.index ["skill_type_id"], name: "index_personal_research_agents_on_skill_type_id"
   end
 
   create_table "races", id: false, force: :cascade do |t|

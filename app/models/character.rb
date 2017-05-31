@@ -62,9 +62,9 @@ class Character < ApplicationRecord
   # ContactsApi
   has_many :contacts, inverse_of: :character
   has_many :contact_labels, inverse_of: :character
-  has_many :character_contacts, through: :contacts, source: :contact_entity, source_type: 'Character'
-  has_many :corporation_contacts, through: :contacts, source: :contact_entity, source_type: 'Corporation'
-  has_many :alliance_contacts, through: :contacts, source: :contact_entity, source_type: 'Alliance'
+  has_many :character_contacts, through: :contacts, source: :diplomacy, source_type: 'Character'
+  has_many :corporation_contacts, through: :contacts, source: :diplomacy, source_type: 'Corporation'
+  has_many :alliance_contacts, through: :contacts, source: :diplomacy, source_type: 'Alliance'
   
   # CorporationApi
   has_many :roles
