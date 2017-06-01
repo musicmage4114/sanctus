@@ -4,7 +4,7 @@ class CreatePersonalBlueprints < ActiveRecord::Migration[5.0]
       t.integer :item_id, null: false, index: { unique: true }
       t.belongs_to :type, null: false, index: true
       t.belongs_to :character, null: false, index: true
-      t.references :location, polymorphic: true, null: false, index: { name: 'item_location_index' }
+      t.belongs_to :location, polymorphic: true, null: false, index: { name: 'item_location_index' }
       t.integer :material_efficiency, null: false
       t.integer :quantity, null: false
       t.integer :runs, null: false
@@ -13,7 +13,5 @@ class CreatePersonalBlueprints < ActiveRecord::Migration[5.0]
 
       t.timestamps null: false
     end
-    # foreign key: personal blueprints -> blueprints; column: type_id, primary key: type_id
-    # foreign key: personal blueprints -> characters; primary key: character_id
   end
 end

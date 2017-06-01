@@ -8,9 +8,6 @@ class CreateEvents < ActiveRecord::Migration[5.0]
       t.string :title
       t.belongs_to :host, polymorphic: true, index: true
       t.string :host_name
-      
-      # enum - supplied parameter: integer - importance
-      # 1 = important, 0 = normal
       t.integer :importance, null: false, default: 0, index: true
       
       t.timestamps

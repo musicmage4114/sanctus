@@ -12,6 +12,7 @@ class CreateCharacters < ActiveRecord::Migration[5.0]
       t.belongs_to :ancestry
       t.text :description
       t.datetime :last_clone_jump
+      t.integer :gender, null: false, default: 1
       
       # urls for retrieval of character portrait of the given size
       t.string :portrait_64
@@ -27,13 +28,7 @@ class CreateCharacters < ActiveRecord::Migration[5.0]
       # supplied parameters: location_id, location_type
       t.references :current_location, polymorphic: true, index: { name: 'current_location_index' }
 
-      # enum - supplied parameter: string - gender
-      # male = 1, female = 2
-      t.integer :gender, null: false, default: 1
-
       t.timestamps null: false
     end
-    # foreign key: characters -> corporations; primary key: corporation_id
-    # foreign key: characters -> alliances; primary key: alliance_id
   end
 end

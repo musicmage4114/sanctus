@@ -5,12 +5,7 @@ class CreateContacts < ActiveRecord::Migration[5.1]
       t.belongs_to :diplomacy, polymorphic: true, null: false, index: true
       t.belongs_to :label, index: true
       t.float :standing
-      
-      # enum - supplied parameter: boolean - is_blocked
-      # true -> 1 -> blocked, false -> 0 -> not_blocked
       t.integer :blocklist, null: false, default: 0, index: true
-      # enum - supplied parameter: boolean - is_watched
-      # true -> 1 -> watched, false -> 0 -> not_watched
       t.integer :watchlist, null: false, default: 0, index: true
 
       t.timestamps

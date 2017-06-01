@@ -4,6 +4,9 @@ class Corporation < ApplicationRecord
   # supplied parameter: boolean - is_deleted; true -> 1 -> closed, false -> 0 -> open
   enum deletion_status: [:open, :closed]
   
+  has_many :allowed_channels, as: :allowed
+  has_many :blocked_channels, as: :blocked
+  
   # CorporationApi
   belongs_to :alliance, inverse_of: :corporations, optional: true
   belongs_to :ceo, class_name: 'Character', foreign_key: :ceo_id, inverse_of: :corporations

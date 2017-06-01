@@ -9,9 +9,6 @@ class CreateFactions < ActiveRecord::Migration[5.1]
       t.belongs_to :solar_system, index: true
       t.integer :station_count
       t.integer :station_system_count
-      
-      # enum - supplied parameter: boolean - is_unique
-      # true -> 1 -> unique, false -> 0 -> not_unique
       t.integer :uniqueness, null: false, default: 1, index: true
     end
     add_foreign_key :factions, :corporations, primary_key: :corporation_id

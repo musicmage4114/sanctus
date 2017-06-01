@@ -7,9 +7,6 @@ class CreateMedalAwards < ActiveRecord::Migration[5.1]
       t.datetime :date, null: false
       t.text :reason
       t.index [:character_id, :medal_id]
-      
-      # enum - supplied parameter: string - status
-      # private = 1, public = 2
       t.integer :viewable, null: false, default: 1, index: true
       
       t.timestamps

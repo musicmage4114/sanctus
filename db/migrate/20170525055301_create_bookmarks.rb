@@ -17,5 +17,6 @@ class CreateBookmarks < ActiveRecord::Migration[5.0]
       t.float :y
       t.float :z
     end
+    add_foreign_key :bookmarks, :characters, column: :creator_id, primary_key: :character_id
   end
 end

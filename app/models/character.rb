@@ -46,12 +46,16 @@ class Character < ApplicationRecord
   
   # chat channels
   has_many :chat_channels, foreign_key: :owner_id, inverse_of: :character
-  has_many :allowed_channels, through: :channel_allows, source: :channel
-  has_many :blocked_channels, through: :channel_blocks, source: :channel
-  has_many :muted_channels, through: :channel_mutes, source: :channel
-  has_many :operated_channels, through: :channel_operators, source: :channel
+  has_many :allowed_channels, as: :allowed
+  has_many :blocked_channels, as: :blocked
+  has_many :muted_channels, as: :muted
+  has_many :operated_channels, as: :operator
+  # TODO: has_many :banned_channels
 
   alias_attribute :channels, :chat_channels
+  alias_attribute :operates, :operated_channels
+  alias_attribute :kicked, :blocked_channels
+  # TODO: alias_attribute :banned, :banned_channels
   
   # ClonesApi
   belongs_to :home_station, polymorphic: true, optional: true

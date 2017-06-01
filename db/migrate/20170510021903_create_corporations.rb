@@ -14,19 +14,14 @@ class CreateCorporations < ActiveRecord::Migration[5.0]
       t.string :url
       t.text :description
       t.string :faction_name
+      t.integer :deletion_status, index: true
       
       # urls for retrieval of corporation icon of the given size
       t.string :icon_64
       t.string :icon_128
       t.string :icon_256
 
-      # enum - supplied parameter: boolean - is_deleted
-      # true -> 1 -> closed, false -> 0 -> open
-      t.integer :deletion_status, index: true
-
       t.timestamps null: false
     end
-    # foreign key: corporations -> characters; column: ceo_id, primary key: character_id
-    # foreign key: corporations -> alliances; primary key: alliance_id
   end
 end

@@ -2,7 +2,7 @@ class CreateChannelAllows < ActiveRecord::Migration[5.1]
   def change
     create_table :channel_allows, id: false do |t|
       t.belongs_to :channel, null: false, index: true
-      t.belongs_to :accessor, polymorphic: true, null: false, index: true
+      t.belongs_to :allowed, polymorphic: true, null: false, index: true
 
       t.timestamps
     end

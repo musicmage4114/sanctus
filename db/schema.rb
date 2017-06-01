@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170601043147) do
+ActiveRecord::Schema.define(version: 20170601061454) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -27,9 +27,9 @@ ActiveRecord::Schema.define(version: 20170601043147) do
     t.string "ticker", limit: 5, null: false
     t.datetime "date_founded", null: false
     t.integer "executor_corporation_id", null: false
+    t.integer "deletion_status"
     t.string "icon_64"
     t.string "icon_128"
-    t.integer "deletion_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["alliance_id"], name: "index_alliances_on_alliance_id", unique: true
@@ -106,46 +106,46 @@ ActiveRecord::Schema.define(version: 20170601043147) do
 
   create_table "channel_allows", id: false, force: :cascade do |t|
     t.integer "channel_id", null: false
-    t.string "accessor_type"
-    t.integer "accessor_id", null: false
+    t.string "allowed_type"
+    t.integer "allowed_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["accessor_type", "accessor_id"], name: "index_channel_allows_on_accessor_type_and_accessor_id"
+    t.index ["allowed_type", "allowed_id"], name: "index_channel_allows_on_allowed_type_and_allowed_id"
     t.index ["channel_id"], name: "index_channel_allows_on_channel_id"
   end
 
   create_table "channel_blocks", id: false, force: :cascade do |t|
     t.integer "channel_id", null: false
-    t.string "accessor_type"
-    t.integer "accessor_id", null: false
+    t.string "blocked_type"
+    t.integer "blocked_id", null: false
     t.datetime "ends"
     t.text "reason"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["accessor_type", "accessor_id"], name: "index_channel_blocks_on_accessor_type_and_accessor_id"
+    t.index ["blocked_type", "blocked_id"], name: "index_channel_blocks_on_blocked_type_and_blocked_id"
     t.index ["channel_id"], name: "index_channel_blocks_on_channel_id"
   end
 
   create_table "channel_mutes", id: false, force: :cascade do |t|
     t.integer "channel_id", null: false
-    t.string "accessor_type"
-    t.integer "accessor_id", null: false
+    t.string "muted_type"
+    t.integer "muted_id", null: false
     t.datetime "ends"
     t.text "reason"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["accessor_type", "accessor_id"], name: "index_channel_mutes_on_accessor_type_and_accessor_id"
     t.index ["channel_id"], name: "index_channel_mutes_on_channel_id"
+    t.index ["muted_type", "muted_id"], name: "index_channel_mutes_on_muted_type_and_muted_id"
   end
 
   create_table "channel_operators", id: false, force: :cascade do |t|
     t.integer "channel_id", null: false
-    t.string "accessor_type"
-    t.integer "accessor_id", null: false
+    t.string "operator_type"
+    t.integer "operator_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["accessor_type", "accessor_id"], name: "index_channel_operators_on_accessor_type_and_accessor_id"
     t.index ["channel_id"], name: "index_channel_operators_on_channel_id"
+    t.index ["operator_type", "operator_id"], name: "index_channel_operators_on_operator_type_and_operator_id"
   end
 
   create_table "characters", id: false, force: :cascade do |t|
@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(version: 20170601043147) do
     t.integer "ancestry_id"
     t.text "description"
     t.datetime "last_clone_jump"
+    t.integer "gender", default: 1, null: false
     t.string "portrait_64"
     t.string "portrait_128"
     t.string "portrait_256"
@@ -168,7 +169,6 @@ ActiveRecord::Schema.define(version: 20170601043147) do
     t.integer "home_station_id"
     t.string "current_location_type"
     t.integer "current_location_id"
-    t.integer "gender", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["alliance_id"], name: "index_characters_on_alliance_id"
@@ -234,10 +234,10 @@ ActiveRecord::Schema.define(version: 20170601043147) do
     t.string "url"
     t.text "description"
     t.string "faction_name"
+    t.integer "deletion_status"
     t.string "icon_64"
     t.string "icon_128"
     t.string "icon_256"
-    t.integer "deletion_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["alliance_id"], name: "index_corporations_on_alliance_id"
@@ -267,13 +267,58 @@ ActiveRecord::Schema.define(version: 20170601043147) do
     t.integer "unit_id"
     t.integer "good"
     t.integer "stacking"
-    t.integer "usage", default: 1, null: false
+    t.integer "data_export", default: 1, null: false
     t.index ["attribute_id"], name: "index_dogma_attributes_on_attribute_id", unique: true
+    t.index ["data_export"], name: "index_dogma_attributes_on_data_export"
     t.index ["good"], name: "index_dogma_attributes_on_good"
     t.index ["icon_id"], name: "index_dogma_attributes_on_icon_id"
     t.index ["stacking"], name: "index_dogma_attributes_on_stacking"
     t.index ["unit_id"], name: "index_dogma_attributes_on_unit_id"
-    t.index ["usage"], name: "index_dogma_attributes_on_usage"
+  end
+
+  create_table "dogma_effect_values", id: false, force: :cascade do |t|
+    t.integer "effect_id", null: false
+    t.integer "type_id", null: false
+    t.boolean "default_value"
+    t.index ["effect_id"], name: "index_dogma_effect_values_on_effect_id"
+    t.index ["type_id", "effect_id"], name: "index_dogma_effect_values_on_type_id_and_effect_id"
+    t.index ["type_id"], name: "index_dogma_effect_values_on_type_id"
+  end
+
+  create_table "dogma_effects", id: false, force: :cascade do |t|
+    t.integer "effect_id", null: false
+    t.string "name"
+    t.string "display_name"
+    t.text "description"
+    t.integer "effect_category"
+    t.integer "icon_id"
+    t.integer "pre_expression"
+    t.integer "post_expression"
+    t.boolean "electronic_chance"
+    t.boolean "assistance"
+    t.boolean "offensive"
+    t.boolean "warp_safe"
+    t.boolean "range_chance"
+    t.integer "discharge_attribute_id"
+    t.integer "duration_attribute_id"
+    t.integer "falloff_attribute_id"
+    t.integer "range_attribute_id"
+    t.integer "tracking_speed_attribute_id"
+    t.string "domain"
+    t.string "func"
+    t.integer "operator"
+    t.integer "modified_attribute_id"
+    t.integer "modifying_attribute_id"
+    t.integer "auto_repeat"
+    t.integer "data_export"
+    t.index ["discharge_attribute_id"], name: "index_dogma_effects_on_discharge_attribute_id"
+    t.index ["duration_attribute_id"], name: "index_dogma_effects_on_duration_attribute_id"
+    t.index ["effect_id"], name: "index_dogma_effects_on_effect_id", unique: true
+    t.index ["falloff_attribute_id"], name: "index_dogma_effects_on_falloff_attribute_id"
+    t.index ["modified_attribute_id"], name: "index_dogma_effects_on_modified_attribute_id"
+    t.index ["modifying_attribute_id"], name: "index_dogma_effects_on_modifying_attribute_id"
+    t.index ["range_attribute_id"], name: "index_dogma_effects_on_range_attribute_id"
+    t.index ["tracking_speed_attribute_id"], name: "index_dogma_effects_on_tracking_speed_attribute_id"
   end
 
   create_table "event_responses", id: false, force: :cascade do |t|
@@ -324,19 +369,19 @@ ActiveRecord::Schema.define(version: 20170601043147) do
   create_table "item_categories", id: false, force: :cascade do |t|
     t.integer "category_id", null: false
     t.string "name", null: false
-    t.integer "usage", default: 1, null: false
+    t.integer "data_export", default: 1, null: false
     t.index ["category_id"], name: "index_item_categories_on_category_id", unique: true
-    t.index ["usage"], name: "index_item_categories_on_usage"
+    t.index ["data_export"], name: "index_item_categories_on_data_export"
   end
 
   create_table "item_groups", id: false, force: :cascade do |t|
     t.integer "group_id", null: false
     t.string "name", null: false
     t.integer "category_id", null: false
-    t.integer "usage", default: 1, null: false
+    t.integer "data_export", default: 1, null: false
     t.index ["category_id"], name: "index_item_groups_on_category_id"
+    t.index ["data_export"], name: "index_item_groups_on_data_export"
     t.index ["group_id"], name: "index_item_groups_on_group_id", unique: true
-    t.index ["usage"], name: "index_item_groups_on_usage"
   end
 
   create_table "items", id: false, force: :cascade do |t|
@@ -352,13 +397,13 @@ ActiveRecord::Schema.define(version: 20170601043147) do
     t.float "capacity"
     t.float "portion_size"
     t.float "mass"
-    t.integer "usage", default: 1, null: false
+    t.integer "data_export", default: 1, null: false
+    t.index ["data_export"], name: "index_items_on_data_export"
     t.index ["graphic_id"], name: "index_items_on_graphic_id"
     t.index ["group_id"], name: "index_items_on_group_id"
     t.index ["icon_id"], name: "index_items_on_icon_id"
     t.index ["type"], name: "index_items_on_type"
     t.index ["type_id"], name: "index_items_on_type_id", unique: true
-    t.index ["usage"], name: "index_items_on_usage"
   end
 
   create_table "medal_awards", id: false, force: :cascade do |t|

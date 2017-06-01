@@ -3,9 +3,6 @@ class CreateEventResponses < ActiveRecord::Migration[5.1]
     create_table :event_responses, id: false do |t|
       t.belongs_to :event, null: false, index: true
       t.belongs_to :character, null: false, index: true
-      
-      # enum - supplied parameter: string
-      # 0 = declined, 1 = undecided, 2 = tentative, 3 = accepted
       t.integer :response, null: false, index: true
       t.index [:character_id, :event_id]
 

@@ -13,11 +13,7 @@ class CreateItems < ActiveRecord::Migration[5.0]
       t.float :capacity
       t.float :portion_size
       t.float :mass
-  
-      # enum - supplied parameter: boolean - published
-      # true -> 1 -> published, false -> 0 -> unpublished
-      t.integer :usage, null: false, default: 1, index: true
+      t.integer :data_export, null: false, default: 1, index: true
     end
-    # foreign key: blueprints -> item_groups; column: group_id, primary key: group_id
   end
 end

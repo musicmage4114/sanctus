@@ -6,9 +6,6 @@ class CreateChatChannels < ActiveRecord::Migration[5.1]
       t.string :comparison_key, null: false
       t.string :name
       t.text :motd
-      
-      # enum - supplied parameter: boolean - has_password
-      # true -> 1 -> has_password, false -> 0 -> no_password
       t.integer :password, null: false, default: 0, index: true
 
       t.timestamps
