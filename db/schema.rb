@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531065032) do
+ActiveRecord::Schema.define(version: 20170601043147) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -193,6 +193,31 @@ ActiveRecord::Schema.define(version: 20170531065032) do
     t.index ["channel_id"], name: "index_chat_channels_on_channel_id", unique: true
     t.index ["owner_id"], name: "index_chat_channels_on_owner_id"
     t.index ["password"], name: "index_chat_channels_on_password"
+  end
+
+  create_table "contact_labels", id: false, force: :cascade do |t|
+    t.integer "label_id", null: false
+    t.integer "character_id", null: false
+    t.string "name"
+    t.index ["character_id"], name: "index_contact_labels_on_character_id"
+    t.index ["label_id"], name: "index_contact_labels_on_label_id", unique: true
+  end
+
+  create_table "contacts", id: false, force: :cascade do |t|
+    t.integer "character_id", null: false
+    t.string "diplomacy_type"
+    t.integer "diplomacy_id", null: false
+    t.integer "label_id"
+    t.float "standing"
+    t.integer "blocklist", default: 0, null: false
+    t.integer "watchlist", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["blocklist"], name: "index_contacts_on_blocklist"
+    t.index ["character_id"], name: "index_contacts_on_character_id"
+    t.index ["diplomacy_type", "diplomacy_id"], name: "index_contacts_on_diplomacy_type_and_diplomacy_id"
+    t.index ["label_id"], name: "index_contacts_on_label_id"
+    t.index ["watchlist"], name: "index_contacts_on_watchlist"
   end
 
   create_table "corporations", id: false, force: :cascade do |t|
