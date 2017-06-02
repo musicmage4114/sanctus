@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170601061454) do
+ActiveRecord::Schema.define(version: 20170602045317) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -366,6 +366,47 @@ ActiveRecord::Schema.define(version: 20170601061454) do
     t.index ["uniqueness"], name: "index_factions_on_uniqueness"
   end
 
+  create_table "fleet_memberships", id: false, force: :cascade do |t|
+    t.integer "character_id", null: false
+    t.integer "fleet_id", null: false
+    t.datetime "join_time", null: false
+    t.integer "wing_id", null: false
+    t.integer "squad_id", null: false
+    t.integer "role", default: 1, null: false
+    t.string "role_name", null: false
+    t.integer "ship_type_id", null: false
+    t.integer "solar_system_id", null: false
+    t.string "dock_type"
+    t.integer "dock_id"
+    t.integer "fleet_warp", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_fleet_memberships_on_character_id"
+    t.index ["dock_type", "dock_id"], name: "index_fleet_memberships_on_dock_type_and_dock_id"
+    t.index ["fleet_id", "character_id"], name: "index_fleet_memberships_on_fleet_id_and_character_id"
+    t.index ["fleet_id"], name: "index_fleet_memberships_on_fleet_id"
+    t.index ["fleet_warp"], name: "index_fleet_memberships_on_fleet_warp"
+    t.index ["role"], name: "index_fleet_memberships_on_role"
+    t.index ["ship_type_id"], name: "index_fleet_memberships_on_ship_type_id"
+    t.index ["solar_system_id"], name: "index_fleet_memberships_on_solar_system_id"
+    t.index ["squad_id"], name: "index_fleet_memberships_on_squad_id"
+    t.index ["wing_id"], name: "index_fleet_memberships_on_wing_id"
+  end
+
+  create_table "fleets", id: false, force: :cascade do |t|
+    t.integer "fleet_id", null: false
+    t.text "motd"
+    t.integer "free_move", default: 1, null: false
+    t.integer "fleet_ad", default: 0, null: false
+    t.integer "eve_voice", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["eve_voice"], name: "index_fleets_on_eve_voice"
+    t.index ["fleet_ad"], name: "index_fleets_on_fleet_ad"
+    t.index ["fleet_id"], name: "index_fleets_on_fleet_id", unique: true
+    t.index ["free_move"], name: "index_fleets_on_free_move"
+  end
+
   create_table "item_categories", id: false, force: :cascade do |t|
     t.integer "category_id", null: false
     t.string "name", null: false
@@ -478,6 +519,18 @@ ActiveRecord::Schema.define(version: 20170601061454) do
     t.index ["race_id"], name: "index_races_on_race_id", unique: true
   end
 
+  create_table "squads", id: false, force: :cascade do |t|
+    t.integer "squad_id", null: false
+    t.integer "fleet_id", null: false
+    t.integer "wing_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fleet_id"], name: "index_squads_on_fleet_id"
+    t.index ["squad_id"], name: "index_squads_on_squad_id", unique: true
+    t.index ["wing_id"], name: "index_squads_on_wing_id"
+  end
+
   create_table "standings", id: false, force: :cascade do |t|
     t.integer "character_id", null: false
     t.string "relationship_type"
@@ -493,6 +546,16 @@ ActiveRecord::Schema.define(version: 20170601061454) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "wings", id: false, force: :cascade do |t|
+    t.integer "wing_id", null: false
+    t.integer "fleet_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fleet_id"], name: "index_wings_on_fleet_id"
+    t.index ["wing_id"], name: "index_wings_on_wing_id", unique: true
   end
 
 end
