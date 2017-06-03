@@ -23,10 +23,10 @@ ActiveRecord::Schema.define(version: 20170602045317) do
 
   create_table "alliances", id: false, force: :cascade do |t|
     t.integer "alliance_id", null: false
-    t.string "name", null: false
-    t.string "ticker", limit: 5, null: false
-    t.datetime "date_founded", null: false
     t.integer "executor_corporation_id", null: false
+    t.string "ticker", limit: 5, null: false
+    t.string "name", null: false
+    t.datetime "date_founded", null: false
     t.integer "deletion_status"
     t.string "icon_64"
     t.string "icon_128"
@@ -39,14 +39,14 @@ ActiveRecord::Schema.define(version: 20170602045317) do
 
   create_table "assets", id: false, force: :cascade do |t|
     t.integer "item_id", null: false
+    t.integer "multiple", default: 1, null: false
     t.integer "type_id", null: false
-    t.integer "quantity"
     t.string "location_flag", null: false
     t.string "location_type"
     t.integer "location_id"
     t.string "owner_type"
     t.integer "owner_id"
-    t.integer "multiple", default: 1, null: false
+    t.integer "quantity"
     t.index ["item_id"], name: "index_assets_on_item_id", unique: true
     t.index ["location_type", "location_id"], name: "index_assets_on_location_type_and_location_id"
     t.index ["multiple"], name: "index_assets_on_multiple"
@@ -75,21 +75,22 @@ ActiveRecord::Schema.define(version: 20170602045317) do
   create_table "bookmarks", id: false, force: :cascade do |t|
     t.integer "bookmark_id", null: false
     t.integer "creator_id", null: false
-    t.integer "folder_id"
+    t.integer "location_id", null: false
     t.datetime "create_date", null: false
-    t.text "memo"
-    t.text "note"
+    t.integer "folder_id"
+    t.integer "type_id"
+    t.integer "item_id"
     t.string "owner_type"
     t.integer "owner_id"
-    t.integer "location_id", null: false
-    t.integer "item_id"
-    t.integer "type_id"
+    t.text "memo"
+    t.text "note"
     t.float "x"
     t.float "y"
     t.float "z"
     t.index ["bookmark_id"], name: "index_bookmarks_on_bookmark_id", unique: true
     t.index ["creator_id"], name: "index_bookmarks_on_creator_id"
     t.index ["folder_id"], name: "index_bookmarks_on_folder_id"
+    t.index ["item_id"], name: "index_bookmarks_on_item_id"
     t.index ["location_id"], name: "index_bookmarks_on_location_id"
     t.index ["owner_type", "owner_id"], name: "index_bookmarks_on_owner_type_and_owner_id"
     t.index ["type_id"], name: "index_bookmarks_on_type_id"
@@ -151,16 +152,16 @@ ActiveRecord::Schema.define(version: 20170602045317) do
   create_table "characters", id: false, force: :cascade do |t|
     t.integer "character_id", null: false
     t.integer "corporation_id", null: false
-    t.integer "alliance_id"
+    t.integer "gender", default: 1, null: false
     t.string "name", null: false
     t.datetime "birthday", null: false
-    t.decimal "security_status"
     t.integer "race_id", null: false
     t.integer "bloodline_id", null: false
+    t.integer "alliance_id"
+    t.decimal "security_status"
     t.integer "ancestry_id"
     t.text "description"
     t.datetime "last_clone_jump"
-    t.integer "gender", default: 1, null: false
     t.string "portrait_64"
     t.string "portrait_128"
     t.string "portrait_256"
@@ -183,11 +184,11 @@ ActiveRecord::Schema.define(version: 20170602045317) do
 
   create_table "chat_channels", id: false, force: :cascade do |t|
     t.integer "channel_id", null: false
+    t.integer "password", default: 0, null: false
     t.integer "owner_id", null: false
     t.string "comparison_key", null: false
     t.string "name"
     t.text "motd"
-    t.integer "password", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["channel_id"], name: "index_chat_channels_on_channel_id", unique: true
@@ -204,13 +205,13 @@ ActiveRecord::Schema.define(version: 20170602045317) do
   end
 
   create_table "contacts", id: false, force: :cascade do |t|
-    t.integer "character_id", null: false
     t.string "diplomacy_type"
     t.integer "diplomacy_id", null: false
-    t.integer "label_id"
-    t.float "standing"
+    t.integer "character_id", null: false
     t.integer "blocklist", default: 0, null: false
     t.integer "watchlist", default: 0, null: false
+    t.integer "label_id"
+    t.float "standing"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["blocklist"], name: "index_contacts_on_blocklist"
@@ -222,15 +223,15 @@ ActiveRecord::Schema.define(version: 20170602045317) do
 
   create_table "corporations", id: false, force: :cascade do |t|
     t.integer "corporation_id", null: false
+    t.integer "ceo_id", null: false
+    t.decimal "tax_rate", precision: 4, scale: 3, null: false
+    t.string "ticker", limit: 5, null: false
+    t.string "name", null: false
+    t.integer "creator_id", null: false
     t.integer "alliance_id"
     t.integer "faction_id"
-    t.string "name", null: false
-    t.string "ticker", limit: 5, null: false
-    t.decimal "tax_rate", precision: 4, scale: 3, null: false
     t.datetime "creation_date"
     t.integer "member_count"
-    t.integer "ceo_id", null: false
-    t.integer "creator_id", null: false
     t.string "url"
     t.text "description"
     t.string "faction_name"
@@ -244,7 +245,6 @@ ActiveRecord::Schema.define(version: 20170602045317) do
     t.index ["ceo_id"], name: "index_corporations_on_ceo_id", unique: true
     t.index ["corporation_id"], name: "index_corporations_on_corporation_id", unique: true
     t.index ["creator_id"], name: "index_corporations_on_creator_id"
-    t.index ["deletion_status"], name: "index_corporations_on_deletion_status"
     t.index ["faction_id"], name: "index_corporations_on_faction_id"
   end
 
@@ -259,15 +259,15 @@ ActiveRecord::Schema.define(version: 20170602045317) do
 
   create_table "dogma_attributes", id: false, force: :cascade do |t|
     t.integer "attribute_id", null: false
-    t.float "default_value"
-    t.text "description"
-    t.string "display_name"
-    t.integer "icon_id"
-    t.string "name"
+    t.integer "data_export", default: 1, null: false
     t.integer "unit_id"
     t.integer "good"
     t.integer "stacking"
-    t.integer "data_export", default: 1, null: false
+    t.integer "icon_id"
+    t.float "default_value"
+    t.text "description"
+    t.string "display_name"
+    t.string "name"
     t.index ["attribute_id"], name: "index_dogma_attributes_on_attribute_id", unique: true
     t.index ["data_export"], name: "index_dogma_attributes_on_data_export"
     t.index ["good"], name: "index_dogma_attributes_on_good"
@@ -287,6 +287,8 @@ ActiveRecord::Schema.define(version: 20170602045317) do
 
   create_table "dogma_effects", id: false, force: :cascade do |t|
     t.integer "effect_id", null: false
+    t.integer "attribute_id"
+    t.string "attribute_type"
     t.string "name"
     t.string "display_name"
     t.text "description"
@@ -299,11 +301,6 @@ ActiveRecord::Schema.define(version: 20170602045317) do
     t.boolean "offensive"
     t.boolean "warp_safe"
     t.boolean "range_chance"
-    t.integer "discharge_attribute_id"
-    t.integer "duration_attribute_id"
-    t.integer "falloff_attribute_id"
-    t.integer "range_attribute_id"
-    t.integer "tracking_speed_attribute_id"
     t.string "domain"
     t.string "func"
     t.integer "operator"
@@ -311,14 +308,10 @@ ActiveRecord::Schema.define(version: 20170602045317) do
     t.integer "modifying_attribute_id"
     t.integer "auto_repeat"
     t.integer "data_export"
-    t.index ["discharge_attribute_id"], name: "index_dogma_effects_on_discharge_attribute_id"
-    t.index ["duration_attribute_id"], name: "index_dogma_effects_on_duration_attribute_id"
+    t.index ["attribute_id"], name: "index_dogma_effects_on_attribute_id"
     t.index ["effect_id"], name: "index_dogma_effects_on_effect_id", unique: true
-    t.index ["falloff_attribute_id"], name: "index_dogma_effects_on_falloff_attribute_id"
     t.index ["modified_attribute_id"], name: "index_dogma_effects_on_modified_attribute_id"
     t.index ["modifying_attribute_id"], name: "index_dogma_effects_on_modifying_attribute_id"
-    t.index ["range_attribute_id"], name: "index_dogma_effects_on_range_attribute_id"
-    t.index ["tracking_speed_attribute_id"], name: "index_dogma_effects_on_tracking_speed_attribute_id"
   end
 
   create_table "event_responses", id: false, force: :cascade do |t|
@@ -335,14 +328,14 @@ ActiveRecord::Schema.define(version: 20170602045317) do
 
   create_table "events", id: false, force: :cascade do |t|
     t.integer "event_id", null: false
+    t.integer "importance", default: 0, null: false
     t.datetime "date", null: false
+    t.string "host_type"
+    t.integer "host_id"
     t.integer "duration"
     t.text "description"
     t.string "title"
-    t.string "host_type"
-    t.integer "host_id"
     t.string "host_name"
-    t.integer "importance", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["event_id"], name: "index_events_on_event_id", unique: true
@@ -352,14 +345,14 @@ ActiveRecord::Schema.define(version: 20170602045317) do
 
   create_table "factions", id: false, force: :cascade do |t|
     t.integer "faction_id", null: false
+    t.integer "uniqueness", default: 1, null: false
     t.integer "corporation_id", null: false
     t.string "name", null: false
+    t.integer "solar_system_id"
     t.text "description"
     t.integer "size_factor"
-    t.integer "solar_system_id"
     t.integer "station_count"
     t.integer "station_system_count"
-    t.integer "uniqueness", default: 1, null: false
     t.index ["corporation_id"], name: "index_factions_on_corporation_id"
     t.index ["faction_id"], name: "index_factions_on_faction_id", unique: true
     t.index ["solar_system_id"], name: "index_factions_on_solar_system_id"
@@ -369,16 +362,16 @@ ActiveRecord::Schema.define(version: 20170602045317) do
   create_table "fleet_memberships", id: false, force: :cascade do |t|
     t.integer "character_id", null: false
     t.integer "fleet_id", null: false
-    t.datetime "join_time", null: false
     t.integer "wing_id", null: false
     t.integer "squad_id", null: false
-    t.integer "role", default: 1, null: false
-    t.string "role_name", null: false
     t.integer "ship_type_id", null: false
     t.integer "solar_system_id", null: false
+    t.integer "fleet_warp", default: 1, null: false
+    t.integer "role", default: 1, null: false
+    t.datetime "join_time", null: false
+    t.string "role_name", null: false
     t.string "dock_type"
     t.integer "dock_id"
-    t.integer "fleet_warp", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["character_id"], name: "index_fleet_memberships_on_character_id"
@@ -395,10 +388,10 @@ ActiveRecord::Schema.define(version: 20170602045317) do
 
   create_table "fleets", id: false, force: :cascade do |t|
     t.integer "fleet_id", null: false
-    t.text "motd"
     t.integer "free_move", default: 1, null: false
     t.integer "fleet_ad", default: 0, null: false
     t.integer "eve_voice", default: 0, null: false
+    t.text "motd"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["eve_voice"], name: "index_fleets_on_eve_voice"
@@ -409,17 +402,17 @@ ActiveRecord::Schema.define(version: 20170602045317) do
 
   create_table "item_categories", id: false, force: :cascade do |t|
     t.integer "category_id", null: false
-    t.string "name", null: false
     t.integer "data_export", default: 1, null: false
+    t.string "name", null: false
     t.index ["category_id"], name: "index_item_categories_on_category_id", unique: true
     t.index ["data_export"], name: "index_item_categories_on_data_export"
   end
 
   create_table "item_groups", id: false, force: :cascade do |t|
     t.integer "group_id", null: false
-    t.string "name", null: false
-    t.integer "category_id", null: false
     t.integer "data_export", default: 1, null: false
+    t.integer "category_id", null: false
+    t.string "name", null: false
     t.index ["category_id"], name: "index_item_groups_on_category_id"
     t.index ["data_export"], name: "index_item_groups_on_data_export"
     t.index ["group_id"], name: "index_item_groups_on_group_id", unique: true
@@ -427,18 +420,18 @@ ActiveRecord::Schema.define(version: 20170602045317) do
 
   create_table "items", id: false, force: :cascade do |t|
     t.integer "type_id", null: false
+    t.integer "data_export", default: 1, null: false
     t.string "type", null: false
-    t.string "name", null: false
-    t.text "description"
     t.integer "group_id", null: false
+    t.string "name", null: false
+    t.integer "icon_id"
     t.integer "graphic_id"
+    t.text "description"
     t.float "radius"
     t.float "volume"
-    t.integer "icon_id"
     t.float "capacity"
     t.float "portion_size"
     t.float "mass"
-    t.integer "data_export", default: 1, null: false
     t.index ["data_export"], name: "index_items_on_data_export"
     t.index ["graphic_id"], name: "index_items_on_graphic_id"
     t.index ["group_id"], name: "index_items_on_group_id"
@@ -451,9 +444,9 @@ ActiveRecord::Schema.define(version: 20170602045317) do
     t.integer "character_id", null: false
     t.integer "medal_id", null: false
     t.integer "issuer_id", null: false
+    t.integer "viewable", default: 1, null: false
     t.datetime "date", null: false
     t.text "reason"
-    t.integer "viewable", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["character_id", "medal_id"], name: "index_medal_awards_on_character_id_and_medal_id"
@@ -469,9 +462,9 @@ ActiveRecord::Schema.define(version: 20170602045317) do
     t.string "title", null: false
     t.text "description"
     t.string "graphic", null: false
-    t.integer "color"
     t.integer "layer", null: false
     t.integer "part", null: false
+    t.integer "color"
     t.index ["corporation_id"], name: "index_medals_on_corporation_id"
     t.index ["medal_id"], name: "index_medals_on_medal_id", unique: true
   end
@@ -480,12 +473,12 @@ ActiveRecord::Schema.define(version: 20170602045317) do
     t.integer "item_id", null: false
     t.integer "type_id", null: false
     t.integer "character_id", null: false
-    t.string "location_type"
-    t.integer "location_id", null: false
     t.integer "material_efficiency", null: false
     t.integer "quantity", null: false
     t.integer "runs", null: false
     t.integer "time_efficiency", null: false
+    t.string "location_type"
+    t.integer "location_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["character_id", "type_id"], name: "index_personal_blueprints_on_character_id_and_type_id"
@@ -499,9 +492,9 @@ ActiveRecord::Schema.define(version: 20170602045317) do
     t.integer "character_id", null: false
     t.integer "agent_id", null: false
     t.integer "skill_type_id", null: false
+    t.float "points_remaining", default: 0.0, null: false
     t.datetime "started", null: false
     t.float "points_per_day", null: false
-    t.float "points_remaining", default: 0.0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agent_id"], name: "index_personal_research_agents_on_agent_id"
@@ -532,9 +525,9 @@ ActiveRecord::Schema.define(version: 20170602045317) do
   end
 
   create_table "standings", id: false, force: :cascade do |t|
-    t.integer "character_id", null: false
     t.string "relationship_type"
     t.integer "relationship_id", null: false
+    t.integer "character_id", null: false
     t.float "standing", default: 0.0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
