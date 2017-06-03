@@ -9,5 +9,14 @@ class Faction < ApplicationRecord
                                 inverse_of:  :factions,
                                 optional:    true
   
-  has_many :corporations, inverse_of: :faction
+  has_many :corporations,       inverse_of:  :faction
+  has_many :losses,             class_name:  'Killmail',
+                                foreign_key: :victim_faction_id,
+                                inverse_of:  :faction
+  has_many :killmail_attacks,   class_name:  'KillmailAttacker',
+                                foreign_key: :attacker_faction_id,
+                                inverse_of:  :faction
+  has_many :kills,              through:     :killmail_attackers,
+                                source:      :killmail
+  # TODO: scope :killmails - returns all killmails involving members
 end

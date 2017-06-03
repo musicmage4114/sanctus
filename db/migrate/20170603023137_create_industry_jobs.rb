@@ -8,7 +8,7 @@ class CreateIndustryJobs < ActiveRecord::Migration[5.1]
       t.belongs_to :facility,               null: false, index: true
       t.belongs_to :installer,              null: false, index: true
       t.belongs_to :completed_character,    index: true
-      t.belongs_to :product_type,           index: true
+      t.belongs_to :product,                polymorphic: true
       t.belongs_to :job_blueprint_location, polymorphic: true,
                                             null: false,
                                             index: { name: 'job_blueprint_location_index' }
@@ -33,6 +33,5 @@ class CreateIndustryJobs < ActiveRecord::Migration[5.1]
     add_foreign_key :industry_jobs, :blueprints, column: :blueprint_type_id, primary_key: :type_id
     add_foreign_key :industry_jobs, :characters, column: :installer_id, primary_key: :character_id
     add_foreign_key :industry_jobs, :characters, column: :completed_character_id, primary_key: :character_id
-    add_foreign_key :industry_jobs, :items, column: :product_type_id, primary_key: :type_id
   end
 end

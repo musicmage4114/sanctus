@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170603023137) do
+ActiveRecord::Schema.define(version: 20170603043151) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -408,7 +408,8 @@ ActiveRecord::Schema.define(version: 20170603023137) do
     t.integer "facility_id", null: false
     t.integer "installer_id", null: false
     t.integer "completed_character_id"
-    t.integer "product_type_id"
+    t.string "product_type"
+    t.integer "product_id"
     t.string "job_blueprint_location_type"
     t.integer "job_blueprint_location_id", null: false
     t.string "output_location_type"
@@ -438,7 +439,7 @@ ActiveRecord::Schema.define(version: 20170603023137) do
     t.index ["job_id"], name: "index_industry_jobs_on_job_id", unique: true
     t.index ["job_location_type", "job_location_id"], name: "index_industry_jobs_on_job_location_type_and_job_location_id"
     t.index ["output_location_type", "output_location_id"], name: "output_location_index"
-    t.index ["product_type_id"], name: "index_industry_jobs_on_product_type_id"
+    t.index ["product_type", "product_id"], name: "index_industry_jobs_on_product_type_and_product_id"
   end
 
   create_table "item_categories", id: false, force: :cascade do |t|
@@ -479,6 +480,76 @@ ActiveRecord::Schema.define(version: 20170603023137) do
     t.index ["icon_id"], name: "index_items_on_icon_id"
     t.index ["type"], name: "index_items_on_type"
     t.index ["type_id"], name: "index_items_on_type_id", unique: true
+  end
+
+  create_table "killmail_attackers", id: false, force: :cascade do |t|
+    t.integer "killmail_id", null: false
+    t.integer "attacker_id", null: false
+    t.integer "attacker_corporation_id"
+    t.integer "attacker_alliance_id"
+    t.integer "attacker_faction_id"
+    t.integer "ship_type_id"
+    t.integer "weapon_type_id"
+    t.decimal "security_status"
+    t.integer "damage_dealt"
+    t.index ["attacker_alliance_id"], name: "index_killmail_attackers_on_attacker_alliance_id"
+    t.index ["attacker_corporation_id"], name: "index_killmail_attackers_on_attacker_corporation_id"
+    t.index ["attacker_faction_id"], name: "index_killmail_attackers_on_attacker_faction_id"
+    t.index ["attacker_id", "killmail_id"], name: "index_killmail_attackers_on_attacker_id_and_killmail_id"
+    t.index ["attacker_id"], name: "index_killmail_attackers_on_attacker_id"
+    t.index ["killmail_id"], name: "index_killmail_attackers_on_killmail_id"
+    t.index ["ship_type_id"], name: "index_killmail_attackers_on_ship_type_id"
+    t.index ["weapon_type_id"], name: "index_killmail_attackers_on_weapon_type_id"
+  end
+
+  create_table "killmail_items", force: :cascade do |t|
+    t.integer "killmail_id", null: false
+    t.integer "stack", default: 1, null: false
+    t.integer "killmail_item_id"
+    t.string "killmail_loot_type"
+    t.integer "killmail_loot_id", null: false
+    t.integer "flag"
+    t.integer "quantity_destroyed"
+    t.integer "quantity_dropped"
+    t.float "total_value"
+    t.float "dropped_value"
+    t.float "destroyed_value"
+    t.index ["killmail_id"], name: "index_killmail_items_on_killmail_id"
+    t.index ["killmail_item_id"], name: "index_killmail_items_on_killmail_item_id"
+    t.index ["killmail_loot_type", "killmail_loot_id"], name: "killmail_loot_index"
+    t.index ["stack"], name: "index_killmail_items_on_stack"
+  end
+
+  create_table "killmails", id: false, force: :cascade do |t|
+    t.integer "killmail_id", null: false
+    t.integer "victim_id", null: false
+    t.integer "solar_system_id", null: false
+    t.integer "victim_ship_type_id", null: false
+    t.integer "victim_corporation_id"
+    t.integer "victim_alliance_id"
+    t.integer "victim_faction_id"
+    t.integer "moon_id"
+    t.integer "war_id"
+    t.string "final_blow_type"
+    t.integer "final_blow_id", null: false
+    t.datetime "time"
+    t.integer "damage_taken"
+    t.float "total_value"
+    t.float "dropped_value"
+    t.float "destroyed_value"
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.index ["final_blow_type", "final_blow_id"], name: "index_killmails_on_final_blow_type_and_final_blow_id"
+    t.index ["killmail_id"], name: "index_killmails_on_killmail_id", unique: true
+    t.index ["moon_id"], name: "index_killmails_on_moon_id"
+    t.index ["solar_system_id"], name: "index_killmails_on_solar_system_id"
+    t.index ["victim_alliance_id"], name: "index_killmails_on_victim_alliance_id"
+    t.index ["victim_corporation_id"], name: "index_killmails_on_victim_corporation_id"
+    t.index ["victim_faction_id"], name: "index_killmails_on_victim_faction_id"
+    t.index ["victim_id"], name: "index_killmails_on_victim_id"
+    t.index ["victim_ship_type_id"], name: "index_killmails_on_victim_ship_type_id"
+    t.index ["war_id"], name: "index_killmails_on_war_id"
   end
 
   create_table "medal_awards", id: false, force: :cascade do |t|

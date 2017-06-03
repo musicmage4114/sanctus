@@ -7,7 +7,7 @@ class Character < ApplicationRecord
   enum gender: { male: 1, female: 2 }
 
   # AssetsApi
-  has_many :assets, as: :owner
+  has_many :assets, as: :asset_owner
   
   # BookmarksApi
   has_many :bookmarks_folders, as: :folder_owner,   dependent: :destroy
@@ -102,21 +102,21 @@ class Character < ApplicationRecord
   has_many :industry_jobs,  dependent: :destroy
   
   # KillmailApi
-  has_many :attacker_stats, through:     :victims,
-                            source:      :killmail
-  has_many :victim_stats,   through:     :attackers,
-                            source:      :killmail
-  has_many :victims,        foreign_key: :attacker_id,
-                            inverse_of:  :character
-  has_many :attackers,      foreign_key: :victim_id,
-                            inverse_of:  :character
-  # TODO: has_many :killmails - all killmails involving that player
+  has_many :final_blows,        as:          :final_blow
+  has_many :killmail_attacks,   as:          :attacker
+  has_many :kills,              through:     :killmail_attacks,
+                                source:      :killmail,
+                                source_type: 'Character'
+  has_many :losses,             class_name:  'Killmail',
+                                foreign_key: :victim_id,
+                                inverse_of:  :character
+  has_many :victims,            through:     :kills,
+                                source:      :victim
+  # TODO: scope :killmails - returns all killmails involving the character
   
   # LocationApi
   belongs_to :current_location, polymorphic: true, optional: true
-  has_one :current_ship,        through:     :current_ships,
-                                source:      :ship_type_id,
-                                optional:    true
+  has_one :current_ship,        through: :current_ships, source: :ship_type_id
   
   # LoyaltyApi
   has_many :loyalty_amounts, inverse_of: :character, dependent: :destroy
