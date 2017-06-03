@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602045317) do
+ActiveRecord::Schema.define(version: 20170603023137) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -398,6 +398,47 @@ ActiveRecord::Schema.define(version: 20170602045317) do
     t.index ["fleet_ad"], name: "index_fleets_on_fleet_ad"
     t.index ["fleet_id"], name: "index_fleets_on_fleet_id", unique: true
     t.index ["free_move"], name: "index_fleets_on_free_move"
+  end
+
+  create_table "industry_jobs", id: false, force: :cascade do |t|
+    t.integer "job_id", null: false
+    t.integer "activity_id", null: false
+    t.integer "blueprint_id", null: false
+    t.integer "blueprint_type_id", null: false
+    t.integer "facility_id", null: false
+    t.integer "installer_id", null: false
+    t.integer "completed_character_id"
+    t.integer "product_type_id"
+    t.string "job_blueprint_location_type"
+    t.integer "job_blueprint_location_id", null: false
+    t.string "output_location_type"
+    t.integer "output_location_id", null: false
+    t.string "job_location_type"
+    t.integer "job_location_id", null: false
+    t.decimal "cost"
+    t.float "probability"
+    t.string "status"
+    t.integer "runs"
+    t.integer "licensed_runs"
+    t.integer "successful_runs"
+    t.integer "duration"
+    t.datetime "start_date"
+    t.datetime "pause_date"
+    t.datetime "completed_date"
+    t.datetime "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_industry_jobs_on_activity_id"
+    t.index ["blueprint_id"], name: "index_industry_jobs_on_blueprint_id"
+    t.index ["blueprint_type_id"], name: "index_industry_jobs_on_blueprint_type_id"
+    t.index ["completed_character_id"], name: "index_industry_jobs_on_completed_character_id"
+    t.index ["facility_id"], name: "index_industry_jobs_on_facility_id"
+    t.index ["installer_id"], name: "index_industry_jobs_on_installer_id"
+    t.index ["job_blueprint_location_type", "job_blueprint_location_id"], name: "job_blueprint_location_index"
+    t.index ["job_id"], name: "index_industry_jobs_on_job_id", unique: true
+    t.index ["job_location_type", "job_location_id"], name: "index_industry_jobs_on_job_location_type_and_job_location_id"
+    t.index ["output_location_type", "output_location_id"], name: "output_location_index"
+    t.index ["product_type_id"], name: "index_industry_jobs_on_product_type_id"
   end
 
   create_table "item_categories", id: false, force: :cascade do |t|

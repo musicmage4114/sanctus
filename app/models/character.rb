@@ -120,7 +120,7 @@ class Character < ApplicationRecord
   
   # LoyaltyApi
   has_many :loyalty_amounts, inverse_of: :character, dependent: :destroy
-  has_many :loyalties, through: :loyalty_amounts, source: :corporation
+  has_many :loyalties,       through: :loyalty_amounts, source: :corporation
   
   alias_attribute :loyalty_points, :loyalty_amounts
   
