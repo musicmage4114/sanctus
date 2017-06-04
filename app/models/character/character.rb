@@ -42,7 +42,7 @@ class Character < ApplicationRecord
                                       dependent:  :destroy
   # TODO: scope :past_corporations, shouldn't return current
   
-  alias_attribute :employment_history, :past_corporations
+  alias_attribute :employment_history, :corporation_histories
   
   # standings
   has_many :standings, inverse_of: :character, dependent: :destroy

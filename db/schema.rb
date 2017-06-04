@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170603043151) do
+ActiveRecord::Schema.define(version: 20170604231448) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20170603043151) do
     t.integer "record_id", null: false
     t.datetime "start_date", null: false
     t.index ["alliance_id"], name: "index_alliance_histories_on_alliance_id"
+    t.index ["corporation_id", "alliance_id"], name: "index_alliance_histories_on_corporation_id_and_alliance_id"
     t.index ["corporation_id"], name: "index_alliance_histories_on_corporation_id"
   end
 
@@ -219,6 +220,16 @@ ActiveRecord::Schema.define(version: 20170603043151) do
     t.index ["diplomacy_type", "diplomacy_id"], name: "index_contacts_on_diplomacy_type_and_diplomacy_id"
     t.index ["label_id"], name: "index_contacts_on_label_id"
     t.index ["watchlist"], name: "index_contacts_on_watchlist"
+  end
+
+  create_table "corporation_histories", id: false, force: :cascade do |t|
+    t.integer "character_id", null: false
+    t.integer "corporation_id", null: false
+    t.integer "record_id", null: false
+    t.datetime "start_date", null: false
+    t.index ["character_id", "corporation_id"], name: "index_corporation_histories_on_character_id_and_corporation_id"
+    t.index ["character_id"], name: "index_corporation_histories_on_character_id"
+    t.index ["corporation_id"], name: "index_corporation_histories_on_corporation_id"
   end
 
   create_table "corporations", id: false, force: :cascade do |t|
