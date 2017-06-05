@@ -48,8 +48,9 @@ class Corporation < ApplicationRecord
   has_many :solar_systems,   inverse_of: :corporation
   
   # WarApi
-  has_many :aggressive_wars, through: :war_aggressors, source: :war
-  has_many :defensive_wars,  through: :war_defenders,  source: :war
+  has_many :aggressive_wars, class_name: 'War',     as: :aggressor
+  has_many :defensive_wars,  class_name: 'War',     as: :defender
+  has_many :war_assists,     class_name: 'WarAlly', as: :ally
   # TODO: has_many :current_wars
   # TODO: has_many :past_wars
   

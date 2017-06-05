@@ -154,9 +154,10 @@ class Character < ApplicationRecord
                         dependent:   :destroy
   
   # SkillsApi
-  has_many :skill_queue_entries, inverse_of: :character
+  has_many :skill_queue_entries, inverse_of: :character, dependent: :destroy
   has_many :skills,              class_name: 'CharacterSkill',
-                                 inverse_of: :character
+                                 inverse_of: :character,
+                                 dependent:  :destroy
   
   # WalletApi
   has_many :wallets,  inverse_of:  :character

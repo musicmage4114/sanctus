@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170605044500) do
+ActiveRecord::Schema.define(version: 20170605051252) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -884,6 +884,40 @@ ActiveRecord::Schema.define(version: 20170605044500) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "war_allies", id: false, force: :cascade do |t|
+    t.integer "war_id", null: false
+    t.string "ally_type"
+    t.integer "ally_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ally_type", "ally_id"], name: "index_war_allies_on_ally_type_and_ally_id"
+    t.index ["war_id"], name: "index_war_allies_on_war_id"
+  end
+
+  create_table "wars", id: false, force: :cascade do |t|
+    t.integer "war_id", null: false
+    t.string "aggressor_type"
+    t.integer "aggressor_id", null: false
+    t.string "defender_type"
+    t.integer "defender_id", null: false
+    t.integer "assistance", default: 0, null: false
+    t.boolean "mutual", default: false, null: false
+    t.float "aggressor_isk_score", default: 0.0, null: false
+    t.float "defender_isk_score", default: 0.0, null: false
+    t.integer "aggressor_ship_score", default: 0, null: false
+    t.integer "defender_ship_score", default: 0, null: false
+    t.datetime "declared", null: false
+    t.datetime "started"
+    t.datetime "retracted"
+    t.datetime "finished"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aggressor_type", "aggressor_id"], name: "index_wars_on_aggressor_type_and_aggressor_id"
+    t.index ["assistance"], name: "index_wars_on_assistance"
+    t.index ["defender_type", "defender_id"], name: "index_wars_on_defender_type_and_defender_id"
+    t.index ["war_id"], name: "index_wars_on_war_id", unique: true
   end
 
   create_table "wings", id: false, force: :cascade do |t|

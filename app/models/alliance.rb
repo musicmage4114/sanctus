@@ -20,6 +20,11 @@ class Alliance < ApplicationRecord
                                     source:      :victim
   # TODO: scope :killmails - returns all killmails involving alliance members
   # TODO: scope :past_corporations - shouldn't return current
+  has_many :aggressive_wars, class_name: 'War',     as: :aggressor
+  has_many :defensive_wars,  class_name: 'War',     as: :defender
+  has_many :war_assists,     class_name: 'WarAlly', as: :ally
+  # TODO: scope :current_wars
+  # TODO: scope :past_wars
   
   alias_attribute :executor, :executor_corporation
 end
