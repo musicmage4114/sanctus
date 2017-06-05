@@ -7,7 +7,7 @@ class CreateFleets < ActiveRecord::Migration[5.1]
       t.integer :eve_voice, null: false, default: 0, index: true
       t.text    :motd
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

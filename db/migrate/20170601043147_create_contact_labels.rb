@@ -6,6 +6,7 @@ class CreateContactLabels < ActiveRecord::Migration[5.1]
       t.string     :name
     end
     add_foreign_key :contact_labels, :characters, primary_key: :character_id
-    add_foreign_key :contacts, :contact_labels,   column: :label_id, primary_key: :label_id
+    add_foreign_key :contacts, :contact_labels,   column: :label_id,
+                                                  primary_key: :label_id
   end
 end

@@ -6,7 +6,7 @@ class CreateSquads < ActiveRecord::Migration[5.1]
       t.belongs_to :wing,     index: true
       t.string     :name
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_foreign_key :squads, :fleets, primary_key: :fleet_id
   end

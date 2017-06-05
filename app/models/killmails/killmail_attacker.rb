@@ -1,7 +1,5 @@
 class KillmailAttacker < ApplicationRecord
-  belongs_to :attacker,    class_name: 'Character',
-                           foreign_key: :attacker_id,
-                           inverse_of: :killmail_attackers
+  belongs_to :attacker,    polymorphic: true
   belongs_to :corporation, foreign_key: :attacker_corporation_id,
                            inverse_of: :killmail_attackers,
                            optional: true

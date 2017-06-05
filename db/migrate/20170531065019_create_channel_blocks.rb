@@ -6,8 +6,9 @@ class CreateChannelBlocks < ActiveRecord::Migration[5.1]
       t.datetime   :ends
       t.text       :reason
 
-      t.timestamps
+      t.timestamps null: false
     end
-    add_foreign_key :channel_blocks, :chat_channels, column: :channel_id, primary_key: :channel_id
+    add_foreign_key :channel_blocks, :chat_channels, column: :channel_id,
+                                                     primary_key: :channel_id
   end
 end

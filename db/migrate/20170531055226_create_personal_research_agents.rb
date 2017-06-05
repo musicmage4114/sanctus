@@ -9,7 +9,7 @@ class CreatePersonalResearchAgents < ActiveRecord::Migration[5.1]
       t.float      :points_per_day,   null: false
       
       t.index [:character_id, :agent_id]
-      t.timestamps
+      t.timestamps null: false
     end
     add_foreign_key :personal_research_agents, :characters, primary_key: :character_id
   end

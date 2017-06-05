@@ -2,7 +2,9 @@ class CreateKillmailAttackers < ActiveRecord::Migration[5.1]
   def change
     create_table :killmail_attackers, id: false do |t|
       t.belongs_to :killmail,             null: false, index: true
-      t.belongs_to :attacker,             null: false, index: true
+      t.belongs_to :attacker,             polymorphic: true,
+                                          null: false,
+                                          index: { name: 'killmail_attackers-index' }
       t.belongs_to :attacker_corporation, index: true
       t.belongs_to :attacker_alliance,    index: true
       t.belongs_to :attacker_faction,     index: true

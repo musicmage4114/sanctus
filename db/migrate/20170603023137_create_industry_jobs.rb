@@ -8,14 +8,16 @@ class CreateIndustryJobs < ActiveRecord::Migration[5.1]
       t.belongs_to :facility,               null: false, index: true
       t.belongs_to :installer,              null: false, index: true
       t.belongs_to :completed_character,    index: true
-      t.belongs_to :product,                polymorphic: true
+      t.belongs_to :product,                polymorphic: true, index: true
       t.belongs_to :job_blueprint_location, polymorphic: true,
                                             null: false,
                                             index: { name: 'job_blueprint_location_index' }
       t.belongs_to :output_location,        polymorphic: true,
                                             null: false,
                                             index: { name: 'output_location_index' }
-      t.belongs_to :job_location,           polymorphic: true, null: false
+      t.belongs_to :job_location,           polymorphic: true,
+                                            null: false,
+                                            index: { name: 'job_location_index' }
       t.decimal    :cost
       t.float      :probability
       t.string     :status
@@ -28,10 +30,13 @@ class CreateIndustryJobs < ActiveRecord::Migration[5.1]
       t.datetime   :completed_date
       t.datetime   :end_date
 
-      t.timestamps
+      t.timestamps null: false
     end
-    add_foreign_key :industry_jobs, :blueprints, column: :blueprint_type_id, primary_key: :type_id
-    add_foreign_key :industry_jobs, :characters, column: :installer_id, primary_key: :character_id
-    add_foreign_key :industry_jobs, :characters, column: :completed_character_id, primary_key: :character_id
+    add_foreign_key :industry_jobs, :blueprints, column: :blueprint_type_id,
+                                                 primary_key: :type_id
+    add_foreign_key :industry_jobs, :characters, column: :installer_id,
+                                                 primary_key: :character_id
+    add_foreign_key :industry_jobs, :characters, column: :completed_character_id,
+                                                 primary_key: :character_id
   end
 end

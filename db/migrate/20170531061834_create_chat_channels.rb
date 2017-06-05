@@ -8,8 +8,9 @@ class CreateChatChannels < ActiveRecord::Migration[5.1]
       t.string     :name
       t.text       :motd
 
-      t.timestamps
+      t.timestamps null: false
     end
-    add_foreign_key :chat_channels, :characters, column: :owner_id, primary_key: :character_id
+    add_foreign_key :chat_channels, :characters, column: :owner_id,
+                                                 primary_key: :character_id
   end
 end

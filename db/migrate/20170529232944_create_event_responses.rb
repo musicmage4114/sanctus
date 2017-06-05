@@ -6,7 +6,7 @@ class CreateEventResponses < ActiveRecord::Migration[5.1]
       t.integer    :response,  null: false, index: true
       
       t.index [:character_id, :event_id]
-      t.timestamps
+      t.timestamps null: false
     end
     add_foreign_key :event_responses, :events,     primary_key: :event_id
     add_foreign_key :event_responses, :characters, primary_key: :character_id

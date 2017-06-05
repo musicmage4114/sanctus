@@ -4,8 +4,9 @@ class CreateChannelOperators < ActiveRecord::Migration[5.1]
       t.belongs_to :channel,  null: false, index: true
       t.belongs_to :operator, polymorphic: true, null: false, index: true
 
-      t.timestamps
+      t.timestamps null: false
     end
-    add_foreign_key :channel_operators, :chat_channels, column: :channel_id, primary_key: :channel_id
+    add_foreign_key :channel_operators, :chat_channels, column: :channel_id,
+                                                        primary_key: :channel_id
   end
 end

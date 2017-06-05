@@ -8,7 +8,7 @@ class CreateContacts < ActiveRecord::Migration[5.1]
       t.belongs_to :label,     index: true
       t.float      :standing
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_foreign_key :contacts, :characters, primary_key: :character_id
   end

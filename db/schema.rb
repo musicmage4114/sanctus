@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170604231448) do
+ActiveRecord::Schema.define(version: 20170605011416) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 20170604231448) do
   create_table "bookmarks", id: false, force: :cascade do |t|
     t.integer "bookmark_id", null: false
     t.integer "creator_id", null: false
-    t.integer "location_id", null: false
+    t.integer "solar_system_id", null: false
     t.datetime "create_date", null: false
     t.integer "folder_id"
     t.integer "type_id"
@@ -92,8 +92,8 @@ ActiveRecord::Schema.define(version: 20170604231448) do
     t.index ["creator_id"], name: "index_bookmarks_on_creator_id"
     t.index ["folder_id"], name: "index_bookmarks_on_folder_id"
     t.index ["item_id"], name: "index_bookmarks_on_item_id"
-    t.index ["location_id"], name: "index_bookmarks_on_location_id"
     t.index ["owner_type", "owner_id"], name: "index_bookmarks_on_owner_type_and_owner_id"
+    t.index ["solar_system_id"], name: "index_bookmarks_on_solar_system_id"
     t.index ["type_id"], name: "index_bookmarks_on_type_id"
   end
 
@@ -159,6 +159,11 @@ ActiveRecord::Schema.define(version: 20170604231448) do
     t.integer "race_id", null: false
     t.integer "bloodline_id", null: false
     t.integer "alliance_id"
+    t.string "home_station_type"
+    t.integer "home_station_id"
+    t.string "current_location_type"
+    t.integer "current_location_id"
+    t.datetime "last_location_check"
     t.decimal "security_status"
     t.integer "ancestry_id"
     t.text "description"
@@ -167,10 +172,6 @@ ActiveRecord::Schema.define(version: 20170604231448) do
     t.string "portrait_128"
     t.string "portrait_256"
     t.string "portrait_512"
-    t.string "home_station_type"
-    t.integer "home_station_id"
-    t.string "current_location_type"
-    t.integer "current_location_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["alliance_id"], name: "index_characters_on_alliance_id"
@@ -195,6 +196,17 @@ ActiveRecord::Schema.define(version: 20170604231448) do
     t.index ["channel_id"], name: "index_chat_channels_on_channel_id", unique: true
     t.index ["owner_id"], name: "index_chat_channels_on_owner_id"
     t.index ["password"], name: "index_chat_channels_on_password"
+  end
+
+  create_table "constellations", id: false, force: :cascade do |t|
+    t.integer "constellation_id", null: false
+    t.integer "region_id", null: false
+    t.string "name", null: false
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.index ["constellation_id"], name: "index_constellations_on_constellation_id", unique: true
+    t.index ["region_id"], name: "index_constellations_on_region_id"
   end
 
   create_table "contact_labels", id: false, force: :cascade do |t|
@@ -448,7 +460,7 @@ ActiveRecord::Schema.define(version: 20170604231448) do
     t.index ["installer_id"], name: "index_industry_jobs_on_installer_id"
     t.index ["job_blueprint_location_type", "job_blueprint_location_id"], name: "job_blueprint_location_index"
     t.index ["job_id"], name: "index_industry_jobs_on_job_id", unique: true
-    t.index ["job_location_type", "job_location_id"], name: "index_industry_jobs_on_job_location_type_and_job_location_id"
+    t.index ["job_location_type", "job_location_id"], name: "job_location_index"
     t.index ["output_location_type", "output_location_id"], name: "output_location_index"
     t.index ["product_type", "product_id"], name: "index_industry_jobs_on_product_type_and_product_id"
   end
@@ -495,6 +507,7 @@ ActiveRecord::Schema.define(version: 20170604231448) do
 
   create_table "killmail_attackers", id: false, force: :cascade do |t|
     t.integer "killmail_id", null: false
+    t.string "attacker_type"
     t.integer "attacker_id", null: false
     t.integer "attacker_corporation_id"
     t.integer "attacker_alliance_id"
@@ -507,7 +520,7 @@ ActiveRecord::Schema.define(version: 20170604231448) do
     t.index ["attacker_corporation_id"], name: "index_killmail_attackers_on_attacker_corporation_id"
     t.index ["attacker_faction_id"], name: "index_killmail_attackers_on_attacker_faction_id"
     t.index ["attacker_id", "killmail_id"], name: "index_killmail_attackers_on_attacker_id_and_killmail_id"
-    t.index ["attacker_id"], name: "index_killmail_attackers_on_attacker_id"
+    t.index ["attacker_type", "attacker_id"], name: "killmail_attackers-index"
     t.index ["killmail_id"], name: "index_killmail_attackers_on_killmail_id"
     t.index ["ship_type_id"], name: "index_killmail_attackers_on_ship_type_id"
     t.index ["weapon_type_id"], name: "index_killmail_attackers_on_weapon_type_id"
@@ -592,6 +605,19 @@ ActiveRecord::Schema.define(version: 20170604231448) do
     t.index ["medal_id"], name: "index_medals_on_medal_id", unique: true
   end
 
+  create_table "moons", id: false, force: :cascade do |t|
+    t.integer "moon_id", null: false
+    t.integer "planet_id", null: false
+    t.integer "solar_system_id", null: false
+    t.string "name"
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.index ["moon_id"], name: "index_moons_on_moon_id", unique: true
+    t.index ["planet_id"], name: "index_moons_on_planet_id"
+    t.index ["solar_system_id"], name: "index_moons_on_solar_system_id"
+  end
+
   create_table "personal_blueprints", id: false, force: :cascade do |t|
     t.integer "item_id", null: false
     t.integer "type_id", null: false
@@ -626,6 +652,28 @@ ActiveRecord::Schema.define(version: 20170604231448) do
     t.index ["skill_type_id"], name: "index_personal_research_agents_on_skill_type_id"
   end
 
+  create_table "planets", id: false, force: :cascade do |t|
+    t.integer "planet_id", null: false
+    t.integer "solar_system_id", null: false
+    t.string "name", null: false
+    t.integer "type", null: false
+    t.integer "asteroid_belts"
+    t.integer "ice_belts"
+    t.integer "data_export", default: 1, null: false
+    t.integer "group_id", null: false
+    t.integer "type_id", null: false
+    t.text "description"
+    t.integer "icon_id"
+    t.integer "graphic_id"
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.index ["data_export"], name: "index_planets_on_data_export"
+    t.index ["group_id"], name: "index_planets_on_group_id"
+    t.index ["planet_id"], name: "index_planets_on_planet_id", unique: true
+    t.index ["solar_system_id"], name: "index_planets_on_solar_system_id"
+  end
+
   create_table "races", id: false, force: :cascade do |t|
     t.integer "race_id", null: false
     t.integer "alliance_id", null: false
@@ -633,6 +681,36 @@ ActiveRecord::Schema.define(version: 20170604231448) do
     t.text "description"
     t.index ["alliance_id"], name: "index_races_on_alliance_id"
     t.index ["race_id"], name: "index_races_on_race_id", unique: true
+  end
+
+  create_table "regions", id: false, force: :cascade do |t|
+    t.integer "region_id", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.index ["region_id"], name: "index_regions_on_region_id", unique: true
+  end
+
+  create_table "solar_systems", id: false, force: :cascade do |t|
+    t.integer "system_id", null: false
+    t.integer "constellation_id", null: false
+    t.string "name", null: false
+    t.float "security_status", null: false
+    t.string "security_class"
+    t.integer "asteroid_belts"
+    t.integer "ice_belts"
+    t.integer "jumps_last_hour"
+    t.datetime "last_jumps_check"
+    t.integer "npc_kills_last_hour"
+    t.integer "pod_kills_last_hour"
+    t.integer "ship_kills_last_hour"
+    t.datetime "last_kills_check"
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["constellation_id"], name: "index_solar_systems_on_constellation_id"
+    t.index ["system_id"], name: "index_solar_systems_on_system_id", unique: true
   end
 
   create_table "squads", id: false, force: :cascade do |t|
@@ -656,6 +734,28 @@ ActiveRecord::Schema.define(version: 20170604231448) do
     t.datetime "updated_at", null: false
     t.index ["character_id"], name: "index_standings_on_character_id"
     t.index ["relationship_type", "relationship_id"], name: "index_standings_on_relationship_type_and_relationship_id"
+  end
+
+  create_table "stargates", id: false, force: :cascade do |t|
+    t.integer "stargate_id", null: false
+    t.integer "solar_system_id", null: false
+    t.integer "destination_id", null: false
+    t.integer "destination_stargate_id", null: false
+    t.string "name"
+    t.integer "data_export", default: 1, null: false
+    t.integer "group_id", null: false
+    t.integer "type_id"
+    t.integer "graphic_id"
+    t.string "type"
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.index ["data_export"], name: "index_stargates_on_data_export"
+    t.index ["destination_id"], name: "index_stargates_on_destination_id"
+    t.index ["destination_stargate_id"], name: "index_stargates_on_destination_stargate_id"
+    t.index ["group_id"], name: "index_stargates_on_group_id"
+    t.index ["solar_system_id"], name: "index_stargates_on_solar_system_id"
+    t.index ["stargate_id"], name: "index_stargates_on_stargate_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|

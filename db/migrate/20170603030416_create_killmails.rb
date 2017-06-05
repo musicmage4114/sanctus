@@ -10,7 +10,9 @@ class CreateKillmails < ActiveRecord::Migration[5.1]
       t.belongs_to :victim_faction,     index: true
       t.belongs_to :moon,               index: true
       t.belongs_to :war,                index: true
-      t.belongs_to :final_blow,         polymorphic: true, null: false
+      t.belongs_to :final_blow,         polymorphic: true,
+                                        null: false,
+                                        index: true
       t.datetime   :time
       t.integer    :damage_taken
       t.float      :total_value
@@ -22,7 +24,8 @@ class CreateKillmails < ActiveRecord::Migration[5.1]
       t.float :y
       t.float :z
     end
-    add_foreign_key :killmails, :characters,   column: :victim_id, primary_key: :character_id
+    add_foreign_key :killmails, :characters,   column: :victim_id,
+                                               primary_key: :character_id
     add_foreign_key :killmails, :corporations, column: :victim_corporation_id,
                                                primary_key: :corporation_id
     add_foreign_key :killmails, :alliances,    column: :victim_alliance_id,

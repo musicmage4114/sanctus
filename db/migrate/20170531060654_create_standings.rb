@@ -5,7 +5,7 @@ class CreateStandings < ActiveRecord::Migration[5.1]
       t.belongs_to :character,    null: false, index: true
       t.float      :standing,     null: false, default: 0
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_foreign_key :standings, :characters, primary_key: :character_id
   end

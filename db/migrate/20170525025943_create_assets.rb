@@ -9,6 +9,7 @@ class CreateAssets < ActiveRecord::Migration[5.0]
       t.belongs_to :owner,         polymorphic: true, index: true
       t.integer    :quantity
     end
-    add_foreign_key :assets, :items, column: :type_id, primary_key: :type_id
+    add_foreign_key :assets, :items, column: :type_id,
+                                     primary_key: :type_id
   end
 end

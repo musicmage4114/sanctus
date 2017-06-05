@@ -116,7 +116,7 @@ class Character < ApplicationRecord
   
   # LocationApi
   belongs_to :current_location, polymorphic: true, optional: true
-  has_one :current_ship,        through: :current_ships, source: :ship_type_id
+  has_one :current_ship,        inverse_of: :character
   
   # LoyaltyApi
   has_many :loyalty_amounts, inverse_of: :character, dependent: :destroy

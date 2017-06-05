@@ -28,8 +28,11 @@ class CreateDogmaEffects < ActiveRecord::Migration[5.1]
       t.integer    :auto_repeat
       t.integer    :data_export
     end
-    add_foreign_key :dogma_effects, :dogma_attributes, column: :attribute_id, primary_key: :attribute_id
-    add_foreign_key :dogma_effects, :dogma_attributes, column: :modified_attribute_id, primary_key: :attribute_id
-    add_foreign_key :dogma_effects, :dogma_attributes, column: :modifying_attribute_id, primary_key: :attribute_id
+    add_foreign_key :dogma_effects, :dogma_attributes, column: :attribute_id,
+                                                       primary_key: :attribute_id
+    add_foreign_key :dogma_effects, :dogma_attributes, column: :modified_attribute_id,
+                                                       primary_key: :attribute_id
+    add_foreign_key :dogma_effects, :dogma_attributes, column: :modifying_attribute_id,
+                                                       primary_key: :attribute_id
   end
 end

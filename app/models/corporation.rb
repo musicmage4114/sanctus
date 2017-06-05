@@ -7,6 +7,9 @@ class Corporation < ApplicationRecord
   # AssetsApi
   has_many :assets,           as: :asset_owner, dependent: :destroy
   
+  # BookmarksApi
+  has_many :bookmarks,        as: :owner
+  
   # CharacterApi
   has_many :allowed_channels, as: :allowed, dependent: :destroy
   has_many :blocked_channels, as: :blocked, dependent: :destroy

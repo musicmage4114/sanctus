@@ -11,10 +11,10 @@ class CreateFleetMemberships < ActiveRecord::Migration[5.1]
       t.integer    :role,         null: false, default: 1, index: true
       t.datetime   :join_time,    null: false
       t.string     :role_name,    null: false
-      t.belongs_to :dock,         polymorphic: true
+      t.belongs_to :dock,         polymorphic: true, index: true
       
       t.index [:fleet_id, :character_id]
-      t.timestamps
+      t.timestamps null: false
     end
     add_foreign_key :fleet_memberships, :characters, primary_key: :character_id
     add_foreign_key :fleet_memberships, :fleets,     primary_key: :fleet_id

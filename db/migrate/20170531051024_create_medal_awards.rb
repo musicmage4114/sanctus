@@ -9,10 +9,11 @@ class CreateMedalAwards < ActiveRecord::Migration[5.1]
       t.text       :reason
 
       t.index [:character_id, :medal_id]
-      t.timestamps
+      t.timestamps null: false
     end
     add_foreign_key :medal_awards, :characters, primary_key: :character_id
     add_foreign_key :medal_awards, :medals,     primary_key: :medal_id
-    add_foreign_key :medal_awards, :characters, column: :issuer_id, primary_key: :character_id
+    add_foreign_key :medal_awards, :characters, column: :issuer_id,
+                                                primary_key: :character_id
   end
 end

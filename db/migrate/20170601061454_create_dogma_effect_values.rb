@@ -7,7 +7,9 @@ class CreateDogmaEffectValues < ActiveRecord::Migration[5.1]
       
       t.index [:type_id, :effect_id]
     end
-    add_foreign_key :dogma_effect_values, :dogma_effects, column: :effect_id, primary_key: :effect_id
-    add_foreign_key :dogma_effect_values, :items,         column: :type_id, primary_key: :type_id
+    add_foreign_key :dogma_effect_values, :dogma_effects, column: :effect_id,
+                                                          primary_key: :effect_id
+    add_foreign_key :dogma_effect_values, :items,         column: :type_id,
+                                                          primary_key: :type_id
   end
 end

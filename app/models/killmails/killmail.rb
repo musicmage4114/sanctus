@@ -19,7 +19,8 @@ class Killmail < ApplicationRecord
   belongs_to :final_blow,     polymorphic: true
 
   has_many :killmail_items,   inverse_of:  :killmail
-  has_many :attackers,        through:     :killmail_attackers, source: :attacker
+  has_many :attackers,        class_name:  'KillmailAttacker',
+                              inverse_of:  :killmail
   
   # TODO: scope :containers - killmail_items that contain other items
   # TODO: scope :container_contents - killmail_items contained in other items

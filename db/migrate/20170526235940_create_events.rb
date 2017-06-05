@@ -10,7 +10,7 @@ class CreateEvents < ActiveRecord::Migration[5.0]
       t.string     :title
       t.string     :host_name
       
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

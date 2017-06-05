@@ -8,7 +8,7 @@ class CreateCorporationHistories < ActiveRecord::Migration[5.1]
       
       t.index [:character_id, :corporation_id]
     end
-    add_foreign_key :corporation_histories, :characters, primary_key: :character_id
+    add_foreign_key :corporation_histories, :characters,   primary_key: :character_id
     add_foreign_key :corporation_histories, :corporations, primary_key: :corporation_id
   end
 end
