@@ -1,14 +1,14 @@
 class Colony < ApplicationRecord
   # API data: string - planet_type
   enum planet_type: { shattered: 0,
-               barren: 1,
-               gas: 2,
-               ice: 3,
-               lava: 4,
-               oceanic: 5,
-               plasma: 6,
-               storm: 7,
-               temperate: 8 }
+                      barren: 1,
+                      gas: 2,
+                      ice: 3,
+                      lava: 4,
+                      oceanic: 5,
+                      plasma: 6,
+                      storm: 7,
+                      temperate: 8 }
   
   belongs_to :planet,       inverse_of: :colonies
   belongs_to :owner,        class_name: 'Character', inverse_of: :colonies
