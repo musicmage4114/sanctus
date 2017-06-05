@@ -8,7 +8,13 @@ class Item < ApplicationRecord
   
   has_many :dogma_attribute_values, foreign_key: :type_id,  inverse_of: :item
   has_many :dogma_effect_values,    foreign_key: :type_id,  inverse_of: :item
-  has_many :dogma_effects,          through: :dogma_effect_values,    source: :effect
-  has_many :dogma_attributes,       through: :dogma_attribute_values, source: :attribute
+  has_many :dogma_effects,          through: :dogma_effect_values,
+                                    source: :effect
+  has_many :dogma_attributes,       through: :dogma_attribute_values,
+                                    source: :attribute
   has_many :killmail_drops,         as: :killmail_loot
+  has_many :colony_routes,          foreign_key: :content_type_id,
+                                    inverse_of: :item
+  has_many :colony_pins,            foreign_key: :type_id,
+                                    inverse_of: :item
 end

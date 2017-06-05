@@ -7,6 +7,8 @@ class Stargate < ApplicationRecord
                                  foreign_key: :destination_id,
                                  inverse_of:  :stargate
   has_one :destination_stargate, class_name:  'Stargate',
-                                 foreign_key: :destination_stargate_Id,
+                                 foreign_key: :destination_stargate_id,
                                  inverse_of:  :stargate
+  
+  alias_attribute :system, :solar_system
 end

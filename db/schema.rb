@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170605011416) do
+ActiveRecord::Schema.define(version: 20170605030331) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -198,6 +198,72 @@ ActiveRecord::Schema.define(version: 20170605011416) do
     t.index ["password"], name: "index_chat_channels_on_password"
   end
 
+  create_table "colonies", force: :cascade do |t|
+    t.integer "planet_id", null: false
+    t.integer "owner_id", null: false
+    t.integer "solar_system_id", null: false
+    t.integer "planet_type", null: false
+    t.integer "pin_count"
+    t.integer "upgrade_level"
+    t.index ["owner_id"], name: "index_colonies_on_owner_id"
+    t.index ["planet_id"], name: "index_colonies_on_planet_id"
+    t.index ["planet_type"], name: "index_colonies_on_planet_type"
+    t.index ["solar_system_id"], name: "index_colonies_on_solar_system_id"
+  end
+
+  create_table "colony_links", force: :cascade do |t|
+    t.integer "source_pin_id", null: false
+    t.integer "destination_pin_id", null: false
+    t.integer "link_level", null: false
+    t.index ["destination_pin_id"], name: "index_colony_links_on_destination_pin_id"
+    t.index ["source_pin_id"], name: "index_colony_links_on_source_pin_id"
+  end
+
+  create_table "colony_pins", id: false, force: :cascade do |t|
+    t.integer "pin_id", null: false
+    t.integer "colony_id", null: false
+    t.integer "type_id", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "product_type_id"
+    t.integer "schematic_id"
+    t.float "latitude"
+    t.float "longitude"
+    t.integer "cycle_time"
+    t.integer "quantity_per_cycle"
+    t.float "head_radius"
+    t.datetime "installed"
+    t.datetime "last_cycle_start"
+    t.datetime "expires"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["colony_id"], name: "index_colony_pins_on_colony_id"
+    t.index ["pin_id"], name: "index_colony_pins_on_pin_id", unique: true
+    t.index ["product_type_id"], name: "index_colony_pins_on_product_type_id"
+    t.index ["schematic_id"], name: "index_colony_pins_on_schematic_id"
+    t.index ["status"], name: "index_colony_pins_on_status"
+    t.index ["type_id"], name: "index_colony_pins_on_type_id"
+  end
+
+  create_table "colony_routes", id: false, force: :cascade do |t|
+    t.integer "route_id", null: false
+    t.integer "content_type_id", null: false
+    t.integer "source_pin_id", null: false
+    t.integer "destination_pin_id", null: false
+    t.float "quantity"
+    t.index ["content_type_id"], name: "index_colony_routes_on_content_type_id"
+    t.index ["destination_pin_id"], name: "index_colony_routes_on_destination_pin_id"
+    t.index ["route_id"], name: "index_colony_routes_on_route_id", unique: true
+    t.index ["source_pin_id"], name: "index_colony_routes_on_source_pin_id"
+  end
+
+  create_table "colony_waypoints", force: :cascade do |t|
+    t.integer "pin_id", null: false
+    t.integer "route_id", null: false
+    t.integer "order"
+    t.index ["pin_id"], name: "index_colony_waypoints_on_pin_id"
+    t.index ["route_id"], name: "index_colony_waypoints_on_route_id"
+  end
+
   create_table "constellations", id: false, force: :cascade do |t|
     t.integer "constellation_id", null: false
     t.integer "region_id", null: false
@@ -364,6 +430,15 @@ ActiveRecord::Schema.define(version: 20170605011416) do
     t.index ["event_id"], name: "index_events_on_event_id", unique: true
     t.index ["host_type", "host_id"], name: "index_events_on_host_type_and_host_id"
     t.index ["importance"], name: "index_events_on_importance"
+  end
+
+  create_table "extractor_heads", id: false, force: :cascade do |t|
+    t.integer "head_id", null: false
+    t.integer "pin_id", null: false
+    t.float "latitude"
+    t.float "longitude"
+    t.index ["head_id"], name: "index_extractor_heads_on_head_id", unique: true
+    t.index ["pin_id"], name: "index_extractor_heads_on_pin_id"
   end
 
   create_table "factions", id: false, force: :cascade do |t|
@@ -688,6 +763,13 @@ ActiveRecord::Schema.define(version: 20170605011416) do
     t.string "name", null: false
     t.text "description"
     t.index ["region_id"], name: "index_regions_on_region_id", unique: true
+  end
+
+  create_table "schematics", id: false, force: :cascade do |t|
+    t.integer "schematic_id", null: false
+    t.string "name", null: false
+    t.integer "cycle_time", null: false
+    t.index ["schematic_id"], name: "index_schematics_on_schematic_id", unique: true
   end
 
   create_table "solar_systems", id: false, force: :cascade do |t|

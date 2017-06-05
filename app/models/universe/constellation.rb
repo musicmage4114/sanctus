@@ -4,4 +4,6 @@ class Constellation < ApplicationRecord
   belongs_to :region, inverse_of: :constellations
   
   has_many :solar_systems, inverse_of: :constellation
+  
+  alias_attribute :systems, :solar_systems
 end
