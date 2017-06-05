@@ -17,6 +17,7 @@ class CreateCharacters < ActiveRecord::Migration[5.0]
       t.belongs_to :ancestry
       t.text       :description
       t.datetime   :last_clone_jump
+      t.integer    :total_sp
       
       # urls for retrieval of character portrait of the given size
       t.string :portrait_64

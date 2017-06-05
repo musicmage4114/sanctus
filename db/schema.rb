@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170605030331) do
+ActiveRecord::Schema.define(version: 20170605044500) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -150,6 +150,18 @@ ActiveRecord::Schema.define(version: 20170605030331) do
     t.index ["operator_type", "operator_id"], name: "index_channel_operators_on_operator_type_and_operator_id"
   end
 
+  create_table "character_skills", id: false, force: :cascade do |t|
+    t.integer "character_id", null: false
+    t.integer "skill_type_id", null: false
+    t.integer "current_level", default: 0, null: false
+    t.integer "skillpoints"
+    t.integer "skill_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_character_skills_on_character_id"
+    t.index ["skill_type_id"], name: "index_character_skills_on_skill_type_id"
+  end
+
   create_table "characters", id: false, force: :cascade do |t|
     t.integer "character_id", null: false
     t.integer "corporation_id", null: false
@@ -168,6 +180,7 @@ ActiveRecord::Schema.define(version: 20170605030331) do
     t.integer "ancestry_id"
     t.text "description"
     t.datetime "last_clone_jump"
+    t.integer "total_sp"
     t.string "portrait_64"
     t.string "portrait_128"
     t.string "portrait_256"
@@ -339,11 +352,11 @@ ActiveRecord::Schema.define(version: 20170605030331) do
 
   create_table "dogma_attribute_values", id: false, force: :cascade do |t|
     t.integer "attribute_id", null: false
-    t.integer "type_id", null: false
-    t.float "value", null: false
+    t.string "entity_type"
+    t.integer "entity_id", null: false
+    t.decimal "value", null: false
     t.index ["attribute_id"], name: "index_dogma_attribute_values_on_attribute_id"
-    t.index ["type_id", "attribute_id"], name: "index_dogma_attribute_values_on_type_id_and_attribute_id"
-    t.index ["type_id"], name: "index_dogma_attribute_values_on_type_id"
+    t.index ["entity_type", "entity_id"], name: "index_dogma_attribute_values_on_entity_type_and_entity_id"
   end
 
   create_table "dogma_attributes", id: false, force: :cascade do |t|
@@ -367,16 +380,21 @@ ActiveRecord::Schema.define(version: 20170605030331) do
 
   create_table "dogma_effect_values", id: false, force: :cascade do |t|
     t.integer "effect_id", null: false
-    t.integer "type_id", null: false
-    t.boolean "default_value"
+    t.integer "modified_attribute_id"
+    t.integer "modifying_attribute_id"
+    t.string "domain"
+    t.string "func"
+    t.integer "operator"
     t.index ["effect_id"], name: "index_dogma_effect_values_on_effect_id"
-    t.index ["type_id", "effect_id"], name: "index_dogma_effect_values_on_type_id_and_effect_id"
-    t.index ["type_id"], name: "index_dogma_effect_values_on_type_id"
+    t.index ["modified_attribute_id"], name: "index_dogma_effect_values_on_modified_attribute_id"
+    t.index ["modifying_attribute_id"], name: "index_dogma_effect_values_on_modifying_attribute_id"
   end
 
   create_table "dogma_effects", id: false, force: :cascade do |t|
     t.integer "effect_id", null: false
     t.integer "attribute_id"
+    t.string "entity_type"
+    t.integer "entity_id"
     t.string "attribute_type"
     t.string "name"
     t.string "display_name"
@@ -390,17 +408,11 @@ ActiveRecord::Schema.define(version: 20170605030331) do
     t.boolean "offensive"
     t.boolean "warp_safe"
     t.boolean "range_chance"
-    t.string "domain"
-    t.string "func"
-    t.integer "operator"
-    t.integer "modified_attribute_id"
-    t.integer "modifying_attribute_id"
     t.integer "auto_repeat"
     t.integer "data_export"
     t.index ["attribute_id"], name: "index_dogma_effects_on_attribute_id"
     t.index ["effect_id"], name: "index_dogma_effects_on_effect_id", unique: true
-    t.index ["modified_attribute_id"], name: "index_dogma_effects_on_modified_attribute_id"
-    t.index ["modifying_attribute_id"], name: "index_dogma_effects_on_modifying_attribute_id"
+    t.index ["entity_type", "entity_id"], name: "index_dogma_effects_on_entity_type_and_entity_id"
   end
 
   create_table "event_responses", id: false, force: :cascade do |t|
@@ -772,6 +784,33 @@ ActiveRecord::Schema.define(version: 20170605030331) do
     t.index ["schematic_id"], name: "index_schematics_on_schematic_id", unique: true
   end
 
+  create_table "skill_queue_entries", id: false, force: :cascade do |t|
+    t.integer "character_id", null: false
+    t.integer "skill_type_id", null: false
+    t.integer "queue_position", null: false
+    t.integer "training_start_sp", default: 0, null: false
+    t.integer "skill_id"
+    t.datetime "start"
+    t.datetime "finish"
+    t.integer "level_start_sp"
+    t.integer "level_end_sp"
+    t.integer "finished_level"
+    t.index ["character_id"], name: "index_skill_queue_entries_on_character_id"
+    t.index ["skill_type_id"], name: "index_skill_queue_entries_on_skill_type_id"
+  end
+
+  create_table "skills", id: false, force: :cascade do |t|
+    t.integer "type_id", null: false
+    t.integer "data_export", default: 1, null: false
+    t.integer "group_id", null: false
+    t.string "name", null: false
+    t.text "description", null: false
+    t.integer "skill_id"
+    t.index ["data_export"], name: "index_skills_on_data_export"
+    t.index ["group_id"], name: "index_skills_on_group_id"
+    t.index ["type_id"], name: "index_skills_on_type_id", unique: true
+  end
+
   create_table "solar_systems", id: false, force: :cascade do |t|
     t.integer "system_id", null: false
     t.integer "constellation_id", null: false
@@ -826,8 +865,8 @@ ActiveRecord::Schema.define(version: 20170605030331) do
     t.string "name"
     t.integer "data_export", default: 1, null: false
     t.integer "group_id", null: false
-    t.integer "type_id"
     t.integer "graphic_id"
+    t.integer "type_id"
     t.string "type"
     t.float "x"
     t.float "y"
@@ -835,6 +874,7 @@ ActiveRecord::Schema.define(version: 20170605030331) do
     t.index ["data_export"], name: "index_stargates_on_data_export"
     t.index ["destination_id"], name: "index_stargates_on_destination_id"
     t.index ["destination_stargate_id"], name: "index_stargates_on_destination_stargate_id"
+    t.index ["graphic_id"], name: "index_stargates_on_graphic_id"
     t.index ["group_id"], name: "index_stargates_on_group_id"
     t.index ["solar_system_id"], name: "index_stargates_on_solar_system_id"
     t.index ["stargate_id"], name: "index_stargates_on_stargate_id", unique: true

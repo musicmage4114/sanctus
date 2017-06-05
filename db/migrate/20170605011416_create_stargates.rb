@@ -10,8 +10,8 @@ class CreateStargates < ActiveRecord::Migration[5.1]
       # item attributes
       t.integer    :data_export, null: false, default: 1, index: true
       t.belongs_to :group,       null: false, index: true
+      t.belongs_to :graphic,     index: true
       t.integer    :type_id
-      t.integer    :graphic_id
       t.string     :type # obtained via type_id - "name" attribute
       
       # coordinates

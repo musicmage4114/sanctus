@@ -149,9 +149,14 @@ class Character < ApplicationRecord
   # TODO: has_many :remaining_opportunities
   
   # PlanetaryInteractionApi
-  has_many :colonies, foreign_key: :owner_id,
-                      inverse_of:  :character,
-                      dependent:   :destroy
+  has_many :colonies,   foreign_key: :owner_id,
+                        inverse_of:  :character,
+                        dependent:   :destroy
+  
+  # SkillsApi
+  has_many :skill_queue_entries, inverse_of: :character
+  has_many :skills,              class_name: 'CharacterSkill',
+                                 inverse_of: :character
   
   # WalletApi
   has_many :wallets,  inverse_of:  :character

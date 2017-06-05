@@ -2,6 +2,7 @@ class Stargate < ApplicationRecord
   self.primary_key = 'stargate_id'
   
   belongs_to :solar_system,      inverse_of:  :stargates
+  belongs_to :item_group,        foreign_key: :group_id, inverse_of: :stargates
   
   has_one :destination,          class_name:  'SolarSystem',
                                  foreign_key: :destination_id,
