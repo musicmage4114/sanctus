@@ -10,7 +10,9 @@ class CreateSovereigntyStructures < ActiveRecord::Migration[5.1]
       t.float      :vulnerability_occupancy_level
       t.datetime   :vulnerable_start_time
       t.datetime   :vulnerable_end_time
-
+      
+      t.index [:alliance_id, :sov_structure_id], name: 'sov_structure_alliance_index'
+      t.index [:sov_structure_id, :solar_system_id], name: 'sov_structure_system_index'
       t.timestamps null: false
     end
     add_foreign_key :sovereignty_structures, :alliances,     primary_key: :alliance_id

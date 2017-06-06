@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170606065711) do
+ActiveRecord::Schema.define(version: 20170606073447) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -160,6 +160,15 @@ ActiveRecord::Schema.define(version: 20170606065711) do
     t.datetime "updated_at", null: false
     t.index ["channel_id"], name: "index_channel_operators_on_channel_id"
     t.index ["operator_type", "operator_id"], name: "index_channel_operators_on_operator_type_and_operator_id"
+  end
+
+  create_table "character_opportunities", id: false, force: :cascade do |t|
+    t.integer "character_id", null: false
+    t.integer "task_id", null: false
+    t.datetime "completed"
+    t.index ["character_id", "task_id"], name: "index_character_opportunities_on_character_id_and_task_id"
+    t.index ["character_id"], name: "index_character_opportunities_on_character_id"
+    t.index ["task_id"], name: "index_character_opportunities_on_task_id"
   end
 
   create_table "character_skills", id: false, force: :cascade do |t|
@@ -717,6 +726,32 @@ ActiveRecord::Schema.define(version: 20170606065711) do
     t.index ["solar_system_id"], name: "index_moons_on_solar_system_id"
   end
 
+  create_table "opportunities", id: false, force: :cascade do |t|
+    t.integer "task_id", null: false
+    t.integer "group_id", null: false
+    t.string "name"
+    t.text "description"
+    t.text "notification"
+    t.index ["group_id"], name: "index_opportunities_on_group_id"
+    t.index ["task_id"], name: "index_opportunities_on_task_id", unique: true
+  end
+
+  create_table "opportunity_connections", id: false, force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.integer "connected_group_id", null: false
+    t.index ["connected_group_id"], name: "index_opportunity_connections_on_connected_group_id"
+    t.index ["group_id", "connected_group_id"], name: "connected_groups_index", unique: true
+    t.index ["group_id"], name: "index_opportunity_connections_on_group_id"
+  end
+
+  create_table "opportunity_groups", id: false, force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.string "name"
+    t.text "description"
+    t.text "notification"
+    t.index ["group_id"], name: "index_opportunity_groups_on_group_id", unique: true
+  end
+
   create_table "personal_blueprints", id: false, force: :cascade do |t|
     t.integer "item_id", null: false
     t.integer "type_id", null: false
@@ -879,9 +914,11 @@ ActiveRecord::Schema.define(version: 20170606065711) do
     t.datetime "vulnerable_end_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["alliance_id", "sov_structure_id"], name: "sov_structure_alliance_index"
     t.index ["alliance_id"], name: "index_sovereignty_structures_on_alliance_id"
     t.index ["capturable_type", "capturable_id"], name: "sovereignty_structure_index"
     t.index ["solar_system_id"], name: "index_sovereignty_structures_on_solar_system_id"
+    t.index ["sov_structure_id", "solar_system_id"], name: "sov_structure_system_index"
     t.index ["sov_structure_id"], name: "index_sovereignty_structures_on_sov_structure_id", unique: true
   end
 

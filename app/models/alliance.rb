@@ -25,10 +25,11 @@ class Alliance < ApplicationRecord
   has_many :war_assists,     class_name: 'WarAlly', as: :ally
   # TODO: scope :current_wars
   # TODO: scope :past_wars
-  has_many :campaign_participants, inverse_of: :alliance
-  has_many :sovereignty_campaigns, through:    :campaign_participants,
-                                   source:     :campaign
-  has_many :solar_systems,         inverse_of: :alliance
+  has_many :campaign_participants,  inverse_of:  :alliance
+  has_many :sovereignty_campaigns,  through:     :campaign_participants,
+                                    source:      :campaign
+  has_many :sovereignty_structures, inverse_of:  :alliance
+  has_many :solar_systems,          inverse_of:  :alliance
   
   alias_attribute :executor, :executor_corporation
 end
