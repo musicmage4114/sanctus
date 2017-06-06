@@ -15,6 +15,11 @@ class CreateSolarSystems < ActiveRecord::Migration[5.1]
       t.integer    :ship_kills_last_hour
       t.datetime   :last_kills_check
       
+      # sovereignty
+      t.belongs_to :faction,     index: true
+      t.belongs_to :corporation, index: true
+      t.belongs_to :alliance,    index: true
+      
       # coordinates
       t.float :x
       t.float :y

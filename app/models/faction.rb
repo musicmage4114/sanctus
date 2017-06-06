@@ -1,9 +1,13 @@
 class Faction < ApplicationRecord
   self.primary_key = 'faction_id'
+  
   # API data: boolean - is_unique
   enum uniqueness: [:not_unique, :unique]
 
-  belongs_to :solar_system,     inverse_of:  :factions, optional: true
+  belongs_to :home_system,      class_name:  'SolarSystem',
+                                foreign_key: :solar_system_id,
+                                inverse_of:  :factions,
+                                optional: true
   belongs_to :head_corporation, class_name:  'Corporation',
                                 foreign_key: :corporation_id,
                                 inverse_of:  :factions,
@@ -19,4 +23,5 @@ class Faction < ApplicationRecord
   has_many :kills,              through:     :killmail_attackers,
                                 source:      :killmail
   # TODO: scope :killmails - returns all killmails involving members
+  has_many :solar_systems,      inverse_of:  :faction
 end

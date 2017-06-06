@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170605051252) do
+ActiveRecord::Schema.define(version: 20170606065711) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -104,6 +104,18 @@ ActiveRecord::Schema.define(version: 20170605051252) do
     t.string "name"
     t.index ["folder_id"], name: "index_bookmarks_folders_on_folder_id", unique: true
     t.index ["owner_type", "owner_id"], name: "index_bookmarks_folders_on_owner_type_and_owner_id"
+  end
+
+  create_table "campaign_participants", id: false, force: :cascade do |t|
+    t.integer "campaign_id", null: false
+    t.integer "alliance_id", null: false
+    t.integer "role", default: 3, null: false
+    t.float "score", default: 0.0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alliance_id"], name: "index_campaign_participants_on_alliance_id"
+    t.index ["campaign_id"], name: "index_campaign_participants_on_campaign_id"
+    t.index ["role"], name: "index_campaign_participants_on_role"
   end
 
   create_table "channel_allows", id: false, force: :cascade do |t|
@@ -825,13 +837,52 @@ ActiveRecord::Schema.define(version: 20170605051252) do
     t.integer "pod_kills_last_hour"
     t.integer "ship_kills_last_hour"
     t.datetime "last_kills_check"
+    t.integer "faction_id"
+    t.integer "corporation_id"
+    t.integer "alliance_id"
     t.float "x"
     t.float "y"
     t.float "z"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["alliance_id"], name: "index_solar_systems_on_alliance_id"
     t.index ["constellation_id"], name: "index_solar_systems_on_constellation_id"
+    t.index ["corporation_id"], name: "index_solar_systems_on_corporation_id"
+    t.index ["faction_id"], name: "index_solar_systems_on_faction_id"
     t.index ["system_id"], name: "index_solar_systems_on_system_id", unique: true
+  end
+
+  create_table "sovereignty_campaigns", id: false, force: :cascade do |t|
+    t.integer "campaign_id", null: false
+    t.integer "constellation_id", null: false
+    t.integer "solar_system_id", null: false
+    t.integer "sov_structure_id", null: false
+    t.integer "event_type", default: 1, null: false
+    t.datetime "start_time", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_sovereignty_campaigns_on_campaign_id", unique: true
+    t.index ["constellation_id"], name: "index_sovereignty_campaigns_on_constellation_id"
+    t.index ["event_type"], name: "index_sovereignty_campaigns_on_event_type"
+    t.index ["solar_system_id"], name: "index_sovereignty_campaigns_on_solar_system_id"
+    t.index ["sov_structure_id"], name: "index_sovereignty_campaigns_on_sov_structure_id"
+  end
+
+  create_table "sovereignty_structures", id: false, force: :cascade do |t|
+    t.integer "sov_structure_id", null: false
+    t.integer "alliance_id", null: false
+    t.integer "solar_system_id", null: false
+    t.string "capturable_type"
+    t.integer "capturable_id", null: false
+    t.float "vulnerability_occupancy_level"
+    t.datetime "vulnerable_start_time"
+    t.datetime "vulnerable_end_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alliance_id"], name: "index_sovereignty_structures_on_alliance_id"
+    t.index ["capturable_type", "capturable_id"], name: "sovereignty_structure_index"
+    t.index ["solar_system_id"], name: "index_sovereignty_structures_on_solar_system_id"
+    t.index ["sov_structure_id"], name: "index_sovereignty_structures_on_sov_structure_id", unique: true
   end
 
   create_table "squads", id: false, force: :cascade do |t|
