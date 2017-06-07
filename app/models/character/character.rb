@@ -52,11 +52,9 @@ class Character < ApplicationRecord
   alias_attribute :kicked,   :blocked_channels
   
   # ClonesApi
-  belongs_to :home_station, polymorphic: true,
-                            optional:    true,
-                            dependent:   :destroy
+  belongs_to :home_station, polymorphic: true, optional: true, dependent: :destroy
   
-  has_many :jump_clones,    inverse_of: :character, dependent: :destroy
+  has_many :jump_clones, inverse_of: :character, dependent: :destroy
   
   alias_attribute :medical_clone, :home_station
   
@@ -112,23 +110,25 @@ class Character < ApplicationRecord
   alias_attribute :loyalty_points, :loyalty_amounts
   
   # MailApi
-  has_many :mail_labels,        inverse_of:  :character, dependent: :destroy
-  has_many :mailing_lists,      inverse_of:  :character
-  has_many :sent_evemails,      class_name:  'Evemail',
-                                inverse_of:  :character,
-                                dependent:   :destroy
-  has_many :evemail_deliveries, foreign_key: :recipient_id,
-                                inverse_of:  :character,
-                                dependent:   :destroy
-  
-  alias_attribute :sent_mail, :sent_evemails
-  alias_attribute :received_evemails, :evemail_deliveries
+  has_many :evemail_deliveries,         class_name:  'MailRecipient',
+                                        foreign_key: :recipient_id,
+                                        inverse_of:  :character
+  has_many :received_evemails,          through:     :mail_recipients,
+                                        source:      :evemail
+  has_many :sent_evemails,              class_name:  'Evemail',
+                                        foreign_key: :from_id,
+                                        inverse_of:  :character
+  has_many :mail_labels,                inverse_of:  :character
+  has_many :mailing_list_subscriptions, foreign_key: :subscriber_id,
+                                        inverse_of:  :character
+  has_many :mailing_lists,              through:     :mailing_list_subscriptions,
+                                        source:      :mailing_list
   
   # MarketApi
   has_many :market_orders, as: :order_placement, dependent: :destroy
   
   # OpportunitiesApi
-  has_many :completed_opportunities, inverse_of: :character, dependent: :destroy
+  has_many :opportunities, class_name: 'CharacterOpportunity', inverse_of: :character
   
   # PlanetaryInteractionApi
   has_many :colonies, foreign_key: :owner_id, inverse_of: :character, dependent: :destroy
@@ -150,8 +150,9 @@ class Character < ApplicationRecord
   # TODO: alias_attribute :banned, :banned_channels
   # TODO: scope :killmails - returns all killmails involving the character
   # TODO: scope :unread_mail
-  # TODO: scope :evemails - returns all evemail
+  # TODO: scope :evemails - returns all sent and received evemails
   # TODO: scope :buy_orders
   # TODO: scope :sell_orders
   # TODO: scope :remaining_opportunities
+  # TODO: scope :completed_opportunities
 end

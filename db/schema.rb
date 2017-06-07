@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170606233114) do
+ActiveRecord::Schema.define(version: 20170607015542) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -436,6 +436,17 @@ ActiveRecord::Schema.define(version: 20170606233114) do
     t.index ["entity_type", "entity_id"], name: "index_dogma_effects_on_entity_type_and_entity_id"
   end
 
+  create_table "evemails", id: false, force: :cascade do |t|
+    t.integer "mail_id", null: false
+    t.integer "from_id", null: false
+    t.integer "approved_cost", default: 0, null: false
+    t.datetime "timestamp"
+    t.string "subject"
+    t.text "body"
+    t.index ["from_id"], name: "index_evemails_on_from_id"
+    t.index ["mail_id"], name: "index_evemails_on_mail_id", unique: true
+  end
+
   create_table "event_responses", id: false, force: :cascade do |t|
     t.integer "event_id", null: false
     t.integer "character_id", null: false
@@ -708,6 +719,49 @@ ActiveRecord::Schema.define(version: 20170606233114) do
     t.index ["victim_id"], name: "index_killmails_on_victim_id"
     t.index ["victim_ship_type_id"], name: "index_killmails_on_victim_ship_type_id"
     t.index ["war_id"], name: "index_killmails_on_war_id"
+  end
+
+  create_table "mail_label_assignments", id: false, force: :cascade do |t|
+    t.integer "label_id", null: false
+    t.integer "evemail_id", null: false
+    t.index ["evemail_id"], name: "index_mail_label_assignments_on_evemail_id"
+    t.index ["label_id", "evemail_id"], name: "mail_label_assignments_index"
+    t.index ["label_id"], name: "index_mail_label_assignments_on_label_id"
+  end
+
+  create_table "mail_labels", id: false, force: :cascade do |t|
+    t.integer "label_id", null: false
+    t.string "color", default: "#ffffff", null: false
+    t.integer "unread_count", default: 0, null: false
+    t.integer "character_id"
+    t.string "name"
+    t.index ["character_id"], name: "index_mail_labels_on_character_id"
+    t.index ["label_id"], name: "index_mail_labels_on_label_id", unique: true
+  end
+
+  create_table "mail_recipients", id: false, force: :cascade do |t|
+    t.integer "recipient_id", null: false
+    t.integer "evemail_id", null: false
+    t.integer "status", default: 0, null: false
+    t.index ["evemail_id"], name: "index_mail_recipients_on_evemail_id"
+    t.index ["recipient_id", "evemail_id"], name: "index_mail_recipients_on_recipient_id_and_evemail_id"
+    t.index ["recipient_id"], name: "index_mail_recipients_on_recipient_id"
+  end
+
+  create_table "mailing_list_subscriptions", id: false, force: :cascade do |t|
+    t.integer "mailing_list_id", null: false
+    t.integer "subscriber_id", null: false
+    t.index ["mailing_list_id"], name: "index_mailing_list_subscriptions_on_mailing_list_id"
+    t.index ["subscriber_id", "mailing_list_id"], name: "mailing_list_subscription_index"
+    t.index ["subscriber_id"], name: "index_mailing_list_subscriptions_on_subscriber_id"
+  end
+
+  create_table "mailing_lists", id: false, force: :cascade do |t|
+    t.integer "mailing_list_id", null: false
+    t.integer "creator_id"
+    t.string "name"
+    t.index ["creator_id"], name: "index_mailing_lists_on_creator_id"
+    t.index ["mailing_list_id"], name: "index_mailing_lists_on_mailing_list_id", unique: true
   end
 
   create_table "medal_awards", id: false, force: :cascade do |t|
