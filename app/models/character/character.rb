@@ -31,37 +31,25 @@ class Character < ApplicationRecord
   belongs_to :corporation,            inverse_of: :characters
   belongs_to :race,                   inverse_of: :characters
 
-  has_many :medals,                   through:    :medal_awards, source: :medal
-  has_many :blueprints,               through:    :personal_blueprints,
-                                      source:     :type
-  has_many :personal_blueprints,      inverse_of: :character, dependent: :destroy
-  has_many :personal_research_agents, inverse_of: :character, dependent: :destroy
-  has_many :research_agents,          through:    :personal_research_agents,
-                                      source:     :agent
-  has_many :corporation_histories,    inverse_of: :corporation,
-                                      dependent:  :destroy
-  # TODO: scope :past_corporations, shouldn't return current
+  has_many :medals,                   through:       :medal_awards, source: :medal
+  has_many :blueprints,               through:       :personal_blueprints,
+                                      source:        :type
+  has_many :personal_blueprints,      inverse_of:    :character, dependent: :destroy
+  has_many :personal_research_agents, inverse_of:    :character, dependent: :destroy
+  has_many :research_agents,          through:       :personal_research_agents,
+                                      source:        :agent
+  has_many :corporation_histories,    inverse_of:    :corporation, dependent: :destroy
+  has_many :standings,                inverse_of:    :character, dependent: :destroy
+  has_many :chat_channels,            foreign_key:   :owner_id, inverse_of: :character
+  has_many :allowed_channels,         as: :allowed,  dependent: :destroy
+  has_many :blocked_channels,         as: :blocked,  dependent: :destroy
+  has_many :muted_channels,           as: :muted,    dependent: :destroy
+  has_many :operated_channels,        as: :operator, dependent: :destroy
   
   alias_attribute :employment_history, :corporation_histories
-  
-  # standings
-  has_many :standings, inverse_of: :character, dependent: :destroy
-  # TODO: scope :npc agent_standings
-  # TODO: scope :npc corporation_standings
-  # TODO: scope :faction_standings
-  
-  # chat channels
-  has_many :chat_channels,     foreign_key:   :owner_id, inverse_of: :character
-  has_many :allowed_channels,  as: :allowed,  dependent: :destroy
-  has_many :blocked_channels,  as: :blocked,  dependent: :destroy
-  has_many :muted_channels,    as: :muted,    dependent: :destroy
-  has_many :operated_channels, as: :operator, dependent: :destroy
-  # TODO: has_many :banned_channels
-
   alias_attribute :channels, :chat_channels
   alias_attribute :operates, :operated_channels
   alias_attribute :kicked,   :blocked_channels
-  # TODO: alias_attribute :banned, :banned_channels
   
   # ClonesApi
   belongs_to :home_station, polymorphic: true,
@@ -86,20 +74,20 @@ class Character < ApplicationRecord
                                   source_type: 'Alliance'
   
   # CorporationApi
-  has_many :roles,             dependent: :destroy
-  has_many :grantable_roles,   dependent: :destroy
+  has_many :roles,           dependent: :destroy
+  has_many :grantable_roles, dependent: :destroy
 
-  # FleetApi - fleet membership
+  # FleetApi
   has_one :fleet_membership,   inverse_of: :character, dependent: :destroy
   has_many :fleet_invitations, inverse_of: :character, dependent: :destroy
   
   alias_attribute :fleet, :fleet_membership
   
   # FittingsApi
-  has_many :fittings,       dependent: :destroy
+  has_many :fittings, dependent: :destroy
   
   # IndustryApi
-  has_many :industry_jobs,  dependent: :destroy
+  has_many :industry_jobs, dependent: :destroy
   
   # KillmailApi
   has_many :final_blows,        as:          :final_blow
@@ -112,7 +100,6 @@ class Character < ApplicationRecord
                                 inverse_of:  :character
   has_many :victims,            through:     :kills,
                                 source:      :victim
-  # TODO: scope :killmails - returns all killmails involving the character
   
   # LocationApi
   belongs_to :current_location, polymorphic: true, optional: true
@@ -133,25 +120,18 @@ class Character < ApplicationRecord
   has_many :evemail_deliveries, foreign_key: :recipient_id,
                                 inverse_of:  :character,
                                 dependent:   :destroy
-  # TODO: has_many :unread_mail
-  # TODO: has_many/scope :evemails - returns all evemail
   
   alias_attribute :sent_mail, :sent_evemails
   alias_attribute :received_evemails, :evemail_deliveries
   
   # MarketApi
   has_many :market_orders, as: :order_placement, dependent: :destroy
-  # TODO: has_many :buy_orders
-  # TODO: has_many :sell_orders
   
   # OpportunitiesApi
   has_many :completed_opportunities, inverse_of: :character, dependent: :destroy
-  # TODO: has_many :remaining_opportunities
   
   # PlanetaryInteractionApi
-  has_many :colonies,   foreign_key: :owner_id,
-                        inverse_of:  :character,
-                        dependent:   :destroy
+  has_many :colonies, foreign_key: :owner_id, inverse_of: :character, dependent: :destroy
   
   # SkillsApi
   has_many :skill_queue_entries, inverse_of: :character, dependent: :destroy
@@ -160,5 +140,18 @@ class Character < ApplicationRecord
                                  dependent:  :destroy
   
   # WalletApi
-  has_many :wallets,  inverse_of:  :character
+  has_many :wallets, inverse_of: :character
+  
+  # TODO: scope :past_corporations, shouldn't return current
+  # TODO: scope :npc agent_standings
+  # TODO: scope :npc corporation_standings
+  # TODO: scope :faction_standings
+  # TODO: scope :banned_channels - channels a character is banned from
+  # TODO: alias_attribute :banned, :banned_channels
+  # TODO: scope :killmails - returns all killmails involving the character
+  # TODO: scope :unread_mail
+  # TODO: scope :evemails - returns all evemail
+  # TODO: scope :buy_orders
+  # TODO: scope :sell_orders
+  # TODO: scope :remaining_opportunities
 end

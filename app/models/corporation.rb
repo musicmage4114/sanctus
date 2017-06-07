@@ -13,6 +13,7 @@ class Corporation < ApplicationRecord
   # CharacterApi
   has_many :allowed_channels, as: :allowed, dependent: :destroy
   has_many :blocked_channels, as: :blocked, dependent: :destroy
+  has_many :characters,       inverse_of:  :corporation
   
   # CorporationApi
   belongs_to :alliance,         inverse_of:  :corporations, optional: true
@@ -23,10 +24,8 @@ class Corporation < ApplicationRecord
                                 foreign_key: :creator_id,
                                 inverse_of:  :corporations
 
-  has_many :characters,         inverse_of:  :corporation
   has_many :structures,         inverse_of:  :corporation
   has_many :alliance_histories, inverse_of:  :corporation, dependent: :destroy
-  # TODO: scope :past_alliances - shouldn't return current
 
   alias_attribute :members, :characters
   alias_attribute :founder, :creator
@@ -42,7 +41,6 @@ class Corporation < ApplicationRecord
                               source:      :killmail
   has_many :victims,          through:     :kills,
                               source:      :victim
-  # TODO: scope :killmails - returns all killmails of corporation members
   
   # SovereigntyApi
   has_many :solar_systems,   inverse_of: :corporation
@@ -51,11 +49,14 @@ class Corporation < ApplicationRecord
   has_many :aggressive_wars, class_name: 'War',     as: :aggressor
   has_many :defensive_wars,  class_name: 'War',     as: :defender
   has_many :war_assists,     class_name: 'WarAlly', as: :ally
-  # TODO: has_many :current_wars
-  # TODO: has_many :past_wars
   
   # NPC-specific attributes
   belongs_to :faction,      inverse_of: :corporations, optional: true
+
+  # TODO: scope :killmails - returns all killmails of corporation members
+  # TODO: scope :current_wars
+  # TODO: scope :past_wars
+  # TODO: scope :past_alliances - shouldn't return current
   
   has_many :loyalty_offers, inverse_of: :corporation
 end

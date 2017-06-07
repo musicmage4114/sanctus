@@ -14,5 +14,6 @@ class SovereigntyCampaign < ApplicationRecord
   has_many :participants, class_name:  'CampaignParticipant',
                           foreign_key: :campaign_id,
                           inverse_of:  :sovereignty_campaign
+  
   # TODO: scope :attackers_score
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170606073447) do
+ActiveRecord::Schema.define(version: 20170606233114) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -531,6 +531,23 @@ ActiveRecord::Schema.define(version: 20170606073447) do
     t.index ["free_move"], name: "index_fleets_on_free_move"
   end
 
+  create_table "incursions", force: :cascade do |t|
+    t.integer "constellation_id", null: false
+    t.integer "staging_system_id", null: false
+    t.integer "faction_id", default: 500019, null: false
+    t.integer "state", default: 1, null: false
+    t.integer "mothership", default: 0, null: false
+    t.string "type", default: "Incursion", null: false
+    t.float "influence", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["constellation_id"], name: "index_incursions_on_constellation_id"
+    t.index ["faction_id"], name: "index_incursions_on_faction_id"
+    t.index ["mothership"], name: "index_incursions_on_mothership"
+    t.index ["staging_system_id"], name: "index_incursions_on_staging_system_id"
+    t.index ["state"], name: "index_incursions_on_state"
+  end
+
   create_table "industry_jobs", id: false, force: :cascade do |t|
     t.integer "job_id", null: false
     t.integer "activity_id", null: false
@@ -571,6 +588,15 @@ ActiveRecord::Schema.define(version: 20170606073447) do
     t.index ["job_location_type", "job_location_id"], name: "job_location_index"
     t.index ["output_location_type", "output_location_id"], name: "output_location_index"
     t.index ["product_type", "product_id"], name: "index_industry_jobs_on_product_type_and_product_id"
+  end
+
+  create_table "infested_systems", id: false, force: :cascade do |t|
+    t.integer "incursion_id", null: false
+    t.integer "solar_system_id", null: false
+    t.integer "type", default: 2, null: false
+    t.index ["incursion_id"], name: "index_infested_systems_on_incursion_id"
+    t.index ["solar_system_id"], name: "index_infested_systems_on_solar_system_id"
+    t.index ["type"], name: "index_infested_systems_on_type"
   end
 
   create_table "item_categories", id: false, force: :cascade do |t|
