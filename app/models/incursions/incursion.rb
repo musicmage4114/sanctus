@@ -8,5 +8,5 @@ class Incursion < ApplicationRecord
   belongs_to :staging_system, class_name: 'SolarSystem', inverse_of: :incursions
   belongs_to :faction,        inverse_of: :incursions
   
-  has_many :infested_systems, inverse_of: :incursion
+  has_many :infested_systems, inverse_of: :incursion, dependent: :destroy
 end

@@ -15,7 +15,8 @@ class SolarSystem < ApplicationRecord
   has_many :sovereignty_campaigns, inverse_of: :solar_system
   has_many :characters,            as: :current_location
   
-  has_one :current_incursion,  foreign_key: :system_id, inverse_of: :solar_system
+  has_one :current_incursion,      class_name: 'InfestedSystem',
+                                   inverse_of: :solar_system
   
   # TODO: scope :sovereignty
 end
