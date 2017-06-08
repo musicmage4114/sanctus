@@ -85,7 +85,13 @@ class Character < ApplicationRecord
   has_many :fittings, dependent: :destroy
   
   # IndustryApi
-  has_many :industry_jobs, dependent: :destroy
+  has_many :installed_jobs, foreign_key: :installer_id,
+                            inverse_of:  :character,
+                            dependent:   :destroy
+  has_many :completed_jobs, foreign_key: :completed_character_id,
+                            inverse_of:  :character,
+                            dependent:   :destroy
+                            
   
   # KillmailApi
   has_many :final_blows,        as:          :final_blow
@@ -142,7 +148,7 @@ class Character < ApplicationRecord
   # WalletApi
   has_many :wallets, inverse_of: :character
   
-  # TODO: scope :past_corporations, shouldn't return current
+  # TODO: scope :past_corporations - shouldn't return current
   # TODO: scope :npc agent_standings
   # TODO: scope :npc corporation_standings
   # TODO: scope :faction_standings
@@ -150,6 +156,7 @@ class Character < ApplicationRecord
   # TODO: alias_attribute :banned, :banned_channels
   # TODO: scope :killmails - returns all killmails involving the character
   # TODO: scope :unread_mail
+  # TODO: scope :total_unread_mail
   # TODO: scope :evemails - returns all sent and received evemails
   # TODO: scope :buy_orders
   # TODO: scope :sell_orders

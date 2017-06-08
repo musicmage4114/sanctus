@@ -12,5 +12,7 @@ class CreateDogmaAttributes < ActiveRecord::Migration[5.0]
       t.string     :display_name
       t.string     :name
     end
+    add_foreign_key :dogma_attribute_values, :dogma_attributes, column: :attribute_id,
+                                                                primary_key: :attribute_id
   end
 end

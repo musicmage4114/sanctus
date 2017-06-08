@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607015542) do
+ActiveRecord::Schema.define(version: 20170607033834) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -40,19 +40,20 @@ ActiveRecord::Schema.define(version: 20170607015542) do
 
   create_table "assets", id: false, force: :cascade do |t|
     t.integer "item_id", null: false
-    t.integer "multiple", default: 1, null: false
-    t.integer "type_id", null: false
+    t.integer "singleton", default: 1, null: false
     t.string "location_flag", null: false
     t.string "location_type"
-    t.integer "location_id"
+    t.integer "location_id", null: false
+    t.string "ownable_type"
+    t.integer "ownable_id", null: false
     t.string "owner_type"
-    t.integer "owner_id"
+    t.integer "owner_id", null: false
     t.integer "quantity"
     t.index ["item_id"], name: "index_assets_on_item_id", unique: true
     t.index ["location_type", "location_id"], name: "index_assets_on_location_type_and_location_id"
-    t.index ["multiple"], name: "index_assets_on_multiple"
+    t.index ["ownable_type", "ownable_id"], name: "index_assets_on_ownable_type_and_ownable_id"
     t.index ["owner_type", "owner_id"], name: "index_assets_on_owner_type_and_owner_id"
-    t.index ["type_id"], name: "index_assets_on_type_id"
+    t.index ["singleton"], name: "index_assets_on_singleton"
   end
 
   create_table "bloodlines", id: false, force: :cascade do |t|
@@ -71,6 +72,22 @@ ActiveRecord::Schema.define(version: 20170607015542) do
     t.index ["corporation_id"], name: "index_bloodlines_on_corporation_id"
     t.index ["race_id"], name: "index_bloodlines_on_race_id"
     t.index ["ship_type_id"], name: "index_bloodlines_on_ship_type_id"
+  end
+
+  create_table "blueprints", id: false, force: :cascade do |t|
+    t.integer "type_id", null: false
+    t.integer "group_id", null: false
+    t.string "name", null: false
+    t.integer "data_export", default: 1, null: false
+    t.integer "graphic_id"
+    t.integer "market_group_id"
+    t.text "description"
+    t.float "volume"
+    t.index ["data_export"], name: "index_blueprints_on_data_export"
+    t.index ["graphic_id"], name: "index_blueprints_on_graphic_id"
+    t.index ["group_id"], name: "index_blueprints_on_group_id"
+    t.index ["market_group_id"], name: "index_blueprints_on_market_group_id"
+    t.index ["type_id"], name: "index_blueprints_on_type_id", unique: true
   end
 
   create_table "bookmarks", id: false, force: :cascade do |t|
@@ -399,41 +416,51 @@ ActiveRecord::Schema.define(version: 20170607015542) do
     t.index ["unit_id"], name: "index_dogma_attributes_on_unit_id"
   end
 
-  create_table "dogma_effect_values", id: false, force: :cascade do |t|
+  create_table "dogma_effect_defaults", id: false, force: :cascade do |t|
+    t.integer "dogma_effect_id", null: false
+    t.string "entity_type"
+    t.integer "entity_id", null: false
+    t.boolean "default", default: true, null: false
+    t.index ["dogma_effect_id"], name: "index_dogma_effect_defaults_on_dogma_effect_id"
+    t.index ["entity_type", "entity_id"], name: "dogma_effect_default_index"
+  end
+
+  create_table "dogma_effect_modifications", id: false, force: :cascade do |t|
     t.integer "effect_id", null: false
     t.integer "modified_attribute_id"
     t.integer "modifying_attribute_id"
     t.string "domain"
     t.string "func"
     t.integer "operator"
-    t.index ["effect_id"], name: "index_dogma_effect_values_on_effect_id"
-    t.index ["modified_attribute_id"], name: "index_dogma_effect_values_on_modified_attribute_id"
-    t.index ["modifying_attribute_id"], name: "index_dogma_effect_values_on_modifying_attribute_id"
+    t.index ["effect_id"], name: "index_dogma_effect_modifications_on_effect_id"
+    t.index ["modified_attribute_id"], name: "index_dogma_effect_modifications_on_modified_attribute_id"
+    t.index ["modifying_attribute_id"], name: "index_dogma_effect_modifications_on_modifying_attribute_id"
   end
 
   create_table "dogma_effects", id: false, force: :cascade do |t|
     t.integer "effect_id", null: false
+    t.integer "auto_repeat", default: 1, null: false
+    t.integer "data_export", default: 0, null: false
+    t.integer "attribute_type", default: 6, null: false
+    t.boolean "assistance", default: false, null: false
+    t.boolean "offensive", default: false, null: false
+    t.boolean "warp_safe", default: false, null: false
+    t.boolean "range_chance", default: false, null: false
+    t.boolean "electronic_chance", default: false, null: false
     t.integer "attribute_id"
-    t.string "entity_type"
-    t.integer "entity_id"
-    t.string "attribute_type"
+    t.integer "icon_id"
     t.string "name"
     t.string "display_name"
     t.text "description"
     t.integer "effect_category"
-    t.integer "icon_id"
     t.integer "pre_expression"
     t.integer "post_expression"
-    t.boolean "electronic_chance"
-    t.boolean "assistance"
-    t.boolean "offensive"
-    t.boolean "warp_safe"
-    t.boolean "range_chance"
-    t.integer "auto_repeat"
-    t.integer "data_export"
     t.index ["attribute_id"], name: "index_dogma_effects_on_attribute_id"
+    t.index ["attribute_type"], name: "index_dogma_effects_on_attribute_type"
+    t.index ["auto_repeat"], name: "index_dogma_effects_on_auto_repeat"
+    t.index ["data_export"], name: "index_dogma_effects_on_data_export"
     t.index ["effect_id"], name: "index_dogma_effects_on_effect_id", unique: true
-    t.index ["entity_type", "entity_id"], name: "index_dogma_effects_on_entity_type_and_entity_id"
+    t.index ["icon_id"], name: "index_dogma_effects_on_icon_id"
   end
 
   create_table "evemails", id: false, force: :cascade do |t|
@@ -622,32 +649,11 @@ ActiveRecord::Schema.define(version: 20170607015542) do
     t.integer "group_id", null: false
     t.integer "data_export", default: 1, null: false
     t.integer "category_id", null: false
+    t.string "group_type", null: false
     t.string "name", null: false
     t.index ["category_id"], name: "index_item_groups_on_category_id"
     t.index ["data_export"], name: "index_item_groups_on_data_export"
     t.index ["group_id"], name: "index_item_groups_on_group_id", unique: true
-  end
-
-  create_table "items", id: false, force: :cascade do |t|
-    t.integer "type_id", null: false
-    t.integer "data_export", default: 1, null: false
-    t.string "type", null: false
-    t.integer "group_id", null: false
-    t.string "name", null: false
-    t.integer "icon_id"
-    t.integer "graphic_id"
-    t.text "description"
-    t.float "radius"
-    t.float "volume"
-    t.float "capacity"
-    t.float "portion_size"
-    t.float "mass"
-    t.index ["data_export"], name: "index_items_on_data_export"
-    t.index ["graphic_id"], name: "index_items_on_graphic_id"
-    t.index ["group_id"], name: "index_items_on_group_id"
-    t.index ["icon_id"], name: "index_items_on_icon_id"
-    t.index ["type"], name: "index_items_on_type"
-    t.index ["type_id"], name: "index_items_on_type_id", unique: true
   end
 
   create_table "killmail_attackers", id: false, force: :cascade do |t|

@@ -23,5 +23,7 @@ class CreateCorporations < ActiveRecord::Migration[5.0]
 
       t.timestamps null: false
     end
+    add_foreign_key :corporations, :characters, column: :ceo_id, primary_key: :character_id
+    add_foreign_key :characters, :corporations, primary_key: :corporation_id
   end
 end

@@ -3,7 +3,7 @@ class CreateKillmailItems < ActiveRecord::Migration[5.1]
     create_table :killmail_items do |t|
       t.belongs_to :killmail,      null: false, index: true
       t.integer    :stack,         null: false, default: 1, index: true
-      t.belongs_to :killmail_item, index: true
+      t.belongs_to :killmail_item, index: true, optional: true
       t.belongs_to :killmail_loot, polymorphic: true,
                                    null: false,
                                    index: { name: 'killmail_loot_index' }

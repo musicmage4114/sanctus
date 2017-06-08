@@ -1,18 +1,14 @@
 class Item < ApplicationRecord
-  self.primary_key = 'type_id'
-  
-  # API data: boolean - published
-  enum data_export: [:unpublished, :published]
-  
-  belongs_to :item_group,           foreign_key: :group_id, inverse_of: :items
-  
+  self.abstract_class = true
+
   has_many :dogma_attribute_values, as: :entity
-  has_many :dogma_effects,          as: :entity
-  has_many :dogma_attributes,       through: :dogma_attribute_values,
-                                    source: :attribute
-  has_many :killmail_drops,         as: :killmail_loot
-  has_many :colony_routes,          foreign_key: :content_type_id,
-                                    inverse_of: :item
-  has_many :colony_pins,            foreign_key: :type_id,
-                                    inverse_of: :item
+  has_many :dogma_effect_defaults,  as: :entity
+  
+  has_many :dogma_attributes, through: :dogma_attribute_values, source: :attribute
+  has_many :dogma_effects,    through: :dogma_effect_defaults,  source: :dogma_effect
+
+  has_one :item_group_membership, foreign_key: :member_id, inverse_of: :blueprints
+  has_one :item_group,            through: :item_group_memberships, source: :group
+  
+  alias_attribute
 end

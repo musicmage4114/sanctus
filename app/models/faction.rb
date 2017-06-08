@@ -22,6 +22,7 @@ class Faction < ApplicationRecord
                                 inverse_of:  :faction
   has_many :kills,              through:     :killmail_attackers,
                                 source:      :killmail
-  # TODO: scope :killmails - returns all killmails involving members
   has_many :solar_systems,      inverse_of:  :faction
+  
+  # TODO: scope :killmails - returns all killmails involving members
 end

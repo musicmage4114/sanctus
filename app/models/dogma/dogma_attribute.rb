@@ -13,10 +13,10 @@ class DogmaAttribute < ApplicationRecord
   has_many :possible_values,  class_name:  'DogmaAttributeValue',
                               foreign_key: :attribute_id,
                               inverse_of:  :dogma_attribute
-  has_many :effects_modified, class_name:  'DogmaEffectValue',
+  has_many :effects_modified, class_name:  'DogmaEffectModification',
                               foreign_key: :modifying_attribute_id,
                               inverse_of:  :dogma_attribute
-  has_many :modified_by,      class_name:  'DogmaEffectValue',
+  has_many :modified_by,      class_name:  'DogmaEffectModification',
                               foreign_key: :modified_attribute_id,
                               inverse_of:  :dogma_attribute
 end

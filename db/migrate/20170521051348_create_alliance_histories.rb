@@ -8,5 +8,7 @@ class CreateAllianceHistories < ActiveRecord::Migration[5.0]
       
       t.index [:corporation_id, :alliance_id]
     end
+    add_foreign_key :alliance_histories, :corporations, primary_key: :corporation_id
+    add_foreign_key :alliance_histories, :alliances,    primary_key: :alliance_id
   end
 end

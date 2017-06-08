@@ -14,5 +14,9 @@ class CreateAlliances < ActiveRecord::Migration[5.0]
 
       t.timestamps null: false
     end
+    add_foreign_key :characters, :alliances,   primary_key: :alliance_id
+    add_foreign_key :corporations, :alliances, primary_key: :alliance_id
+    add_foreign_key :alliances, :corporations, column: :executor_corporation_id,
+                                               primary_key: :corporation_id
   end
 end
