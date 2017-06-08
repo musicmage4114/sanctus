@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608054729) do
+ActiveRecord::Schema.define(version: 20170608055721) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -605,6 +605,18 @@ ActiveRecord::Schema.define(version: 20170608054729) do
     t.index ["mothership"], name: "index_incursions_on_mothership"
     t.index ["staging_system_id"], name: "index_incursions_on_staging_system_id"
     t.index ["state"], name: "index_incursions_on_state"
+  end
+
+  create_table "industry_cost_indices", id: false, force: :cascade do |t|
+    t.integer "system_id", null: false
+    t.decimal "invention"
+    t.decimal "manufacturing"
+    t.decimal "time_efficiency"
+    t.decimal "material_efficiency"
+    t.decimal "copying"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["system_id"], name: "index_industry_cost_indices_on_system_id", unique: true
   end
 
   create_table "industry_jobs", id: false, force: :cascade do |t|
