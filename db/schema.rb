@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607033834) do
+ActiveRecord::Schema.define(version: 20170608054729) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -526,6 +526,27 @@ ActiveRecord::Schema.define(version: 20170607033834) do
     t.index ["faction_id"], name: "index_factions_on_faction_id", unique: true
     t.index ["solar_system_id"], name: "index_factions_on_solar_system_id"
     t.index ["uniqueness"], name: "index_factions_on_uniqueness"
+  end
+
+  create_table "fitting_items", id: false, force: :cascade do |t|
+    t.integer "fitting_id", null: false
+    t.string "fitted_item_type"
+    t.integer "fitted_item_id", null: false
+    t.integer "flag"
+    t.integer "quantity"
+    t.index ["fitted_item_type", "fitted_item_id"], name: "index_fitting_items_on_fitted_item_type_and_fitted_item_id"
+    t.index ["fitting_id"], name: "index_fitting_items_on_fitting_id"
+  end
+
+  create_table "fittings", id: false, force: :cascade do |t|
+    t.integer "fitting_id", null: false
+    t.integer "ship_type_id", null: false
+    t.integer "creator_id"
+    t.string "name"
+    t.text "description"
+    t.index ["creator_id"], name: "index_fittings_on_creator_id"
+    t.index ["fitting_id"], name: "index_fittings_on_fitting_id", unique: true
+    t.index ["ship_type_id"], name: "index_fittings_on_ship_type_id"
   end
 
   create_table "fleet_memberships", id: false, force: :cascade do |t|
