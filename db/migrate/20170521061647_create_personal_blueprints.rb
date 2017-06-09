@@ -1,4 +1,4 @@
-class CreatePersonalBlueprints < ActiveRecord::Migration[5.0]
+class CreatePersonalBlueprints < ActiveRecord::Migration[5.1]
   def change
     create_table :personal_blueprints, id: false do |t|
       t.integer    :item_id,             null: false, index: { unique: true }

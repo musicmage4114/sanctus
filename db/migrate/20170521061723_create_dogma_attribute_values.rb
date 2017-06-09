@@ -1,4 +1,4 @@
-class CreateDogmaAttributeValues < ActiveRecord::Migration[5.0]
+class CreateDogmaAttributeValues < ActiveRecord::Migration[5.1]
   def change
     create_table :dogma_attribute_values, id: false do |t|
       t.belongs_to :attribute, null: false, index: true

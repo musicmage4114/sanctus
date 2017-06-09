@@ -1,4 +1,4 @@
-class CreateAlliances < ActiveRecord::Migration[5.0]
+class CreateAlliances < ActiveRecord::Migration[5.1]
   def change
     create_table :alliances, id: false do |t|
       t.integer    :alliance_id, null: false, index: { unique: true }

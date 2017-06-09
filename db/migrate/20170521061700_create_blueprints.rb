@@ -1,4 +1,4 @@
-class CreateBlueprints < ActiveRecord::Migration[5.0]
+class CreateBlueprints < ActiveRecord::Migration[5.1]
   def change
     create_table :blueprints, id: false do |t|
       t.integer    :type_id,      null: false, index: { unique: true }
@@ -7,6 +7,7 @@ class CreateBlueprints < ActiveRecord::Migration[5.0]
       t.integer    :data_export,  null: false, default: 1, index: true
       t.belongs_to :graphic,      index: true
       t.belongs_to :market_group, index: true
+      t.belongs_to :produceable,  polymorphic: true, null: false, index: true
       t.text       :description
       t.float      :volume
     end

@@ -1,4 +1,4 @@
-class CreateBookmarks < ActiveRecord::Migration[5.0]
+class CreateBookmarks < ActiveRecord::Migration[5.1]
   def change
     create_table :bookmarks, id: false do |t|
       t.integer    :bookmark_id,     null: false, index: { unique: true }

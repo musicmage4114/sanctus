@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608055721) do
+ActiveRecord::Schema.define(version: 20170609062546) do
 
   create_table "alliance_histories", force: :cascade do |t|
     t.integer "alliance_id", null: false
@@ -81,12 +81,15 @@ ActiveRecord::Schema.define(version: 20170608055721) do
     t.integer "data_export", default: 1, null: false
     t.integer "graphic_id"
     t.integer "market_group_id"
+    t.string "produceable_type"
+    t.integer "produceable_id", null: false
     t.text "description"
     t.float "volume"
     t.index ["data_export"], name: "index_blueprints_on_data_export"
     t.index ["graphic_id"], name: "index_blueprints_on_graphic_id"
     t.index ["group_id"], name: "index_blueprints_on_group_id"
     t.index ["market_group_id"], name: "index_blueprints_on_market_group_id"
+    t.index ["produceable_type", "produceable_id"], name: "index_blueprints_on_produceable_type_and_produceable_id"
     t.index ["type_id"], name: "index_blueprints_on_type_id", unique: true
   end
 
@@ -501,6 +504,14 @@ ActiveRecord::Schema.define(version: 20170608055721) do
     t.index ["event_id"], name: "index_events_on_event_id", unique: true
     t.index ["host_type", "host_id"], name: "index_events_on_host_type_and_host_id"
     t.index ["importance"], name: "index_events_on_importance"
+  end
+
+  create_table "extra_cargoholds", id: false, force: :cascade do |t|
+    t.integer "ship_id", null: false
+    t.integer "hold_type", default: 0, null: false
+    t.float "capacity"
+    t.index ["hold_type"], name: "index_extra_cargoholds_on_hold_type"
+    t.index ["ship_id"], name: "index_extra_cargoholds_on_ship_id"
   end
 
   create_table "extractor_heads", id: false, force: :cascade do |t|
@@ -943,11 +954,84 @@ ActiveRecord::Schema.define(version: 20170608055721) do
     t.index ["region_id"], name: "index_regions_on_region_id", unique: true
   end
 
+  create_table "required_skills", id: false, force: :cascade do |t|
+    t.integer "skill_type_id", null: false
+    t.string "usable_type"
+    t.integer "usable_id", null: false
+    t.integer "required_level", null: false
+    t.index ["skill_type_id"], name: "index_required_skills_on_skill_type_id"
+    t.index ["usable_type", "usable_id"], name: "index_required_skills_on_usable_type_and_usable_id"
+  end
+
   create_table "schematics", id: false, force: :cascade do |t|
     t.integer "schematic_id", null: false
     t.string "name", null: false
     t.integer "cycle_time", null: false
     t.index ["schematic_id"], name: "index_schematics_on_schematic_id", unique: true
+  end
+
+  create_table "ships", id: false, force: :cascade do |t|
+    t.integer "type_id", null: false
+    t.integer "data_export", default: 1, null: false
+    t.integer "tech_level", default: 1, null: false
+    t.integer "group_id", null: false
+    t.integer "graphic_id", null: false
+    t.integer "faction_id", null: false
+    t.integer "high_slots", default: 0, null: false
+    t.integer "mid_slots", default: 0, null: false
+    t.integer "low_slots", default: 0, null: false
+    t.integer "rigs", default: 3, null: false
+    t.integer "calibration", default: 400, null: false
+    t.integer "drone_capacity", default: 0, null: false
+    t.integer "bandwidth", default: 0, null: false
+    t.integer "max_targets", default: 1, null: false
+    t.float "em_structure_resist", default: 0.0, null: false
+    t.float "exp_structure_resist", default: 0.0, null: false
+    t.float "kin_structure_resist", default: 0.0, null: false
+    t.float "therm_structure_resist", default: 0.0, null: false
+    t.float "em_armor_resist", default: 0.0, null: false
+    t.float "exp_armor_resist", default: 0.0, null: false
+    t.float "kin_armor_resist", default: 0.0, null: false
+    t.float "therm_armor_resist", default: 0.0, null: false
+    t.float "em_shield_resist", default: 0.0, null: false
+    t.float "exp_shield_resist", default: 0.0, null: false
+    t.float "kin_shield_resist", default: 0.0, null: false
+    t.float "therm_shield_resist", default: 0.0, null: false
+    t.float "radar_strength", default: 0.0, null: false
+    t.float "ladar_strength", default: 0.0, null: false
+    t.float "gravimetric_strength", default: 0.0, null: false
+    t.float "magnetometric_strength", default: 0.0, null: false
+    t.integer "launcher_hardpoints", default: 0, null: false
+    t.integer "turret_hardpoints", default: 0, null: false
+    t.string "name", null: false
+    t.text "description"
+    t.string "hull_class"
+    t.string "size_class"
+    t.string "ship_type"
+    t.integer "radius"
+    t.integer "volume"
+    t.float "capacity"
+    t.integer "mass"
+    t.float "powergrid"
+    t.float "cpu"
+    t.float "capacitor"
+    t.float "max_target_range"
+    t.float "max_velocity"
+    t.float "inertia_modifier"
+    t.float "base_warp_time"
+    t.float "warp_speed"
+    t.integer "structure_hp"
+    t.integer "armor_hp"
+    t.integer "shield_hp"
+    t.integer "shield_recharge"
+    t.float "signature_radius"
+    t.integer "scan_resolution"
+    t.index ["data_export"], name: "index_ships_on_data_export"
+    t.index ["faction_id"], name: "index_ships_on_faction_id"
+    t.index ["graphic_id"], name: "index_ships_on_graphic_id"
+    t.index ["group_id"], name: "index_ships_on_group_id"
+    t.index ["tech_level"], name: "index_ships_on_tech_level"
+    t.index ["type_id"], name: "index_ships_on_type_id", unique: true
   end
 
   create_table "skill_queue_entries", id: false, force: :cascade do |t|

@@ -14,4 +14,7 @@ class Skill < ApplicationRecord
                                     inverse_of:  :skill
   has_many :character_skills,       foreign_key: :skill_type_id,
                                     inverse_of:  :skill
+  has_many :ships,                  through:     :required_skills,
+                                    source:      :usable,
+                                    source_type: 'Ship'
 end

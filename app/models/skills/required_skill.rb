@@ -1,0 +1,2 @@
+class RequiredSkill < ApplicationRecord
+end

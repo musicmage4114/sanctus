@@ -1,4 +1,4 @@
-class CreateAssets < ActiveRecord::Migration[5.0]
+class CreateAssets < ActiveRecord::Migration[5.1]
   def change
     create_table :assets, id: false do |t|
       t.integer    :item_id,        null: false, index: { unique: true }

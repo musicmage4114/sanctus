@@ -1,4 +1,4 @@
-class CreateAllianceHistories < ActiveRecord::Migration[5.0]
+class CreateAllianceHistories < ActiveRecord::Migration[5.1]
   def change
     create_table :alliance_histories do |t|
       t.belongs_to :alliance,    null: false, index: true

@@ -1,4 +1,4 @@
-class CreateItemGroups < ActiveRecord::Migration[5.0]
+class CreateItemGroups < ActiveRecord::Migration[5.1]
   def change
     create_table :item_groups, id: false do |t|
       t.integer    :group_id,    null: false, index: { unique: true }

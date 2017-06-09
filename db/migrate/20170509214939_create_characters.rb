@@ -1,4 +1,4 @@
-class CreateCharacters < ActiveRecord::Migration[5.0]
+class CreateCharacters < ActiveRecord::Migration[5.1]
   def change
     create_table :characters, id: false do |t|
       t.integer    :character_id,     null: false, index: { unique: true }
