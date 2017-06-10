@@ -5,6 +5,6 @@ class CreateSchematics < ActiveRecord::Migration[5.1]
       t.string  :name,         null: false
       t.integer :cycle_time,   null: false
     end
+    add_foreign_key :colony_pins, :schematics, primary_key: :schematic_id
   end
-  add_foreign_key :colony_pins, :schematics, primary_key: :schematic_id
 end

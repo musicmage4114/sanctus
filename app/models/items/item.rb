@@ -8,8 +8,8 @@ class Item < ApplicationRecord
   has_many :required_skills,        as: :usable
   has_many :industry_jobs,          as: :product
   has_many :fitting_items,          as: :fitted_item
-  has_many :killmail_drops,         as: :killmail_loot,
-                                    class_name: 'KillmailItem'
+  has_many :killmail_drops,         as: :killmail_loot, class_name: 'KillmailItem'
+  has_many :colony_routes,          as: :content
 
   has_many :fittings,          through: :fitting_items,  source: :fitting
   has_many :killmails,         through: :killmail_items, source: :killmail

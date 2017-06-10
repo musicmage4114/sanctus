@@ -27,7 +27,7 @@ class CreateSolarSystems < ActiveRecord::Migration[5.1]
 
       t.timestamps null: false
     end
-    add_foreign_key :solar_system, :constellations,     primary_key: :constellation_id
+    add_foreign_key :solar_systems, :constellations,     primary_key: :constellation_id
     add_foreign_key :bookmarks, :solar_systems,         primary_key: :system_id
     add_foreign_key :fleet_memberships, :solar_systems, primary_key: :system_id
     add_foreign_key :killmails, :solar_systems,         primary_key: :system_id

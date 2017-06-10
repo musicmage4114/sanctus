@@ -15,8 +15,6 @@ class CreatePersonalBlueprints < ActiveRecord::Migration[5.1]
       t.index [:character_id, :type_id]
       t.timestamps null: false
     end
-    add_foreign_key :personal_blueprints, :blueprints, column: :type_id,
-                                                       primary_key: :type_id
     add_foreign_key :personal_blueprints, :characters, primary_key: :character_id
   end
 end

@@ -31,7 +31,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+# gem 'capistrano-rails', group: :standby
 
 gem 'bootstrap-sass'
 gem 'will_paginate'
@@ -40,8 +40,8 @@ gem 'bootstrap-will_paginate'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-  # Use sqlite3 as the database for Active Record (during development/testing only)
-  gem 'sqlite3'
+  # Use sqlite3 as the database for Active Record (during standby/testing only)
+  # gem 'sqlite3'
 end
 
 group :development do
@@ -60,7 +60,7 @@ group :test do
   gem 'guard-minitest'
 end
 
-group :production do
+group :development, :test, :production do
   # Use PostgreSQL in production environment.
   gem 'pg'
 end

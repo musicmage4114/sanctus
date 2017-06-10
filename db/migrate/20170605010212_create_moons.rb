@@ -12,7 +12,6 @@ class CreateMoons < ActiveRecord::Migration[5.1]
       t.float :z
     end
     add_foreign_key :moons, :planets,       primary_key: :planet_id
-    add_foreign_key :moons, :solar_systems, column: :system_id,
-                                            primary_key: :system_id
+    add_foreign_key :moons, :solar_systems, primary_key: :system_id
   end
 end
