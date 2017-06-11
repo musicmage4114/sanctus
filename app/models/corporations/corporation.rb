@@ -3,6 +3,7 @@ class Corporation < ApplicationRecord
 
   # API data: boolean - is_deleted
   enum deletion_status: [:open, :closed]
+  enum corporation_type: [:npc, :player]
   
   # AssetsApi
   has_many :assets,           as: :asset_owner, dependent: :destroy
@@ -51,7 +52,13 @@ class Corporation < ApplicationRecord
   has_many :war_assists,     class_name: 'WarAlly', as: :ally
   
   # NPC-specific attributes
+  belongs_to :solar_system, inverse_of: :corporations, optional: true
   belongs_to :faction,      inverse_of: :corporations, optional: true
+  belongs_to :friend,       inverse_of: :corporations
+  belongs_to :enemy,        inverse_of: :corporations
+  
+  has_many :divisions,      class_name: 'NpcCorpDivision',
+                            inverse_of: :corporation
 
   # TODO: scope :killmails - returns all killmails of corporation members
   # TODO: scope :current_wars

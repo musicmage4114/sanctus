@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611062634) do
+ActiveRecord::Schema.define(version: 20170611221243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,12 +131,6 @@ ActiveRecord::Schema.define(version: 20170611062634) do
   create_table "crpActivities", primary_key: "activityID", id: :integer, default: nil, force: :cascade do |t|
     t.string "activityName", limit: 100
     t.string "description", limit: 1000
-  end
-
-  create_table "crpNPCCorporationDivisions", primary_key: ["corporationID", "divisionID"], force: :cascade do |t|
-    t.integer "corporationID", null: false
-    t.integer "divisionID", null: false
-    t.integer "size"
   end
 
   create_table "crpNPCCorporationResearchFields", primary_key: ["skillID", "corporationID"], force: :cascade do |t|
@@ -627,6 +621,12 @@ ActiveRecord::Schema.define(version: 20170611062634) do
     t.float "radius"
   end
 
+  create_table "npc_corp_divisions", primary_key: ["corporation_id", "division"], force: :cascade do |t|
+    t.integer "corporation_id", null: false
+    t.integer "division", null: false
+    t.integer "size"
+  end
+
   create_table "planetSchematics", primary_key: "schematicID", id: :integer, default: nil, force: :cascade do |t|
     t.string "schematicName", limit: 255
     t.integer "cycleTime"
@@ -841,5 +841,6 @@ ActiveRecord::Schema.define(version: 20170611062634) do
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
+  add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
 end
