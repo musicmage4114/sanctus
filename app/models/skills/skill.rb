@@ -17,4 +17,10 @@ class Skill < ApplicationRecord
   has_many :ships,                  through:     :required_skills,
                                     source:      :usable,
                                     source_type: 'Ship'
+  
+  has_and_belongs_to_many :research_corporations, class_name:  'Corporation',
+                                                  join_table:  :npc_corp_research,
+                                                  foreign_key: :skill_type_id
+  
+  alias_attribute :research_corps, :research_corporations
 end

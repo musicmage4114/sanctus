@@ -59,6 +59,10 @@ class Corporation < ApplicationRecord
   
   has_many :divisions,      class_name: 'NpcCorpDivision',
                             inverse_of: :corporation
+  
+  has_and_belongs_to_many :research_fields, class_name: 'Skill',
+                                            join_table: :npc_corp_research,
+                                            association_foreign_key: :skill_type_id
 
   # TODO: scope :killmails - returns all killmails of corporation members
   # TODO: scope :current_wars

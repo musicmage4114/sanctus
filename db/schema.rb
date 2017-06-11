@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611225650) do
+ActiveRecord::Schema.define(version: 20170611230025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,11 +131,6 @@ ActiveRecord::Schema.define(version: 20170611225650) do
   create_table "crpActivities", primary_key: "activityID", id: :integer, default: nil, force: :cascade do |t|
     t.string "activityName", limit: 100
     t.string "description", limit: 1000
-  end
-
-  create_table "crpNPCCorporationResearchFields", primary_key: ["skillID", "corporationID"], force: :cascade do |t|
-    t.integer "skillID", null: false
-    t.integer "corporationID", null: false
   end
 
   create_table "crpNPCCorporationTrades", primary_key: ["corporationID", "typeID"], force: :cascade do |t|
@@ -629,6 +624,13 @@ ActiveRecord::Schema.define(version: 20170611225650) do
     t.integer "size"
   end
 
+  create_table "npc_corp_research", primary_key: ["skill_type_id", "corporation_id"], force: :cascade do |t|
+    t.integer "skill_type_id", null: false
+    t.integer "corporation_id", null: false
+    t.index ["corporation_id"], name: "index_npc_corp_research_on_corporation_id"
+    t.index ["skill_type_id"], name: "index_npc_corp_research_on_skill_type_id"
+  end
+
   create_table "planetSchematics", primary_key: "schematicID", id: :integer, default: nil, force: :cascade do |t|
     t.string "schematicName", limit: 255
     t.integer "cycleTime"
@@ -845,5 +847,6 @@ ActiveRecord::Schema.define(version: 20170611225650) do
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
+  add_foreign_key "npc_corp_research", "corporations", primary_key: "corporation_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
 end
