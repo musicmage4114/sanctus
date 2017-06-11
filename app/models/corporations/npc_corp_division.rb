@@ -9,5 +9,8 @@ class NpcCorpDivision < ApplicationRecord
                    military: 28,
                    advanced_military: 29 }
   
-  belongs_to :corporation, inverse_of: :npc_corp_divisions
+  belongs_to :corporation,      inverse_of:  :npc_corp_divisions
+  belongs_to :division_details, class_name:  'CorpDivisionDetail',
+                                foreign_key: :division,
+                                inverse_of:  :npc_corp_divisions
 end

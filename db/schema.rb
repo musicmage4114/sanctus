@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611230025) do
+ActiveRecord::Schema.define(version: 20170611233042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,12 @@ ActiveRecord::Schema.define(version: 20170611230025) do
     t.string "notes", limit: 500
   end
 
+  create_table "corp_division_details", primary_key: "division_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "divisionName", limit: 100
+    t.string "description", limit: 1000
+    t.string "leader_title", limit: 100
+  end
+
   create_table "corporations", primary_key: "corporation_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "solar_system_id"
     t.integer "friend_id"
@@ -136,12 +142,6 @@ ActiveRecord::Schema.define(version: 20170611230025) do
   create_table "crpNPCCorporationTrades", primary_key: ["corporationID", "typeID"], force: :cascade do |t|
     t.integer "corporationID", null: false
     t.integer "typeID", null: false
-  end
-
-  create_table "crpNPCDivisions", primary_key: "divisionID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "divisionName", limit: 100
-    t.string "description", limit: 1000
-    t.string "leaderType", limit: 100
   end
 
   create_table "dgmAttributeCategories", primary_key: "categoryID", id: :integer, default: nil, force: :cascade do |t|
@@ -840,12 +840,14 @@ ActiveRecord::Schema.define(version: 20170611230025) do
     t.string "description", limit: 500
   end
 
+  add_foreign_key "agents", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "ancestries", "bloodlines", primary_key: "bloodline_id"
   add_foreign_key "bloodlines", "races", primary_key: "race_id"
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
+  add_foreign_key "npc_corp_divisions", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
   add_foreign_key "npc_corp_research", "corporations", primary_key: "corporation_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
