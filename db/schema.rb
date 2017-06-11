@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611060131) do
+ActiveRecord::Schema.define(version: 20170611062634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(version: 20170611060131) do
     t.integer "location_id"
     t.integer "level"
     t.integer "agent_type"
-    t.integer "locator_agent"
     t.string "location_type"
+    t.integer "locator_agent", default: 0
     t.index ["corporation_id"], name: "ix_agtAgents_corporationID"
     t.index ["location_type", "location_id"], name: "index_agents_on_location_type_and_location_id"
   end
@@ -91,6 +91,43 @@ ActiveRecord::Schema.define(version: 20170611060131) do
     t.string "notes", limit: 500
   end
 
+  create_table "corporations", primary_key: "corporation_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "solar_system_id"
+    t.integer "friend_id"
+    t.integer "enemy_id"
+    t.integer "faction_id"
+    t.integer "station_count"
+    t.integer "station_system_count"
+    t.string "description", limit: 4000
+    t.integer "icon_id"
+    t.bigint "ceo_id"
+    t.bigint "integer_id"
+    t.decimal "tax_rate", precision: 4, scale: 3
+    t.decimal "decimal", precision: 4, scale: 3
+    t.string "ticker", limit: 5
+    t.string "name"
+    t.bigint "creator_id"
+    t.bigint "alliance_id_id"
+    t.datetime "creation_date"
+    t.integer "member_count"
+    t.string "url"
+    t.integer "deletion_status", default: 0, null: false
+    t.string "icon_64"
+    t.string "icon_128"
+    t.string "icon_256"
+    t.integer "corporation_type", default: 2, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["alliance_id_id"], name: "index_corporations_on_alliance_id_id"
+    t.index ["ceo_id"], name: "index_corporations_on_ceo_id"
+    t.index ["creator_id"], name: "index_corporations_on_creator_id"
+    t.index ["enemy_id"], name: "index_corporations_on_enemy_id"
+    t.index ["faction_id"], name: "index_corporations_on_faction_id"
+    t.index ["friend_id"], name: "index_corporations_on_friend_id"
+    t.index ["integer_id"], name: "index_corporations_on_integer_id"
+    t.index ["solar_system_id"], name: "index_corporations_on_solar_system_id"
+  end
+
   create_table "crpActivities", primary_key: "activityID", id: :integer, default: nil, force: :cascade do |t|
     t.string "activityName", limit: 100
     t.string "description", limit: 1000
@@ -110,36 +147,6 @@ ActiveRecord::Schema.define(version: 20170611060131) do
   create_table "crpNPCCorporationTrades", primary_key: ["corporationID", "typeID"], force: :cascade do |t|
     t.integer "corporationID", null: false
     t.integer "typeID", null: false
-  end
-
-  create_table "crpNPCCorporations", primary_key: "corporationID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "size", limit: 1
-    t.string "extent", limit: 1
-    t.integer "solarSystemID"
-    t.integer "investorID1"
-    t.integer "investorShares1"
-    t.integer "investorID2"
-    t.integer "investorShares2"
-    t.integer "investorID3"
-    t.integer "investorShares3"
-    t.integer "investorID4"
-    t.integer "investorShares4"
-    t.integer "friendID"
-    t.integer "enemyID"
-    t.integer "publicShares"
-    t.integer "initialPrice"
-    t.float "minSecurity"
-    t.boolean "scattered"
-    t.integer "fringe"
-    t.integer "corridor"
-    t.integer "hub"
-    t.integer "border"
-    t.integer "factionID"
-    t.float "sizeFactor"
-    t.integer "stationCount"
-    t.integer "stationSystemCount"
-    t.string "description", limit: 4000
-    t.integer "iconID"
   end
 
   create_table "crpNPCDivisions", primary_key: "divisionID", id: :integer, default: nil, force: :cascade do |t|
@@ -831,5 +838,8 @@ ActiveRecord::Schema.define(version: 20170611060131) do
 
   add_foreign_key "ancestries", "bloodlines", primary_key: "bloodline_id"
   add_foreign_key "bloodlines", "races", primary_key: "race_id"
+  add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
+  add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
+  add_foreign_key "corporations", "factions", primary_key: "faction_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
 end
