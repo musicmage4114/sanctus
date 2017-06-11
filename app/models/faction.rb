@@ -12,6 +12,9 @@ class Faction < ApplicationRecord
                                 foreign_key: :corporation_id,
                                 inverse_of:  :factions,
                                 optional:    true
+  belongs_to :militia,          class_name:  'Corporation',
+                                foreign_key: :militia_corporation_id,
+                                inverse_of:  :faction
   
   has_many :corporations,       inverse_of:  :faction
   has_many :losses,             class_name:  'Killmail',

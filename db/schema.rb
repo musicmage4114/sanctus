@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611053201) do
+ActiveRecord::Schema.define(version: 20170611054404) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,19 +89,6 @@ ActiveRecord::Schema.define(version: 20170611053201) do
     t.integer "iconID"
     t.string "shortDescription", limit: 500
     t.string "notes", limit: 500
-  end
-
-  create_table "chrFactions", primary_key: "factionID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "factionName", limit: 100
-    t.string "description", limit: 1000
-    t.integer "raceIDs"
-    t.integer "solarSystemID"
-    t.integer "corporationID"
-    t.float "sizeFactor"
-    t.integer "stationCount"
-    t.integer "stationSystemCount"
-    t.integer "militiaCorporationID"
-    t.integer "iconID"
   end
 
   create_table "chrRaces", primary_key: "raceID", id: :integer, default: nil, force: :cascade do |t|
@@ -259,6 +246,23 @@ ActiveRecord::Schema.define(version: 20170611053201) do
     t.string "unitName", limit: 100
     t.string "displayName", limit: 50
     t.string "description", limit: 1000
+  end
+
+  create_table "factions", primary_key: "faction_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.string "description", limit: 1000
+    t.integer "race_id"
+    t.integer "solar_system_id"
+    t.integer "corporation_id"
+    t.float "size_factor"
+    t.integer "station_count"
+    t.integer "station_system_count"
+    t.integer "militia_corporation_id"
+    t.integer "icon_id"
+    t.integer "uniqueness", default: 1, null: false
+    t.index ["militia_corporation_id"], name: "index_factions_on_militia_corporation_id"
+    t.index ["race_id"], name: "index_factions_on_race_id"
+    t.index ["solar_system_id"], name: "index_factions_on_solar_system_id"
   end
 
   create_table "industryActivity", primary_key: ["typeID", "activityID"], force: :cascade do |t|
