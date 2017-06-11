@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611054404) do
+ActiveRecord::Schema.define(version: 20170611060131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,13 +89,6 @@ ActiveRecord::Schema.define(version: 20170611054404) do
     t.integer "iconID"
     t.string "shortDescription", limit: 500
     t.string "notes", limit: 500
-  end
-
-  create_table "chrRaces", primary_key: "raceID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "raceName", limit: 100
-    t.string "description", limit: 1000
-    t.integer "iconID"
-    t.string "shortDescription", limit: 500
   end
 
   create_table "crpActivities", primary_key: "activityID", id: :integer, default: nil, force: :cascade do |t|
@@ -644,6 +637,13 @@ ActiveRecord::Schema.define(version: 20170611054404) do
     t.boolean "isInput"
   end
 
+  create_table "races", primary_key: "race_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.string "description", limit: 1000
+    t.integer "icon_id"
+    t.string "short_description", limit: 500
+  end
+
   create_table "ramActivities", primary_key: "activityID", id: :integer, default: nil, force: :cascade do |t|
     t.string "activityName", limit: 100
     t.string "iconNo", limit: 5
@@ -830,5 +830,6 @@ ActiveRecord::Schema.define(version: 20170611054404) do
   end
 
   add_foreign_key "ancestries", "bloodlines", primary_key: "bloodline_id"
+  add_foreign_key "bloodlines", "races", primary_key: "race_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
 end
