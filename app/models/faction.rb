@@ -7,6 +7,8 @@ class Faction < ApplicationRecord
                       minmatar: 2,
                       amarr: 4,
                       gallente: 8,
+                      gallente_caldari: 9,
+                      all_empire: 15,
                       jove: 16,
                       pirate: 32,
                       sleepers: 64,

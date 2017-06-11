@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611223656) do
+ActiveRecord::Schema.define(version: 20170611225650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -255,6 +255,7 @@ ActiveRecord::Schema.define(version: 20170611223656) do
     t.integer "icon_id"
     t.integer "uniqueness", default: 1, null: false
     t.integer "member_race"
+    t.index ["member_race"], name: "index_factions_on_member_race"
     t.index ["militia_corporation_id"], name: "index_factions_on_militia_corporation_id"
     t.index ["race_id"], name: "index_factions_on_race_id"
     t.index ["solar_system_id"], name: "index_factions_on_solar_system_id"
