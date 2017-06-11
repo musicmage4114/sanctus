@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611221243) do
+ActiveRecord::Schema.define(version: 20170611223656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -254,6 +254,7 @@ ActiveRecord::Schema.define(version: 20170611221243) do
     t.integer "militia_corporation_id"
     t.integer "icon_id"
     t.integer "uniqueness", default: 1, null: false
+    t.integer "member_race"
     t.index ["militia_corporation_id"], name: "index_factions_on_militia_corporation_id"
     t.index ["race_id"], name: "index_factions_on_race_id"
     t.index ["solar_system_id"], name: "index_factions_on_solar_system_id"
@@ -841,6 +842,7 @@ ActiveRecord::Schema.define(version: 20170611221243) do
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
+  add_foreign_key "factions", "races", primary_key: "race_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
 end
