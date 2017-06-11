@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611051405) do
+ActiveRecord::Schema.define(version: 20170611052054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,19 @@ ActiveRecord::Schema.define(version: 20170611051405) do
     t.string "location_type"
     t.index ["corporation_id"], name: "ix_agtAgents_corporationID"
     t.index ["location_type", "location_id"], name: "index_agents_on_location_type_and_location_id"
+  end
+
+  create_table "ancestries", primary_key: "ancestry_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.integer "bloodline_id"
+    t.string "description", limit: 1000
+    t.integer "perception"
+    t.integer "willpower"
+    t.integer "charisma"
+    t.integer "memory"
+    t.integer "intelligence"
+    t.integer "icon_id"
+    t.string "short_description", limit: 500
   end
 
   create_table "certCerts", primary_key: "certID", id: :integer, default: nil, force: :cascade do |t|
@@ -46,19 +59,6 @@ ActiveRecord::Schema.define(version: 20170611051405) do
     t.integer "skillLevel"
     t.string "certLevelText", limit: 8
     t.index ["skillID"], name: "ix_certSkills_skillID"
-  end
-
-  create_table "chrAncestries", primary_key: "ancestryID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "ancestryName", limit: 100
-    t.integer "bloodlineID"
-    t.string "description", limit: 1000
-    t.integer "perception"
-    t.integer "willpower"
-    t.integer "charisma"
-    t.integer "memory"
-    t.integer "intelligence"
-    t.integer "iconID"
-    t.string "shortDescription", limit: 500
   end
 
   create_table "chrAttributes", primary_key: "attributeID", id: :integer, default: nil, force: :cascade do |t|
