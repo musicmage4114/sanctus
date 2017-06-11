@@ -34,8 +34,6 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :standby
 
 gem 'bootstrap-sass'
-gem 'will_paginate'
-gem 'bootstrap-will_paginate'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -47,21 +45,14 @@ end
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console', '>= 3.3.0'
-
   gem 'listen'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen'
 end
 
-group :test do
-  gem 'rails-controller-testing'
-  gem 'minitest-reporters'
-  gem 'guard'
-  gem 'guard-minitest'
-end
-
 group :development, :test, :production do
-  # Use PostgreSQL in production environment.
+  # Use PostgreSQL in all environments.
   gem 'pg'
 end
 
