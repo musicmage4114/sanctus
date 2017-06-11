@@ -10,31 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20170611045947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "agents", primary_key: "agent_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "division"
+    t.integer "corporation_id"
+    t.integer "location_id"
+    t.integer "level"
+    t.integer "agent_type"
+    t.integer "locator_agent"
+    t.string "location_type"
+    t.index ["corporation_id"], name: "ix_agtAgents_corporationID"
+    t.index ["location_type", "location_id"], name: "index_agents_on_location_type_and_location_id"
+  end
+
   create_table "agtAgentTypes", primary_key: "agentTypeID", id: :integer, default: nil, force: :cascade do |t|
     t.string "agentType", limit: 50
-  end
-
-  create_table "agtAgents", primary_key: "agentID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "divisionID"
-    t.integer "corporationID"
-    t.integer "locationID"
-    t.integer "level"
-    t.integer "quality"
-    t.integer "agentTypeID"
-    t.boolean "isLocator"
-    t.index ["corporationID"], name: "ix_agtAgents_corporationID"
-    t.index ["locationID"], name: "ix_agtAgents_locationID"
-  end
-
-  create_table "agtResearchAgents", primary_key: ["agentID", "typeID"], force: :cascade do |t|
-    t.integer "agentID", null: false
-    t.integer "typeID", null: false
-    t.index ["typeID"], name: "ix_agtResearchAgents_typeID"
   end
 
   create_table "certCerts", primary_key: "certID", id: :integer, default: nil, force: :cascade do |t|
@@ -700,6 +694,13 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "quantity"
   end
 
+  create_table "research_agent_skills", primary_key: ["agent_id", "skill_type_id"], force: :cascade do |t|
+    t.integer "agent_id", null: false
+    t.integer "skill_type_id", null: false
+    t.index ["agent_id"], name: "index_research_agent_skills_on_agent_id"
+    t.index ["skill_type_id"], name: "ix_agtResearchAgents_typeID"
+  end
+
   create_table "skinLicense", primary_key: "licenseTypeID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "duration"
     t.integer "skinID"
@@ -825,4 +826,5 @@ ActiveRecord::Schema.define(version: 0) do
     t.string "description", limit: 500
   end
 
+  add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
 end
