@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611045947) do
+ActiveRecord::Schema.define(version: 20170611051405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,10 +25,6 @@ ActiveRecord::Schema.define(version: 20170611045947) do
     t.string "location_type"
     t.index ["corporation_id"], name: "ix_agtAgents_corporationID"
     t.index ["location_type", "location_id"], name: "index_agents_on_location_type_and_location_id"
-  end
-
-  create_table "agtAgentTypes", primary_key: "agentTypeID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "agentType", limit: 50
   end
 
   create_table "certCerts", primary_key: "certID", id: :integer, default: nil, force: :cascade do |t|
