@@ -3,8 +3,8 @@ class Bloodline < ApplicationRecord
   
   belongs_to :race,        inverse_of:  :bloodlines
   belongs_to :corporation, inverse_of:  :bloodlines
-  belongs_to :ship,        foreign_key: :ship_type_id,
-                           inverse_of:  :bloodline
+  belongs_to :icon,        inverse_of:  :bloodlines
+  belongs_to :ship,        foreign_key: :ship_type_id, inverse_of: :bloodline
   
   has_many :characters,    inverse_of:  :bloodline
   

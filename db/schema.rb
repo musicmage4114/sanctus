@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611052054) do
+ActiveRecord::Schema.define(version: 20170611053201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,28 @@ ActiveRecord::Schema.define(version: 20170611052054) do
     t.string "short_description", limit: 500
   end
 
+  create_table "bloodlines", primary_key: "bloodline_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "bloodlineName", limit: 100
+    t.integer "race_id"
+    t.string "description", limit: 1000
+    t.string "male_description", limit: 1000
+    t.string "female_description", limit: 1000
+    t.integer "ship_type_id"
+    t.integer "corporation_id"
+    t.integer "perception"
+    t.integer "willpower"
+    t.integer "charisma"
+    t.integer "memory"
+    t.integer "intelligence"
+    t.integer "icon_id"
+    t.string "short_description", limit: 500
+    t.string "short_male_description", limit: 500
+    t.string "short_female_description", limit: 500
+    t.index ["corporation_id"], name: "index_bloodlines_on_corporation_id"
+    t.index ["race_id"], name: "index_bloodlines_on_race_id"
+    t.index ["ship_type_id"], name: "index_bloodlines_on_ship_type_id"
+  end
+
   create_table "certCerts", primary_key: "certID", id: :integer, default: nil, force: :cascade do |t|
     t.text "description"
     t.integer "groupID"
@@ -67,25 +89,6 @@ ActiveRecord::Schema.define(version: 20170611052054) do
     t.integer "iconID"
     t.string "shortDescription", limit: 500
     t.string "notes", limit: 500
-  end
-
-  create_table "chrBloodlines", primary_key: "bloodlineID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "bloodlineName", limit: 100
-    t.integer "raceID"
-    t.string "description", limit: 1000
-    t.string "maleDescription", limit: 1000
-    t.string "femaleDescription", limit: 1000
-    t.integer "shipTypeID"
-    t.integer "corporationID"
-    t.integer "perception"
-    t.integer "willpower"
-    t.integer "charisma"
-    t.integer "memory"
-    t.integer "intelligence"
-    t.integer "iconID"
-    t.string "shortDescription", limit: 500
-    t.string "shortMaleDescription", limit: 500
-    t.string "shortFemaleDescription", limit: 500
   end
 
   create_table "chrFactions", primary_key: "factionID", id: :integer, default: nil, force: :cascade do |t|
@@ -822,5 +825,6 @@ ActiveRecord::Schema.define(version: 20170611052054) do
     t.string "description", limit: 500
   end
 
+  add_foreign_key "ancestries", "bloodlines", primary_key: "bloodline_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
 end
