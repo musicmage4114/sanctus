@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612204556) do
+ActiveRecord::Schema.define(version: 20170612210110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -353,12 +353,6 @@ ActiveRecord::Schema.define(version: 20170612204556) do
     t.integer "factionID"
   end
 
-  create_table "invFlags", primary_key: "flagID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "flagName", limit: 200
-    t.string "flagText", limit: 100
-    t.integer "orderID"
-  end
-
   create_table "invItems", primary_key: "itemID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "typeID", null: false
     t.integer "ownerID", null: false
@@ -431,6 +425,12 @@ ActiveRecord::Schema.define(version: 20170612204556) do
 
   create_table "invVolumes", primary_key: "typeID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "volume"
+  end
+
+  create_table "inventory_flags", primary_key: "flag_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 200
+    t.string "description", limit: 100
+    t.integer "order_id"
   end
 
   create_table "item_categories", primary_key: "category_id", id: :integer, default: nil, force: :cascade do |t|
