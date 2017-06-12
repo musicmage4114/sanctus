@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612051302) do
+ActiveRecord::Schema.define(version: 20170612053550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20170612051302) do
     t.integer "intelligence"
     t.integer "icon_id"
     t.string "short_description", limit: 500
+    t.index ["icon_id"], name: "index_ancestries_on_icon_id"
   end
 
   create_table "bloodlines", primary_key: "bloodline_id", id: :integer, default: nil, force: :cascade do |t|
@@ -58,6 +59,7 @@ ActiveRecord::Schema.define(version: 20170612051302) do
     t.string "short_male_description", limit: 500
     t.string "short_female_description", limit: 500
     t.index ["corporation_id"], name: "index_bloodlines_on_corporation_id"
+    t.index ["icon_id"], name: "index_bloodlines_on_icon_id"
     t.index ["race_id"], name: "index_bloodlines_on_race_id"
     t.index ["ship_type_id"], name: "index_bloodlines_on_ship_type_id"
   end
@@ -111,7 +113,7 @@ ActiveRecord::Schema.define(version: 20170612051302) do
     t.string "ticker", limit: 5
     t.string "name"
     t.bigint "creator_id"
-    t.bigint "alliance_id_id"
+    t.bigint "alliance_id"
     t.datetime "creation_date"
     t.integer "member_count"
     t.string "url"
@@ -122,12 +124,13 @@ ActiveRecord::Schema.define(version: 20170612051302) do
     t.integer "corporation_type", default: 2, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["alliance_id_id"], name: "index_corporations_on_alliance_id_id"
+    t.index ["alliance_id"], name: "index_corporations_on_alliance_id"
     t.index ["ceo_id"], name: "index_corporations_on_ceo_id"
     t.index ["creator_id"], name: "index_corporations_on_creator_id"
     t.index ["enemy_id"], name: "index_corporations_on_enemy_id"
     t.index ["faction_id"], name: "index_corporations_on_faction_id"
     t.index ["friend_id"], name: "index_corporations_on_friend_id"
+    t.index ["icon_id"], name: "index_corporations_on_icon_id"
     t.index ["integer_id"], name: "index_corporations_on_integer_id"
     t.index ["solar_system_id"], name: "index_corporations_on_solar_system_id"
   end
@@ -162,6 +165,7 @@ ActiveRecord::Schema.define(version: 20170612051302) do
     t.integer "data_export", default: 1, null: false
     t.integer "stacking", default: 1, null: false
     t.integer "good", default: 1, null: false
+    t.index ["category_id"], name: "index_dogma_attributes_on_category_id"
     t.index ["icon_id"], name: "index_dogma_attributes_on_icon_id"
   end
 
@@ -204,6 +208,7 @@ ActiveRecord::Schema.define(version: 20170612051302) do
     t.index ["discharge_attribute_id"], name: "index_dogma_effects_on_discharge_attribute_id"
     t.index ["duration_attribute_id"], name: "index_dogma_effects_on_duration_attribute_id"
     t.index ["falloff_attribute_id"], name: "index_dogma_effects_on_falloff_attribute_id"
+    t.index ["icon_id"], name: "index_dogma_effects_on_icon_id"
     t.index ["post_expression"], name: "index_dogma_effects_on_post_expression"
     t.index ["pre_expression"], name: "index_dogma_effects_on_pre_expression"
     t.index ["range_attribute_id"], name: "index_dogma_effects_on_range_attribute_id"
@@ -225,11 +230,6 @@ ActiveRecord::Schema.define(version: 20170612051302) do
     t.index ["type_id"], name: "index_dogma_expressions_on_type_id"
   end
 
-  create_table "eveIcons", primary_key: "iconID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "iconFile", limit: 500
-    t.text "description"
-  end
-
   create_table "eveUnits", primary_key: "unitID", id: :integer, default: nil, force: :cascade do |t|
     t.string "unitName", limit: 100
     t.string "displayName", limit: 50
@@ -249,6 +249,7 @@ ActiveRecord::Schema.define(version: 20170612051302) do
     t.integer "icon_id"
     t.integer "uniqueness", default: 1, null: false
     t.integer "member_race"
+    t.index ["icon_id"], name: "index_factions_on_icon_id"
     t.index ["member_race"], name: "index_factions_on_member_race"
     t.index ["militia_corporation_id"], name: "index_factions_on_militia_corporation_id"
     t.index ["race_id"], name: "index_factions_on_race_id"
@@ -260,6 +261,11 @@ ActiveRecord::Schema.define(version: 20170612051302) do
     t.string "graphic_file", limit: 100
     t.string "sof_hull_name", limit: 100
     t.string "sof_race_name", limit: 100
+    t.text "description"
+  end
+
+  create_table "icons", primary_key: "icon_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "icon_file", limit: 500
     t.text "description"
   end
 
@@ -458,6 +464,7 @@ ActiveRecord::Schema.define(version: 20170612051302) do
     t.string "type"
     t.integer "data_export", default: 1, null: false
     t.index ["group_id"], name: "ix_invTypes_groupID"
+    t.index ["icon_id"], name: "index_items_on_icon_id"
   end
 
   create_table "mapCelestialStatistics", primary_key: "celestialID", id: :integer, default: nil, force: :cascade do |t|
@@ -668,6 +675,7 @@ ActiveRecord::Schema.define(version: 20170612051302) do
     t.string "description", limit: 1000
     t.integer "icon_id"
     t.string "short_description", limit: 500
+    t.index ["icon_id"], name: "index_races_on_icon_id"
   end
 
   create_table "ramActivities", primary_key: "activityID", id: :integer, default: nil, force: :cascade do |t|
@@ -866,6 +874,7 @@ ActiveRecord::Schema.define(version: 20170612051302) do
 
   add_foreign_key "agents", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "ancestries", "bloodlines", primary_key: "bloodline_id"
+  add_foreign_key "bloodlines", "icons", primary_key: "icon_id"
   add_foreign_key "bloodlines", "items", column: "ship_type_id", primary_key: "type_id"
   add_foreign_key "bloodlines", "races", primary_key: "race_id"
   add_foreign_key "certificate_masteries", "certificates", column: "cert_id", primary_key: "cert_id"
@@ -875,9 +884,11 @@ ActiveRecord::Schema.define(version: 20170612051302) do
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
+  add_foreign_key "corporations", "icons", primary_key: "icon_id"
   add_foreign_key "dogma_attribute_values", "dogma_attributes", column: "attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_attribute_values", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "dogma_attributes", "dogma_attribute_categories", column: "category_id", primary_key: "category_id"
+  add_foreign_key "dogma_attributes", "icons", primary_key: "icon_id"
   add_foreign_key "dogma_effect_defaults", "dogma_effects", column: "effect_id", primary_key: "effect_id"
   add_foreign_key "dogma_effect_defaults", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "dogma_effects", "dogma_attributes", column: "discharge_attribute_id", primary_key: "attribute_id"
@@ -890,8 +901,11 @@ ActiveRecord::Schema.define(version: 20170612051302) do
   add_foreign_key "dogma_effects", "dogma_attributes", column: "tracking_speed_attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_effects", "dogma_expressions", column: "post_expression", primary_key: "expression_id"
   add_foreign_key "dogma_effects", "dogma_expressions", column: "pre_expression", primary_key: "expression_id"
+  add_foreign_key "dogma_effects", "icons", primary_key: "icon_id"
+  add_foreign_key "factions", "icons", primary_key: "icon_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
   add_foreign_key "items", "graphics", primary_key: "graphic_id"
+  add_foreign_key "items", "icons", primary_key: "icon_id"
   add_foreign_key "items", "races", primary_key: "race_id"
   add_foreign_key "npc_corp_divisions", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
@@ -899,6 +913,8 @@ ActiveRecord::Schema.define(version: 20170612051302) do
   add_foreign_key "npc_corp_item_offers", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "npc_corp_research", "corporations", primary_key: "corporation_id"
   add_foreign_key "npc_corp_research", "items", column: "skill_type_id", primary_key: "type_id"
+  add_foreign_key "races", "icons", primary_key: "icon_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
   add_foreign_key "research_agent_skills", "items", column: "skill_type_id", primary_key: "type_id"
+  add_foreign_key "training_attributes", "icons", primary_key: "icon_id"
 end
