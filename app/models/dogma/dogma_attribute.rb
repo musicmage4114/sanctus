@@ -7,6 +7,9 @@ class DogmaAttribute < ApplicationRecord
   enum stacking: [:unstackable, :stackable]
   # API data: boolean - high_is_good
   enum good: [:low, :high]
+  
+  belongs_to :category,       class_name:  'DogmaAttributeCategory',
+                              inverse_of:  :dogma_attributes
 
   has_many :dogma_effects,    foreign_key: :attribute_id,
                               inverse_of:  :dogma_attribute

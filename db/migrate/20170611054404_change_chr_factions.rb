@@ -15,7 +15,7 @@ class ChangeChrFactions < ActiveRecord::Migration[5.1]
       t.rename :militiaCorporationID, :militia_corporation_id
       t.index :militia_corporation_id
       t.rename :iconID, :icon_id
-      t.column :uniqueness, :integer, null: false, default: 1, index: true
+      t.integer :uniqueness, null: false, default: 1, index: true
     end
   end
 end

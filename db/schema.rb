@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611233042) do
+ActiveRecord::Schema.define(version: 20170611235458) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,24 +144,6 @@ ActiveRecord::Schema.define(version: 20170611233042) do
     t.integer "typeID", null: false
   end
 
-  create_table "dgmAttributeCategories", primary_key: "categoryID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "categoryName", limit: 50
-    t.string "categoryDescription", limit: 200
-  end
-
-  create_table "dgmAttributeTypes", primary_key: "attributeID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "attributeName", limit: 100
-    t.string "description", limit: 1000
-    t.integer "iconID"
-    t.float "defaultValue"
-    t.boolean "published"
-    t.string "displayName", limit: 150
-    t.integer "unitID"
-    t.boolean "stackable"
-    t.boolean "highIsGood"
-    t.integer "categoryID"
-  end
-
   create_table "dgmEffects", primary_key: "effectID", id: :integer, default: nil, force: :cascade do |t|
     t.string "effectName", limit: 400
     t.integer "effectCategory"
@@ -216,6 +198,25 @@ ActiveRecord::Schema.define(version: 20170611233042) do
     t.integer "typeID", null: false
     t.integer "effectID", null: false
     t.boolean "isDefault"
+  end
+
+  create_table "dogma_attribute_categories", primary_key: "category_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 50
+    t.string "description", limit: 200
+  end
+
+  create_table "dogma_attributes", primary_key: "attribute_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "attributeName", limit: 100
+    t.string "description", limit: 1000
+    t.integer "icon_id"
+    t.float "default_value"
+    t.string "display_name", limit: 150
+    t.integer "unit_id"
+    t.integer "category_id"
+    t.integer "data_export", default: 1, null: false
+    t.integer "stacking", default: 1, null: false
+    t.integer "good", default: 1, null: false
+    t.index ["icon_id"], name: "index_dogma_attributes_on_icon_id"
   end
 
   create_table "eveGraphics", primary_key: "graphicID", id: :integer, default: nil, force: :cascade do |t|
@@ -846,6 +847,7 @@ ActiveRecord::Schema.define(version: 20170611233042) do
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
+  add_foreign_key "dogma_attributes", "dogma_attribute_categories", column: "category_id", primary_key: "category_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
   add_foreign_key "npc_corp_divisions", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
