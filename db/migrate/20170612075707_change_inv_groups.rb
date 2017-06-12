@@ -33,11 +33,11 @@ class ChangeInvGroups < ActiveRecord::Migration[5.1]
   end
 
   def rollback
-    add_column :item_groups, :published, :boolean, null: false, default: true
+    add_column :invGroups, :published, :boolean, null: false, default: true
   
     ItemGroup.reset_column_information
     ItemGroup.where(data_export: 0).update_all(published: false)
   
-    remove_column :item_groups, :data_export
+    remove_column :invGroups, :data_export
   end
 end

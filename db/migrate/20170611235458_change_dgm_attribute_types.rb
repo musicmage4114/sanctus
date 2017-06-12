@@ -37,7 +37,7 @@ class ChangeDgmAttributeTypes < ActiveRecord::Migration[5.1]
   end
   
   def rollback
-    change_table :dogma_attributes do |t|
+    change_table :dgmAttributeTypes do |t|
       t.boolean :published,  default: true
       t.boolean :stackable,  default: true
       t.boolean :highIsGood, default: true
@@ -48,7 +48,7 @@ class ChangeDgmAttributeTypes < ActiveRecord::Migration[5.1]
     DogmaAttribute.where(stacking: 0).update_all(stackable: false)
     DogmaAttribute.where(good: 0).update_all(highIsGood: false)
     
-    change_table :dogma_attributes do |t|
+    change_table :dgmAttributeTypes do |t|
       t.remove :data_export
       t.remove :stacking
       t.remove :good

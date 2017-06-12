@@ -29,11 +29,11 @@ class ChangeAgtAgents < ActiveRecord::Migration[5.1]
   end
   
   def rollback
-    add_column :agents, :isLocator, :boolean, default: false
+    add_column :agtAgents, :isLocator, :boolean, default: false
   
     Agent.reset_column_information
     Agent.where(locator_agent: 1).update_all(isLocator: true)
     
-    remove_column :agents, :locator_agent
+    remove_column :agtAgents, :locator_agent
   end
 end

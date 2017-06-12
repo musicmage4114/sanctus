@@ -69,6 +69,6 @@ class ChangeCrpNpcCorporations < ActiveRecord::Migration[5.1]
   def rollback
     Corporation.reset_column_information
     Corporation.find(1000193).update(faction_id: 500021)
-    remove_foreign_key :corporations, :factions, primary_key: :faction_id
+    remove_foreign_key :crpNPCCorporations, :factions, primary_key: :faction_id
   end
 end

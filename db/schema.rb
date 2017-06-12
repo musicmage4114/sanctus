@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612210923) do
+ActiveRecord::Schema.define(version: 20170612214719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -353,14 +353,6 @@ ActiveRecord::Schema.define(version: 20170612210923) do
     t.integer "factionID"
   end
 
-  create_table "invMarketGroups", primary_key: "marketGroupID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "parentGroupID"
-    t.string "marketGroupName", limit: 100
-    t.string "description", limit: 3000
-    t.integer "iconID"
-    t.boolean "hasTypes"
-  end
-
   create_table "invMetaGroups", primary_key: "metaGroupID", id: :integer, default: nil, force: :cascade do |t|
     t.string "metaGroupName", limit: 100
     t.string "description", limit: 1000
@@ -627,6 +619,16 @@ ActiveRecord::Schema.define(version: 20170612210923) do
     t.float "zMin"
     t.float "zMax"
     t.float "radius"
+  end
+
+  create_table "market_groups", primary_key: "market_group_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "parent_group_id"
+    t.string "name", limit: 100
+    t.string "description", limit: 3000
+    t.integer "icon_id"
+    t.integer "contents", default: 1, null: false
+    t.index ["icon_id"], name: "index_market_groups_on_icon_id"
+    t.index ["parent_group_id"], name: "index_market_groups_on_parent_group_id"
   end
 
   create_table "npc_corp_divisions", primary_key: ["corporation_id", "division"], force: :cascade do |t|
@@ -922,6 +924,7 @@ ActiveRecord::Schema.define(version: 20170612210923) do
   add_foreign_key "dogma_effects", "dogma_expressions", column: "pre_expression", primary_key: "expression_id"
   add_foreign_key "dogma_effects", "icons", primary_key: "icon_id"
   add_foreign_key "dogma_expressions", "item_groups", primary_key: "group_id"
+  add_foreign_key "factions", "corporations", column: "militia_corporation_id", primary_key: "corporation_id"
   add_foreign_key "factions", "icons", primary_key: "icon_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
   add_foreign_key "industry_probabilities", "industry_activities", column: "activity_type", primary_key: "activity_id"
@@ -933,6 +936,8 @@ ActiveRecord::Schema.define(version: 20170612210923) do
   add_foreign_key "items", "icons", primary_key: "icon_id"
   add_foreign_key "items", "item_groups", column: "group_id", primary_key: "group_id"
   add_foreign_key "items", "races", primary_key: "race_id"
+  add_foreign_key "market_groups", "icons", primary_key: "icon_id"
+  add_foreign_key "market_groups", "market_groups", column: "parent_group_id", primary_key: "market_group_id"
   add_foreign_key "npc_corp_divisions", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
   add_foreign_key "npc_corp_item_offers", "corporations", primary_key: "corporation_id"

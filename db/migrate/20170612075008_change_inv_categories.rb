@@ -23,11 +23,11 @@ class ChangeInvCategories < ActiveRecord::Migration[5.1]
   end
 
   def rollback
-    add_column :item_categories, :published, :boolean, null: false, default: true
+    add_column :invCategories, :published, :boolean, null: false, default: true
   
     ItemCategory.reset_column_information
     ItemCategory.where(data_export: 0).update_all(published: false)
   
-    remove_column :item_categories, :data_export
+    remove_column :invCategories, :data_export
   end
 end

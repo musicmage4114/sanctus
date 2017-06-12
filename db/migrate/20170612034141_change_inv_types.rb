@@ -40,11 +40,11 @@ class ChangeInvTypes < ActiveRecord::Migration[5.1]
   end
   
   def rollback
-    add_column :items, :published, :boolean, null: false, default: true
+    add_column :invTypes, :published, :boolean, null: false, default: true
     
     Item.reset_column_information
     Item.where(data_export: 0).update_all(published: false)
     
-    remove_column :items, :data_export
+    remove_column :invTypes, :data_export
   end
 end

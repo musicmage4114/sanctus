@@ -20,7 +20,7 @@ class ChangeEveGraphics < ActiveRecord::Migration[5.1]
   end
   
   def rollback
-    remove_foreign_key :items, :graphics, primary_key: :graphic_id
+    remove_foreign_key :items, :eveGraphics, primary_key: :graphic_id
     Item.reset_column_information
     Item.where(graphic_id: nil).update_all(graphic_id: 0)
   end

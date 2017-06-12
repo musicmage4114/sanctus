@@ -32,7 +32,7 @@ class ChangeCertSkills < ActiveRecord::Migration[5.1]
   end
   
   def rollback
-    add_column :certificate_skills, :certLevelText, :string
+    add_column :certSkills, :certLevelText, :string
 
     CertificateSkill.reset_column_information
     CertificateSkill.where(level_name: 0).update_all(certLevelText: 'basic')
@@ -41,6 +41,6 @@ class ChangeCertSkills < ActiveRecord::Migration[5.1]
     CertificateSkill.where(level_name: 3).update_all(certLevelText: 'advanced')
     CertificateSkill.where(level_name: 4).update_all(certLevelText: 'elite')
     
-    remove_column :certificate_skills, :level_name
+    remove_column :certSkills, :level_name
   end
 end

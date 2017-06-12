@@ -18,6 +18,6 @@ class AddMemberRaceToFactions < ActiveRecord::Migration[5.1]
     Faction.reset_column_information
     Faction.update_all(race_id: :member_race)
     
-    remove_column :member_race
+    remove_column :factions, :member_race
   end
 end

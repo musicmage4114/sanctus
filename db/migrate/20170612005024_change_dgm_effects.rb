@@ -69,7 +69,7 @@ class ChangeDgmEffects < ActiveRecord::Migration[5.1]
   end
   
   def rollback
-    change_table :dogma_effects do |t|
+    change_table :dgmEffects do |t|
       t.boolean :disallowAutoRepeat, default: false
       t.boolean :published, default: true
       t.boolean :isWarpSafe, default: false
@@ -80,7 +80,7 @@ class ChangeDgmEffects < ActiveRecord::Migration[5.1]
     DogmaEffect.where(data_export: 0).update_all(published: false)
     DogmaEffect.where(warp_safety: 1).update_all(isWarpSafe: true)
     
-    change_table :dogma_effects do |t|
+    change_table :dgmEffects do |t|
       t.remove :auto_repeat
       t.remove :data_export
       t.remove :warp_safety
