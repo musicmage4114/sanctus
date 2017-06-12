@@ -35,6 +35,9 @@ class Item < ApplicationRecord
   has_and_belongs_to_many :research_corporations, class_name:  'Corporation',
                                                   join_table:  :npc_corp_research,
                                                   foreign_key: :skill_type_id
+  has_and_belongs_to_many :item_offers,           class_name:  'Corporation',
+                                                  join_table: :npc_corp_item_offers,
+                                                  foreign_key: :type_id
   
   alias_attribute :research_corps, :research_corporations
 end

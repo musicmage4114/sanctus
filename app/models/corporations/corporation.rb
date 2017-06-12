@@ -63,6 +63,9 @@ class Corporation < ApplicationRecord
   has_and_belongs_to_many :research_fields, class_name: 'Item',
                                             join_table: :npc_corp_research,
                                             association_foreign_key: :skill_type_id
+  has_and_belongs_to_many :item_offers,     class_name: 'Item',
+                                            join_table: :npc_corp_item_offers,
+                                            association_foreign_key: :type_id
 
   # TODO: scope :killmails - returns all killmails of corporation members
   # TODO: scope :current_wars

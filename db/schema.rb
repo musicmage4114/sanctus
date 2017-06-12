@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612045311) do
+ActiveRecord::Schema.define(version: 20170612050044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,11 +135,6 @@ ActiveRecord::Schema.define(version: 20170612045311) do
   create_table "crpActivities", primary_key: "activityID", id: :integer, default: nil, force: :cascade do |t|
     t.string "activityName", limit: 100
     t.string "description", limit: 1000
-  end
-
-  create_table "crpNPCCorporationTrades", primary_key: ["corporationID", "typeID"], force: :cascade do |t|
-    t.integer "corporationID", null: false
-    t.integer "typeID", null: false
   end
 
   create_table "dogma_attribute_categories", primary_key: "category_id", id: :integer, default: nil, force: :cascade do |t|
@@ -637,6 +632,13 @@ ActiveRecord::Schema.define(version: 20170612045311) do
     t.integer "size"
   end
 
+  create_table "npc_corp_item_offers", primary_key: ["corporation_id", "type_id"], force: :cascade do |t|
+    t.integer "corporation_id", null: false
+    t.integer "type_id", null: false
+    t.index ["corporation_id"], name: "index_npc_corp_item_offers_on_corporation_id"
+    t.index ["type_id"], name: "index_npc_corp_item_offers_on_type_id"
+  end
+
   create_table "npc_corp_research", primary_key: ["skill_type_id", "corporation_id"], force: :cascade do |t|
     t.integer "skill_type_id", null: false
     t.integer "corporation_id", null: false
@@ -892,6 +894,8 @@ ActiveRecord::Schema.define(version: 20170612045311) do
   add_foreign_key "items", "races", primary_key: "race_id"
   add_foreign_key "npc_corp_divisions", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
+  add_foreign_key "npc_corp_item_offers", "corporations", primary_key: "corporation_id"
+  add_foreign_key "npc_corp_item_offers", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "npc_corp_research", "corporations", primary_key: "corporation_id"
   add_foreign_key "npc_corp_research", "items", column: "skill_type_id", primary_key: "type_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
