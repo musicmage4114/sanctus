@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611235458) do
+ActiveRecord::Schema.define(version: 20170612005024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,36 +144,6 @@ ActiveRecord::Schema.define(version: 20170611235458) do
     t.integer "typeID", null: false
   end
 
-  create_table "dgmEffects", primary_key: "effectID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "effectName", limit: 400
-    t.integer "effectCategory"
-    t.integer "preExpression"
-    t.integer "postExpression"
-    t.string "description", limit: 1000
-    t.string "guid", limit: 60
-    t.integer "iconID"
-    t.boolean "isOffensive"
-    t.boolean "isAssistance"
-    t.integer "durationAttributeID"
-    t.integer "trackingSpeedAttributeID"
-    t.integer "dischargeAttributeID"
-    t.integer "rangeAttributeID"
-    t.integer "falloffAttributeID"
-    t.boolean "disallowAutoRepeat"
-    t.boolean "published"
-    t.string "displayName", limit: 100
-    t.boolean "isWarpSafe"
-    t.boolean "rangeChance"
-    t.boolean "electronicChance"
-    t.boolean "propulsionChance"
-    t.integer "distribution"
-    t.string "sfxName", limit: 20
-    t.integer "npcUsageChanceAttributeID"
-    t.integer "npcActivationChanceAttributeID"
-    t.integer "fittingUsageChanceAttributeID"
-    t.text "modifierInfo"
-  end
-
   create_table "dgmExpressions", primary_key: "expressionID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "operandID"
     t.integer "arg1"
@@ -217,6 +187,41 @@ ActiveRecord::Schema.define(version: 20170611235458) do
     t.integer "stacking", default: 1, null: false
     t.integer "good", default: 1, null: false
     t.index ["icon_id"], name: "index_dogma_attributes_on_icon_id"
+  end
+
+  create_table "dogma_effects", primary_key: "effect_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "effectName", limit: 400
+    t.integer "effect_category"
+    t.integer "pre_expression"
+    t.integer "post_expression"
+    t.string "description", limit: 1000
+    t.string "guid", limit: 60
+    t.integer "icon_id"
+    t.boolean "offensive"
+    t.boolean "assistance"
+    t.integer "duration_attribute_id"
+    t.integer "tracking_speed_attribute_id"
+    t.integer "discharge_attribute_id"
+    t.integer "range_attribute_id"
+    t.integer "falloff_attribute_id"
+    t.string "displayName", limit: 100
+    t.boolean "range_chance"
+    t.boolean "electronic_chance"
+    t.boolean "propulsion_chance"
+    t.integer "distribution"
+    t.string "sfx_name", limit: 20
+    t.integer "npc_usage_chance_attribute_id"
+    t.integer "npc_activation_chance_attribute_id"
+    t.integer "fitting_usage_chance_attribute_id"
+    t.text "modifier_info"
+    t.integer "auto_repeat", default: 0, null: false
+    t.integer "data_export", default: 1, null: false
+    t.integer "warp_safety", default: 0, null: false
+    t.index ["discharge_attribute_id"], name: "index_dogma_effects_on_discharge_attribute_id"
+    t.index ["duration_attribute_id"], name: "index_dogma_effects_on_duration_attribute_id"
+    t.index ["falloff_attribute_id"], name: "index_dogma_effects_on_falloff_attribute_id"
+    t.index ["range_attribute_id"], name: "index_dogma_effects_on_range_attribute_id"
+    t.index ["tracking_speed_attribute_id"], name: "index_dogma_effects_on_tracking_speed_attribute_id"
   end
 
   create_table "eveGraphics", primary_key: "graphicID", id: :integer, default: nil, force: :cascade do |t|
@@ -848,6 +853,14 @@ ActiveRecord::Schema.define(version: 20170611235458) do
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
   add_foreign_key "dogma_attributes", "dogma_attribute_categories", column: "category_id", primary_key: "category_id"
+  add_foreign_key "dogma_effects", "dogma_attributes", column: "discharge_attribute_id", primary_key: "attribute_id"
+  add_foreign_key "dogma_effects", "dogma_attributes", column: "duration_attribute_id", primary_key: "attribute_id"
+  add_foreign_key "dogma_effects", "dogma_attributes", column: "falloff_attribute_id", primary_key: "attribute_id"
+  add_foreign_key "dogma_effects", "dogma_attributes", column: "fitting_usage_chance_attribute_id", primary_key: "attribute_id"
+  add_foreign_key "dogma_effects", "dogma_attributes", column: "npc_activation_chance_attribute_id", primary_key: "attribute_id"
+  add_foreign_key "dogma_effects", "dogma_attributes", column: "npc_usage_chance_attribute_id", primary_key: "attribute_id"
+  add_foreign_key "dogma_effects", "dogma_attributes", column: "range_attribute_id", primary_key: "attribute_id"
+  add_foreign_key "dogma_effects", "dogma_attributes", column: "tracking_speed_attribute_id", primary_key: "attribute_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
   add_foreign_key "npc_corp_divisions", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"

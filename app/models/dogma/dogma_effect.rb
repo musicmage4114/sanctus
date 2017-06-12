@@ -5,15 +5,24 @@ class DogmaEffect < ApplicationRecord
   enum auto_repeat: [:allowed, :disallowed]
   # API data: boolean - published
   enum data_export: [:unpublished, :published]
-  # API data: <value>_attribute_id fields
-  enum attribute_type: { discharge:      1,
-                         duration:       2,
-                         falloff:        3,
-                         range:          4,
-                         tracking_speed: 5,
-                         other:          6 }
+  enum warp_safety: [:unsafe, :safe]
   
-  belongs_to :dogma_attribute, foreign_key: :attribute_id, inverse_of: :dogma_effects
+  belongs_to :duration_attribute,              class_name: 'DogmaAttribute',
+                                               inverse_of: :dogma_effects
+  belongs_to :tracking_speed_attribute,        class_name: 'DogmaAttribute',
+                                               inverse_of: :dogma_effects
+  belongs_to :discharge_attribute,             class_name: 'DogmaAttribute',
+                                               inverse_of: :dogma_effects
+  belongs_to :range_attribute,                 class_name: 'DogmaAttribute',
+                                               inverse_of: :dogma_effects
+  belongs_to :falloff_attribute,               class_name: 'DogmaAttribute',
+                                               inverse_of: :dogma_effects
+  belongs_to :npc_usage_chance_attribute,      class_name: 'DogmaAttribute',
+                                               inverse_of: :dogma_effects
+  belongs_to :npc_activation_chance_attribute, class_name: 'DogmaAttribute',
+                                               inverse_of: :dogma_effects
+  belongs_to :fitting_usage_chance_attribute,  class_name: 'DogmaAttribute',
+                                               inverse_of: :dogma_effects
   
   has_many :modifications,     class_name:  'DogmaEffectModification',
                                foreign_key: :effect_id,
