@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612024716) do
+ActiveRecord::Schema.define(version: 20170612034141) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -437,24 +437,6 @@ ActiveRecord::Schema.define(version: 20170612024716) do
     t.integer "quantity"
   end
 
-  create_table "invTypes", primary_key: "typeID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "groupID"
-    t.string "typeName", limit: 100
-    t.text "description"
-    t.float "mass"
-    t.float "volume"
-    t.float "capacity"
-    t.integer "portionSize"
-    t.integer "raceID"
-    t.decimal "basePrice", precision: 19, scale: 4
-    t.boolean "published"
-    t.integer "marketGroupID"
-    t.integer "iconID"
-    t.integer "soundID"
-    t.integer "graphicID"
-    t.index ["groupID"], name: "ix_invTypes_groupID"
-  end
-
   create_table "invUniqueNames", primary_key: "itemID", id: :integer, default: nil, force: :cascade do |t|
     t.string "itemName", limit: 200, null: false
     t.integer "groupID"
@@ -464,6 +446,25 @@ ActiveRecord::Schema.define(version: 20170612024716) do
 
   create_table "invVolumes", primary_key: "typeID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "volume"
+  end
+
+  create_table "items", primary_key: "type_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "group_id"
+    t.string "name", limit: 100
+    t.text "description"
+    t.float "mass"
+    t.float "volume"
+    t.float "capacity"
+    t.integer "portion_size"
+    t.integer "race_id"
+    t.decimal "base_price", precision: 19, scale: 4
+    t.integer "market_group_id"
+    t.integer "icon_id"
+    t.integer "sound_id"
+    t.integer "graphic_id"
+    t.string "type"
+    t.integer "data_export", default: 1, null: false
+    t.index ["group_id"], name: "ix_invTypes_groupID"
   end
 
   create_table "mapCelestialStatistics", primary_key: "celestialID", id: :integer, default: nil, force: :cascade do |t|
@@ -856,13 +857,16 @@ ActiveRecord::Schema.define(version: 20170612024716) do
 
   add_foreign_key "agents", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "ancestries", "bloodlines", primary_key: "bloodline_id"
+  add_foreign_key "bloodlines", "items", column: "ship_type_id", primary_key: "type_id"
   add_foreign_key "bloodlines", "races", primary_key: "race_id"
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
   add_foreign_key "dogma_attribute_values", "dogma_attributes", column: "attribute_id", primary_key: "attribute_id"
+  add_foreign_key "dogma_attribute_values", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "dogma_attributes", "dogma_attribute_categories", column: "category_id", primary_key: "category_id"
   add_foreign_key "dogma_effect_defaults", "dogma_effects", column: "effect_id", primary_key: "effect_id"
+  add_foreign_key "dogma_effect_defaults", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "dogma_effects", "dogma_attributes", column: "discharge_attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_effects", "dogma_attributes", column: "duration_attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_effects", "dogma_attributes", column: "falloff_attribute_id", primary_key: "attribute_id"
@@ -874,8 +878,11 @@ ActiveRecord::Schema.define(version: 20170612024716) do
   add_foreign_key "dogma_effects", "dogma_expressions", column: "post_expression", primary_key: "expression_id"
   add_foreign_key "dogma_effects", "dogma_expressions", column: "pre_expression", primary_key: "expression_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
+  add_foreign_key "items", "races", primary_key: "race_id"
   add_foreign_key "npc_corp_divisions", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
   add_foreign_key "npc_corp_research", "corporations", primary_key: "corporation_id"
+  add_foreign_key "npc_corp_research", "items", column: "skill_type_id", primary_key: "type_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
+  add_foreign_key "research_agent_skills", "items", column: "skill_type_id", primary_key: "type_id"
 end

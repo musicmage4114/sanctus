@@ -3,7 +3,9 @@ class ColonyRoute < ApplicationRecord
   
   belongs_to :source_pin,      class_name: 'ColonyPin', inverse_of: :colony_routes
   belongs_to :destination_pin, class_name: 'ColonyPin', inverse_of: :colony_routes
-  belongs_to :content,         polymorphic: true
+  belongs_to :content,         class_name: 'Item',
+                               foreign_key: :content_type_id,
+                               inverse_of: :colony_routes
   
   has_many :waypoints, class_name: 'ColonyWaypoint',
                        inverse_of: :colony_route,

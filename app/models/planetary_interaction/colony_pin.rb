@@ -5,7 +5,7 @@ class ColonyPin < ApplicationRecord
   enum status: [:inactive, :active]
   
   belongs_to :colony,        inverse_of:  :colony_pins
-  belongs_to :type,          class_name:  'Item', inverse_of: :colony_pins
+  belongs_to :pin_type,      class_name:  'Item', inverse_of: :colony_pins
   belongs_to :schematic,     inverse_of:  :colony_pins, optional: true
   
   has_many :extractor_heads, inverse_of:  :colony_pin, dependent: :destroy
