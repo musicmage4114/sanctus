@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612065649) do
+ActiveRecord::Schema.define(version: 20170612071426) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,17 @@ ActiveRecord::Schema.define(version: 20170612065649) do
     t.index ["blueprint_id", "material_type_id"], name: "index_blueprint_materials_on_blueprint_id_and_material_type_id"
     t.index ["blueprint_id"], name: "ix_industryActivityMaterials_typeID"
     t.index ["material_type_id"], name: "index_blueprint_materials_on_material_type_id"
+  end
+
+  create_table "blueprint_products", id: false, force: :cascade do |t|
+    t.integer "blueprint_id"
+    t.integer "activity_type"
+    t.integer "product_type_id"
+    t.integer "quantity"
+    t.index ["activity_type"], name: "index_blueprint_products_on_activity_type"
+    t.index ["blueprint_id", "product_type_id"], name: "blueprint_product_type_id_product_index"
+    t.index ["blueprint_id"], name: "ix_industryActivityProducts_typeID"
+    t.index ["product_type_id"], name: "ix_industryActivityProducts_productTypeID"
   end
 
   create_table "certificate_masteries", id: false, force: :cascade do |t|
@@ -273,15 +284,6 @@ ActiveRecord::Schema.define(version: 20170612065649) do
   create_table "icons", primary_key: "icon_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "icon_file", limit: 500
     t.text "description"
-  end
-
-  create_table "industryActivityProducts", id: false, force: :cascade do |t|
-    t.integer "typeID"
-    t.integer "activityID"
-    t.integer "productTypeID"
-    t.integer "quantity"
-    t.index ["productTypeID"], name: "ix_industryActivityProducts_productTypeID"
-    t.index ["typeID"], name: "ix_industryActivityProducts_typeID"
   end
 
   create_table "industryActivityRaces", id: false, force: :cascade do |t|
@@ -884,6 +886,7 @@ ActiveRecord::Schema.define(version: 20170612065649) do
   add_foreign_key "bloodlines", "items", column: "ship_type_id", primary_key: "type_id"
   add_foreign_key "bloodlines", "races", primary_key: "race_id"
   add_foreign_key "blueprint_materials", "industry_activities", column: "activity_type", primary_key: "activity_id"
+  add_foreign_key "blueprint_products", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "certificate_masteries", "certificates", column: "cert_id", primary_key: "cert_id"
   add_foreign_key "certificate_masteries", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "certificate_skills", "certificates", column: "cert_id", primary_key: "cert_id"

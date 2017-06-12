@@ -39,6 +39,11 @@ class Item < ApplicationRecord
   has_many :invention_products,     class_name:  'IndustryProbability',
                                     foreign_key: :product_type_id,
                                     inverse_of:  :item
+  has_many :blueprint_products,     foreign_key: :blueprint_id,
+                                    inverse_of:  :item
+  has_many :products,               class_name:  'BlueprintProduct',
+                                    foreign_key: :product_type_id,
+                                    inverse_of:  :item
   
   has_many :fittings,               through: :fitting_items, source: :fitting
   has_many :killmails,              through: :killmail_items, source: :killmail

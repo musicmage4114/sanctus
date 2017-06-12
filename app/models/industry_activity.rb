@@ -6,5 +6,7 @@ class IndustryActivity < ApplicationRecord
   has_many :blueprint_materials,    foreign_key: :activity_type,
                                     inverse_of:  :industry_activities
   has_many :industry_probabilities, foreign_key: :activity_type,
-                                    inverse_of: :industry_activities
+                                    inverse_of:  :industry_activities
+  has_many :blueprint_products,     foreign_key: :activity_type,
+                                    inverse_of:  :industry_activities
 end
