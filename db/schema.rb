@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612214719) do
+ActiveRecord::Schema.define(version: 20170612220714) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -353,12 +353,6 @@ ActiveRecord::Schema.define(version: 20170612214719) do
     t.integer "factionID"
   end
 
-  create_table "invMetaGroups", primary_key: "metaGroupID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "metaGroupName", limit: 100
-    t.string "description", limit: 1000
-    t.integer "iconID"
-  end
-
   create_table "invMetaTypes", primary_key: "typeID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "parentTypeID"
     t.integer "metaGroupID"
@@ -629,6 +623,13 @@ ActiveRecord::Schema.define(version: 20170612214719) do
     t.integer "contents", default: 1, null: false
     t.index ["icon_id"], name: "index_market_groups_on_icon_id"
     t.index ["parent_group_id"], name: "index_market_groups_on_parent_group_id"
+  end
+
+  create_table "meta_item_groups", primary_key: "meta_group_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.string "description", limit: 1000
+    t.integer "icon_id"
+    t.index ["icon_id"], name: "index_meta_item_groups_on_icon_id"
   end
 
   create_table "npc_corp_divisions", primary_key: ["corporation_id", "division"], force: :cascade do |t|
@@ -938,6 +939,7 @@ ActiveRecord::Schema.define(version: 20170612214719) do
   add_foreign_key "items", "races", primary_key: "race_id"
   add_foreign_key "market_groups", "icons", primary_key: "icon_id"
   add_foreign_key "market_groups", "market_groups", column: "parent_group_id", primary_key: "market_group_id"
+  add_foreign_key "meta_item_groups", "icons", primary_key: "icon_id"
   add_foreign_key "npc_corp_divisions", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
   add_foreign_key "npc_corp_item_offers", "corporations", primary_key: "corporation_id"
