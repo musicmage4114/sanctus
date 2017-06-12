@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612023815) do
+ActiveRecord::Schema.define(version: 20170612024716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,12 +144,6 @@ ActiveRecord::Schema.define(version: 20170612023815) do
     t.integer "typeID", null: false
   end
 
-  create_table "dgmTypeEffects", primary_key: ["typeID", "effectID"], force: :cascade do |t|
-    t.integer "typeID", null: false
-    t.integer "effectID", null: false
-    t.boolean "isDefault"
-  end
-
   create_table "dogma_attribute_categories", primary_key: "category_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "name", limit: 50
     t.string "description", limit: 200
@@ -176,6 +170,14 @@ ActiveRecord::Schema.define(version: 20170612023815) do
     t.integer "stacking", default: 1, null: false
     t.integer "good", default: 1, null: false
     t.index ["icon_id"], name: "index_dogma_attributes_on_icon_id"
+  end
+
+  create_table "dogma_effect_defaults", primary_key: ["type_id", "effect_id"], force: :cascade do |t|
+    t.integer "type_id", null: false
+    t.integer "effect_id", null: false
+    t.boolean "default"
+    t.index ["effect_id"], name: "index_dogma_effect_defaults_on_effect_id"
+    t.index ["type_id"], name: "index_dogma_effect_defaults_on_type_id"
   end
 
   create_table "dogma_effects", primary_key: "effect_id", id: :integer, default: nil, force: :cascade do |t|
@@ -860,6 +862,7 @@ ActiveRecord::Schema.define(version: 20170612023815) do
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
   add_foreign_key "dogma_attribute_values", "dogma_attributes", column: "attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_attributes", "dogma_attribute_categories", column: "category_id", primary_key: "category_id"
+  add_foreign_key "dogma_effect_defaults", "dogma_effects", column: "effect_id", primary_key: "effect_id"
   add_foreign_key "dogma_effects", "dogma_attributes", column: "discharge_attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_effects", "dogma_attributes", column: "duration_attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_effects", "dogma_attributes", column: "falloff_attribute_id", primary_key: "attribute_id"
