@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612071426) do
+ActiveRecord::Schema.define(version: 20170612073008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,18 @@ ActiveRecord::Schema.define(version: 20170612071426) do
     t.index ["blueprint_id", "product_type_id"], name: "blueprint_product_type_id_product_index"
     t.index ["blueprint_id"], name: "ix_industryActivityProducts_typeID"
     t.index ["product_type_id"], name: "ix_industryActivityProducts_productTypeID"
+  end
+
+  create_table "blueprint_skills", id: false, force: :cascade do |t|
+    t.integer "blueprint_id"
+    t.integer "activity_type"
+    t.integer "skill_id"
+    t.integer "required_level"
+    t.index ["activity_type"], name: "index_blueprint_skills_on_activity_type"
+    t.index ["blueprint_id", "activity_type"], name: "industryActivitySkills_idx1"
+    t.index ["blueprint_id", "skill_id"], name: "index_blueprint_skills_on_blueprint_id_and_skill_id"
+    t.index ["blueprint_id"], name: "ix_industryActivitySkills_typeID"
+    t.index ["skill_id"], name: "ix_industryActivitySkills_skillID"
   end
 
   create_table "certificate_masteries", id: false, force: :cascade do |t|
@@ -284,25 +296,6 @@ ActiveRecord::Schema.define(version: 20170612071426) do
   create_table "icons", primary_key: "icon_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "icon_file", limit: 500
     t.text "description"
-  end
-
-  create_table "industryActivityRaces", id: false, force: :cascade do |t|
-    t.integer "typeID"
-    t.integer "activityID"
-    t.integer "productTypeID"
-    t.integer "raceID"
-    t.index ["productTypeID"], name: "ix_industryActivityRaces_productTypeID"
-    t.index ["typeID"], name: "ix_industryActivityRaces_typeID"
-  end
-
-  create_table "industryActivitySkills", id: false, force: :cascade do |t|
-    t.integer "typeID"
-    t.integer "activityID"
-    t.integer "skillID"
-    t.integer "level"
-    t.index ["skillID"], name: "ix_industryActivitySkills_skillID"
-    t.index ["typeID", "activityID"], name: "industryActivitySkills_idx1"
-    t.index ["typeID"], name: "ix_industryActivitySkills_typeID"
   end
 
   create_table "industryBlueprints", primary_key: "typeID", id: :integer, default: nil, force: :cascade do |t|
@@ -887,6 +880,8 @@ ActiveRecord::Schema.define(version: 20170612071426) do
   add_foreign_key "bloodlines", "races", primary_key: "race_id"
   add_foreign_key "blueprint_materials", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "blueprint_products", "industry_activities", column: "activity_type", primary_key: "activity_id"
+  add_foreign_key "blueprint_skills", "industry_activities", column: "activity_type", primary_key: "activity_id"
+  add_foreign_key "blueprint_skills", "items", column: "skill_id", primary_key: "type_id"
   add_foreign_key "certificate_masteries", "certificates", column: "cert_id", primary_key: "cert_id"
   add_foreign_key "certificate_masteries", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "certificate_skills", "certificates", column: "cert_id", primary_key: "cert_id"
