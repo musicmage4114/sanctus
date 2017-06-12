@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612044525) do
+ActiveRecord::Schema.define(version: 20170612045311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,14 +87,6 @@ ActiveRecord::Schema.define(version: 20170612044525) do
     t.integer "group_id"
     t.string "name", limit: 255
     t.index ["group_id"], name: "index_certificates_on_group_id"
-  end
-
-  create_table "chrAttributes", primary_key: "attributeID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "attributeName", limit: 100
-    t.string "description", limit: 1000
-    t.integer "iconID"
-    t.string "shortDescription", limit: 500
-    t.string "notes", limit: 500
   end
 
   create_table "corp_division_details", primary_key: "division_id", id: :integer, default: nil, force: :cascade do |t|
@@ -821,6 +813,15 @@ ActiveRecord::Schema.define(version: 20170612044525) do
     t.index ["regionID"], name: "ix_staStations_regionID"
     t.index ["solarSystemID"], name: "ix_staStations_solarSystemID"
     t.index ["stationTypeID"], name: "ix_staStations_stationTypeID"
+  end
+
+  create_table "training_attributes", primary_key: "attribute_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.string "description", limit: 1000
+    t.integer "icon_id"
+    t.string "short_description", limit: 500
+    t.string "notes", limit: 500
+    t.index ["icon_id"], name: "index_training_attributes_on_icon_id"
   end
 
   create_table "translationTables", primary_key: ["sourceTable", "translatedKey"], force: :cascade do |t|
