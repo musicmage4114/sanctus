@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612050044) do
+ActiveRecord::Schema.define(version: 20170612051302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,7 +90,7 @@ ActiveRecord::Schema.define(version: 20170612050044) do
   end
 
   create_table "corp_division_details", primary_key: "division_id", id: :integer, default: nil, force: :cascade do |t|
-    t.string "divisionName", limit: 100
+    t.string "name", limit: 100
     t.string "description", limit: 1000
     t.string "leader_title", limit: 100
   end
@@ -225,14 +225,6 @@ ActiveRecord::Schema.define(version: 20170612050044) do
     t.index ["type_id"], name: "index_dogma_expressions_on_type_id"
   end
 
-  create_table "eveGraphics", primary_key: "graphicID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "sofFactionName", limit: 100
-    t.string "graphicFile", limit: 100
-    t.string "sofHullName", limit: 100
-    t.string "sofRaceName", limit: 100
-    t.text "description"
-  end
-
   create_table "eveIcons", primary_key: "iconID", id: :integer, default: nil, force: :cascade do |t|
     t.string "iconFile", limit: 500
     t.text "description"
@@ -261,6 +253,14 @@ ActiveRecord::Schema.define(version: 20170612050044) do
     t.index ["militia_corporation_id"], name: "index_factions_on_militia_corporation_id"
     t.index ["race_id"], name: "index_factions_on_race_id"
     t.index ["solar_system_id"], name: "index_factions_on_solar_system_id"
+  end
+
+  create_table "graphics", primary_key: "graphic_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "sof_faction_name", limit: 100
+    t.string "graphic_file", limit: 100
+    t.string "sof_hull_name", limit: 100
+    t.string "sof_race_name", limit: 100
+    t.text "description"
   end
 
   create_table "industryActivity", primary_key: ["typeID", "activityID"], force: :cascade do |t|
@@ -891,6 +891,7 @@ ActiveRecord::Schema.define(version: 20170612050044) do
   add_foreign_key "dogma_effects", "dogma_expressions", column: "post_expression", primary_key: "expression_id"
   add_foreign_key "dogma_effects", "dogma_expressions", column: "pre_expression", primary_key: "expression_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
+  add_foreign_key "items", "graphics", primary_key: "graphic_id"
   add_foreign_key "items", "races", primary_key: "race_id"
   add_foreign_key "npc_corp_divisions", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
