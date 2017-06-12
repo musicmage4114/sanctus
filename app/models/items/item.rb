@@ -26,6 +26,7 @@ class Item < ApplicationRecord
   has_many :dogma_expressions,     foreign_key: :type_id, inverse_of: :item
   has_many :personal_blueprints,   foreign_key: :type_id, inverse_of: :item
   has_many :colony_pins,           foreign_key: :type_id, inverse_of: :item
+  has_many :certificate_masteries, foreign_key: :type_id, inverse_of: :item
   
   has_many :fittings,              through: :fitting_items, source: :fitting
   has_many :killmails,             through: :killmail_items, source: :killmail

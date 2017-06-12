@@ -10,6 +10,7 @@ class ItemGroup < ApplicationRecord
                                foreign_key: :group_id,
                                inverse_of:  :item_group
   has_many :dogma_expressions, inverse_of:  :item_group
+  has_many :certificates,      foreign_key: :group_id, inverse_of: :item_group
   
   alias_attribute :expressions, :dogma_expressions
 end
