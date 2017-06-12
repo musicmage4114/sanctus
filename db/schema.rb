@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612073008) do
+ActiveRecord::Schema.define(version: 20170612074156) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,10 @@ ActiveRecord::Schema.define(version: 20170612073008) do
     t.index ["blueprint_id", "material_type_id"], name: "index_blueprint_materials_on_blueprint_id_and_material_type_id"
     t.index ["blueprint_id"], name: "ix_industryActivityMaterials_typeID"
     t.index ["material_type_id"], name: "index_blueprint_materials_on_material_type_id"
+  end
+
+  create_table "blueprint_production_limits", primary_key: "blueprint_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "max_production"
   end
 
   create_table "blueprint_products", id: false, force: :cascade do |t|
@@ -296,10 +300,6 @@ ActiveRecord::Schema.define(version: 20170612073008) do
   create_table "icons", primary_key: "icon_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "icon_file", limit: 500
     t.text "description"
-  end
-
-  create_table "industryBlueprints", primary_key: "typeID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "maxProductionLimit"
   end
 
   create_table "industry_activities", primary_key: "activity_id", id: :integer, default: nil, force: :cascade do |t|
