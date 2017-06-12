@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612074156) do
+ActiveRecord::Schema.define(version: 20170612075008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -328,12 +328,6 @@ ActiveRecord::Schema.define(version: 20170612074156) do
     t.index ["blueprint_id"], name: "index_industry_times_on_blueprint_id"
   end
 
-  create_table "invCategories", primary_key: "categoryID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "categoryName", limit: 100
-    t.integer "iconID"
-    t.boolean "published"
-  end
-
   create_table "invContrabandTypes", primary_key: ["factionID", "typeID"], force: :cascade do |t|
     t.integer "factionID", null: false
     t.integer "typeID", null: false
@@ -447,6 +441,13 @@ ActiveRecord::Schema.define(version: 20170612074156) do
 
   create_table "invVolumes", primary_key: "typeID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "volume"
+  end
+
+  create_table "item_categories", primary_key: "category_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.integer "icon_id"
+    t.integer "data_export", default: 1, null: false
+    t.index ["icon_id"], name: "index_item_categories_on_icon_id"
   end
 
   create_table "items", primary_key: "type_id", id: :integer, default: nil, force: :cascade do |t|
@@ -912,6 +913,7 @@ ActiveRecord::Schema.define(version: 20170612074156) do
   add_foreign_key "factions", "races", primary_key: "race_id"
   add_foreign_key "industry_probabilities", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "industry_times", "industry_activities", column: "activity_type", primary_key: "activity_id"
+  add_foreign_key "item_categories", "icons", primary_key: "icon_id"
   add_foreign_key "items", "graphics", primary_key: "graphic_id"
   add_foreign_key "items", "icons", primary_key: "icon_id"
   add_foreign_key "items", "races", primary_key: "race_id"
