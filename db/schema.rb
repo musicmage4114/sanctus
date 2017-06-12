@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612034141) do
+ActiveRecord::Schema.define(version: 20170612040933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,12 +62,6 @@ ActiveRecord::Schema.define(version: 20170612034141) do
     t.index ["ship_type_id"], name: "index_bloodlines_on_ship_type_id"
   end
 
-  create_table "certCerts", primary_key: "certID", id: :integer, default: nil, force: :cascade do |t|
-    t.text "description"
-    t.integer "groupID"
-    t.string "name", limit: 255
-  end
-
   create_table "certMasteries", id: false, force: :cascade do |t|
     t.integer "typeID"
     t.integer "masteryLevel"
@@ -81,6 +75,12 @@ ActiveRecord::Schema.define(version: 20170612034141) do
     t.integer "skillLevel"
     t.string "certLevelText", limit: 8
     t.index ["skillID"], name: "ix_certSkills_skillID"
+  end
+
+  create_table "certificates", primary_key: "cert_id", id: :integer, default: nil, force: :cascade do |t|
+    t.text "description"
+    t.integer "group_id"
+    t.string "name", limit: 255
   end
 
   create_table "chrAttributes", primary_key: "attributeID", id: :integer, default: nil, force: :cascade do |t|
