@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612075008) do
+ActiveRecord::Schema.define(version: 20170612075707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -357,18 +357,6 @@ ActiveRecord::Schema.define(version: 20170612075008) do
     t.integer "orderID"
   end
 
-  create_table "invGroups", primary_key: "groupID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "categoryID"
-    t.string "groupName", limit: 100
-    t.integer "iconID"
-    t.boolean "useBasePrice"
-    t.boolean "anchored"
-    t.boolean "anchorable"
-    t.boolean "fittableNonSingleton"
-    t.boolean "published"
-    t.index ["categoryID"], name: "ix_invGroups_categoryID"
-  end
-
   create_table "invItems", primary_key: "itemID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "typeID", null: false
     t.integer "ownerID", null: false
@@ -448,6 +436,19 @@ ActiveRecord::Schema.define(version: 20170612075008) do
     t.integer "icon_id"
     t.integer "data_export", default: 1, null: false
     t.index ["icon_id"], name: "index_item_categories_on_icon_id"
+  end
+
+  create_table "item_groups", primary_key: "group_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "category_id"
+    t.string "name", limit: 100
+    t.integer "icon_id"
+    t.boolean "base_price"
+    t.boolean "anchored"
+    t.boolean "anchorable"
+    t.boolean "fit_multiple"
+    t.integer "data_export", default: 1, null: false
+    t.index ["category_id"], name: "ix_invGroups_categoryID"
+    t.index ["icon_id"], name: "index_item_groups_on_icon_id"
   end
 
   create_table "items", primary_key: "type_id", id: :integer, default: nil, force: :cascade do |t|
@@ -887,6 +888,7 @@ ActiveRecord::Schema.define(version: 20170612075008) do
   add_foreign_key "certificate_masteries", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "certificate_skills", "certificates", column: "cert_id", primary_key: "cert_id"
   add_foreign_key "certificate_skills", "items", column: "skill_id", primary_key: "type_id"
+  add_foreign_key "certificates", "item_groups", column: "group_id", primary_key: "group_id"
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
@@ -909,13 +911,17 @@ ActiveRecord::Schema.define(version: 20170612075008) do
   add_foreign_key "dogma_effects", "dogma_expressions", column: "post_expression", primary_key: "expression_id"
   add_foreign_key "dogma_effects", "dogma_expressions", column: "pre_expression", primary_key: "expression_id"
   add_foreign_key "dogma_effects", "icons", primary_key: "icon_id"
+  add_foreign_key "dogma_expressions", "item_groups", primary_key: "group_id"
   add_foreign_key "factions", "icons", primary_key: "icon_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
   add_foreign_key "industry_probabilities", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "industry_times", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "item_categories", "icons", primary_key: "icon_id"
+  add_foreign_key "item_groups", "icons", primary_key: "icon_id"
+  add_foreign_key "item_groups", "item_categories", column: "category_id", primary_key: "category_id"
   add_foreign_key "items", "graphics", primary_key: "graphic_id"
   add_foreign_key "items", "icons", primary_key: "icon_id"
+  add_foreign_key "items", "item_groups", column: "group_id", primary_key: "group_id"
   add_foreign_key "items", "races", primary_key: "race_id"
   add_foreign_key "npc_corp_divisions", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
