@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612062339) do
+ActiveRecord::Schema.define(version: 20170612063444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,18 @@ ActiveRecord::Schema.define(version: 20170612062339) do
     t.index ["icon_id"], name: "index_bloodlines_on_icon_id"
     t.index ["race_id"], name: "index_bloodlines_on_race_id"
     t.index ["ship_type_id"], name: "index_bloodlines_on_ship_type_id"
+  end
+
+  create_table "blueprint_materials", id: false, force: :cascade do |t|
+    t.integer "blueprint_id"
+    t.integer "activity_type"
+    t.integer "material_type_id"
+    t.integer "quantity"
+    t.index ["activity_type"], name: "index_blueprint_materials_on_activity_type"
+    t.index ["blueprint_id", "activity_type"], name: "industryActivityMaterials_idx1"
+    t.index ["blueprint_id", "material_type_id"], name: "index_blueprint_materials_on_blueprint_id_and_material_type_id"
+    t.index ["blueprint_id"], name: "ix_industryActivityMaterials_typeID"
+    t.index ["material_type_id"], name: "index_blueprint_materials_on_material_type_id"
   end
 
   create_table "certificate_masteries", id: false, force: :cascade do |t|
@@ -261,15 +273,6 @@ ActiveRecord::Schema.define(version: 20170612062339) do
   create_table "icons", primary_key: "icon_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "icon_file", limit: 500
     t.text "description"
-  end
-
-  create_table "industryActivityMaterials", id: false, force: :cascade do |t|
-    t.integer "typeID"
-    t.integer "activityID"
-    t.integer "materialTypeID"
-    t.integer "quantity"
-    t.index ["typeID", "activityID"], name: "industryActivityMaterials_idx1"
-    t.index ["typeID"], name: "ix_industryActivityMaterials_typeID"
   end
 
   create_table "industryActivityProbabilities", id: false, force: :cascade do |t|
@@ -878,6 +881,7 @@ ActiveRecord::Schema.define(version: 20170612062339) do
   add_foreign_key "bloodlines", "icons", primary_key: "icon_id"
   add_foreign_key "bloodlines", "items", column: "ship_type_id", primary_key: "type_id"
   add_foreign_key "bloodlines", "races", primary_key: "race_id"
+  add_foreign_key "blueprint_materials", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "certificate_masteries", "certificates", column: "cert_id", primary_key: "cert_id"
   add_foreign_key "certificate_masteries", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "certificate_skills", "certificates", column: "cert_id", primary_key: "cert_id"
