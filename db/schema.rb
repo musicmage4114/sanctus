@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612055134) do
+ActiveRecord::Schema.define(version: 20170612061343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -318,6 +318,13 @@ ActiveRecord::Schema.define(version: 20170612055134) do
 
   create_table "industryBlueprints", primary_key: "typeID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "maxProductionLimit"
+  end
+
+  create_table "industry_activities", primary_key: "activity_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.string "icon_number", limit: 5
+    t.string "description", limit: 1000
+    t.integer "data_export", default: 1, null: false
   end
 
   create_table "invCategories", primary_key: "categoryID", id: :integer, default: nil, force: :cascade do |t|
@@ -670,13 +677,6 @@ ActiveRecord::Schema.define(version: 20170612055134) do
     t.integer "icon_id"
     t.string "short_description", limit: 500
     t.index ["icon_id"], name: "index_races_on_icon_id"
-  end
-
-  create_table "ramActivities", primary_key: "activityID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "activityName", limit: 100
-    t.string "iconNo", limit: 5
-    t.string "description", limit: 1000
-    t.boolean "published"
   end
 
   create_table "ramAssemblyLineStations", primary_key: ["stationID", "assemblyLineTypeID"], force: :cascade do |t|
