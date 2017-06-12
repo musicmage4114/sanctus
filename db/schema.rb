@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612022813) do
+ActiveRecord::Schema.define(version: 20170612023815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,14 +144,6 @@ ActiveRecord::Schema.define(version: 20170612022813) do
     t.integer "typeID", null: false
   end
 
-  create_table "dgmTypeAttributes", primary_key: ["typeID", "attributeID"], force: :cascade do |t|
-    t.integer "typeID", null: false
-    t.integer "attributeID", null: false
-    t.integer "valueInt"
-    t.float "valueFloat"
-    t.index ["attributeID"], name: "ix_dgmTypeAttributes_attributeID"
-  end
-
   create_table "dgmTypeEffects", primary_key: ["typeID", "effectID"], force: :cascade do |t|
     t.integer "typeID", null: false
     t.integer "effectID", null: false
@@ -161,6 +153,15 @@ ActiveRecord::Schema.define(version: 20170612022813) do
   create_table "dogma_attribute_categories", primary_key: "category_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "name", limit: 50
     t.string "description", limit: 200
+  end
+
+  create_table "dogma_attribute_values", primary_key: ["type_id", "attribute_id"], force: :cascade do |t|
+    t.integer "type_id", null: false
+    t.integer "attribute_id", null: false
+    t.integer "value_integer"
+    t.float "value_float"
+    t.index ["attribute_id"], name: "ix_dgmTypeAttributes_attributeID"
+    t.index ["type_id"], name: "index_dogma_attribute_values_on_type_id"
   end
 
   create_table "dogma_attributes", primary_key: "attribute_id", id: :integer, default: nil, force: :cascade do |t|
@@ -857,6 +858,7 @@ ActiveRecord::Schema.define(version: 20170612022813) do
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
+  add_foreign_key "dogma_attribute_values", "dogma_attributes", column: "attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_attributes", "dogma_attribute_categories", column: "category_id", primary_key: "category_id"
   add_foreign_key "dogma_effects", "dogma_attributes", column: "discharge_attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_effects", "dogma_attributes", column: "duration_attribute_id", primary_key: "attribute_id"
