@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612042712) do
+ActiveRecord::Schema.define(version: 20170612044525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 20170612042712) do
   end
 
   create_table "bloodlines", primary_key: "bloodline_id", id: :integer, default: nil, force: :cascade do |t|
-    t.string "bloodlineName", limit: 100
+    t.string "name", limit: 100
     t.integer "race_id"
     t.string "description", limit: 1000
     t.string "male_description", limit: 1000
@@ -62,15 +62,6 @@ ActiveRecord::Schema.define(version: 20170612042712) do
     t.index ["ship_type_id"], name: "index_bloodlines_on_ship_type_id"
   end
 
-  create_table "certSkills", id: false, force: :cascade do |t|
-    t.integer "certID"
-    t.integer "skillID"
-    t.integer "certLevelInt"
-    t.integer "skillLevel"
-    t.string "certLevelText", limit: 8
-    t.index ["skillID"], name: "ix_certSkills_skillID"
-  end
-
   create_table "certificate_masteries", id: false, force: :cascade do |t|
     t.integer "type_id"
     t.integer "mastery_level"
@@ -78,6 +69,17 @@ ActiveRecord::Schema.define(version: 20170612042712) do
     t.index ["cert_id"], name: "index_certificate_masteries_on_cert_id"
     t.index ["type_id", "cert_id"], name: "index_certificate_masteries_on_type_id_and_cert_id"
     t.index ["type_id"], name: "index_certificate_masteries_on_type_id"
+  end
+
+  create_table "certificate_skills", id: false, force: :cascade do |t|
+    t.integer "cert_id"
+    t.integer "skill_id"
+    t.integer "certificate_level"
+    t.integer "skill_level"
+    t.integer "level_name"
+    t.index ["cert_id", "skill_id"], name: "index_certificate_skills_on_cert_id_and_skill_id"
+    t.index ["cert_id"], name: "index_certificate_skills_on_cert_id"
+    t.index ["skill_id"], name: "ix_certSkills_skillID"
   end
 
   create_table "certificates", primary_key: "cert_id", id: :integer, default: nil, force: :cascade do |t|
@@ -865,6 +867,8 @@ ActiveRecord::Schema.define(version: 20170612042712) do
   add_foreign_key "bloodlines", "races", primary_key: "race_id"
   add_foreign_key "certificate_masteries", "certificates", column: "cert_id", primary_key: "cert_id"
   add_foreign_key "certificate_masteries", "items", column: "type_id", primary_key: "type_id"
+  add_foreign_key "certificate_skills", "certificates", column: "cert_id", primary_key: "cert_id"
+  add_foreign_key "certificate_skills", "items", column: "skill_id", primary_key: "type_id"
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
