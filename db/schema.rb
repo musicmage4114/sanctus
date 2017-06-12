@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612063444) do
+ActiveRecord::Schema.define(version: 20170612065649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -275,15 +275,6 @@ ActiveRecord::Schema.define(version: 20170612063444) do
     t.text "description"
   end
 
-  create_table "industryActivityProbabilities", id: false, force: :cascade do |t|
-    t.integer "typeID"
-    t.integer "activityID"
-    t.integer "productTypeID"
-    t.decimal "probability", precision: 3, scale: 2
-    t.index ["productTypeID"], name: "ix_industryActivityProbabilities_productTypeID"
-    t.index ["typeID"], name: "ix_industryActivityProbabilities_typeID"
-  end
-
   create_table "industryActivityProducts", id: false, force: :cascade do |t|
     t.integer "typeID"
     t.integer "activityID"
@@ -321,6 +312,17 @@ ActiveRecord::Schema.define(version: 20170612063444) do
     t.string "icon_number", limit: 5
     t.string "description", limit: 1000
     t.integer "data_export", default: 1, null: false
+  end
+
+  create_table "industry_probabilities", id: false, force: :cascade do |t|
+    t.integer "blueprint_id"
+    t.integer "activity_type"
+    t.integer "product_type_id"
+    t.decimal "probability", precision: 3, scale: 2
+    t.index ["activity_type"], name: "index_industry_probabilities_on_activity_type"
+    t.index ["blueprint_id", "product_type_id"], name: "blueprint_product_type_id_index"
+    t.index ["blueprint_id"], name: "ix_industryActivityProbabilities_typeID"
+    t.index ["product_type_id"], name: "ix_industryActivityProbabilities_productTypeID"
   end
 
   create_table "industry_times", primary_key: ["blueprint_id", "activity_type"], force: :cascade do |t|
@@ -910,6 +912,7 @@ ActiveRecord::Schema.define(version: 20170612063444) do
   add_foreign_key "dogma_effects", "icons", primary_key: "icon_id"
   add_foreign_key "factions", "icons", primary_key: "icon_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
+  add_foreign_key "industry_probabilities", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "industry_times", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "items", "graphics", primary_key: "graphic_id"
   add_foreign_key "items", "icons", primary_key: "icon_id"
