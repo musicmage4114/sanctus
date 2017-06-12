@@ -7,7 +7,7 @@ class ChangeInvMetaTypes < ActiveRecord::Migration[5.1]
       t.index :base_type_id
       t.rename :metaGroupID, :meta_group_id
       t.index :meta_group_id
-      t.index [:base_type_id, :meta_type_id], name: 'meta_base_type_id_index'
+      t.index [:base_type_id, :meta_type_id],  name: 'meta_base_type_id_index'
       t.index [:meta_type_id, :meta_group_id], name: 'meta_group_type_id_index'
     end
     add_foreign_key :meta_variations, :items,            column: :meta_type_id,

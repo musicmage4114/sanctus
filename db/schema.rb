@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612221418) do
+ActiveRecord::Schema.define(version: 20170612225825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -351,10 +351,6 @@ ActiveRecord::Schema.define(version: 20170612221418) do
     t.integer "quantity"
     t.float "minSecurityLevel"
     t.integer "factionID"
-  end
-
-  create_table "invNames", primary_key: "itemID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "itemName", limit: 200, null: false
   end
 
   create_table "invPositions", primary_key: "itemID", id: :integer, default: nil, force: :cascade do |t|
@@ -863,6 +859,10 @@ ActiveRecord::Schema.define(version: 20170612221418) do
     t.string "description", limit: 1000
   end
 
+  create_table "universe_entities", primary_key: "item_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 200, null: false
+  end
+
   create_table "universe_items", primary_key: "item_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "type_id", null: false
     t.integer "owner_id", null: false
@@ -870,12 +870,14 @@ ActiveRecord::Schema.define(version: 20170612221418) do
     t.integer "flag_id", null: false
     t.integer "quantity", null: false
     t.string "location_type"
+    t.string "owner_type", default: "UniverseEntity"
     t.index ["flag_id"], name: "index_universe_items_on_flag_id"
     t.index ["item_id", "type_id"], name: "index_universe_items_on_item_id_and_type_id"
     t.index ["location_id"], name: "ix_invItems_locationID"
     t.index ["location_type", "location_id"], name: "index_universe_items_on_location_type_and_location_id"
     t.index ["owner_id", "location_id"], name: "items_IX_OwnerLocation"
     t.index ["owner_id"], name: "index_universe_items_on_owner_id"
+    t.index ["owner_type", "owner_id"], name: "index_universe_items_on_owner_type_and_owner_id"
     t.index ["type_id"], name: "index_universe_items_on_type_id"
   end
 
@@ -957,5 +959,6 @@ ActiveRecord::Schema.define(version: 20170612221418) do
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
   add_foreign_key "research_agent_skills", "items", column: "skill_type_id", primary_key: "type_id"
   add_foreign_key "training_attributes", "icons", primary_key: "icon_id"
+  add_foreign_key "universe_entities", "universe_items", column: "item_id", primary_key: "item_id"
   add_foreign_key "universe_items", "inventory_flags", column: "flag_id", primary_key: "flag_id"
 end
