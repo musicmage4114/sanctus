@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612220714) do
+ActiveRecord::Schema.define(version: 20170612221418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -353,11 +353,6 @@ ActiveRecord::Schema.define(version: 20170612220714) do
     t.integer "factionID"
   end
 
-  create_table "invMetaTypes", primary_key: "typeID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "parentTypeID"
-    t.integer "metaGroupID"
-  end
-
   create_table "invNames", primary_key: "itemID", id: :integer, default: nil, force: :cascade do |t|
     t.string "itemName", limit: 200, null: false
   end
@@ -630,6 +625,15 @@ ActiveRecord::Schema.define(version: 20170612220714) do
     t.string "description", limit: 1000
     t.integer "icon_id"
     t.index ["icon_id"], name: "index_meta_item_groups_on_icon_id"
+  end
+
+  create_table "meta_variations", primary_key: "meta_type_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "base_type_id"
+    t.integer "meta_group_id"
+    t.index ["base_type_id", "meta_type_id"], name: "meta_base_type_id_index"
+    t.index ["base_type_id"], name: "index_meta_variations_on_base_type_id"
+    t.index ["meta_group_id"], name: "index_meta_variations_on_meta_group_id"
+    t.index ["meta_type_id", "meta_group_id"], name: "meta_group_type_id_index"
   end
 
   create_table "npc_corp_divisions", primary_key: ["corporation_id", "division"], force: :cascade do |t|
@@ -940,6 +944,9 @@ ActiveRecord::Schema.define(version: 20170612220714) do
   add_foreign_key "market_groups", "icons", primary_key: "icon_id"
   add_foreign_key "market_groups", "market_groups", column: "parent_group_id", primary_key: "market_group_id"
   add_foreign_key "meta_item_groups", "icons", primary_key: "icon_id"
+  add_foreign_key "meta_variations", "items", column: "base_type_id", primary_key: "type_id"
+  add_foreign_key "meta_variations", "items", column: "meta_type_id", primary_key: "type_id"
+  add_foreign_key "meta_variations", "meta_item_groups", column: "meta_group_id", primary_key: "meta_group_id"
   add_foreign_key "npc_corp_divisions", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"
   add_foreign_key "npc_corp_item_offers", "corporations", primary_key: "corporation_id"

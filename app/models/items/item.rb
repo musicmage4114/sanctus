@@ -46,9 +46,24 @@ class Item < ApplicationRecord
                                     inverse_of:  :item
   has_many :universe_item,          foreign_key: :type_id, inverse_of: :item
   
+  # join table/model - meta_variations
+  has_many :higher_meta_variants,   class_name:  'MetaVariation',
+                                    foreign_key: :base_type_id,
+                                    inverse_of:  :item
+  has_many :meta_variants,          through:     :higher_meta_variants,
+                                    source:      :meta_type
+  has_many :base_meta_variants,     class_name:  'MetaVariation',
+                                    foreign_key: :meta_type_id,
+                                    inverse_of:  :item
+  has_many :base_variants,          through:     :base_meta_variants,
+                                    source:      :base_type
+  
+  alias_attribute :base_item, :base_variants
+  
   has_many :fittings,               through: :fitting_items, source: :fitting
   has_many :killmails,              through: :killmail_items, source: :killmail
   has_many :research_agents,        through: :research_agent_skills, source: :agent
+  has_many :variations,             through: :meta_variations, source: :meta_type
   
   has_and_belongs_to_many :research_corporations, class_name:  'Corporation',
                                                   join_table:  :npc_corp_research,
