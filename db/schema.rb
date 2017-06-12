@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612225825) do
+ActiveRecord::Schema.define(version: 20170612232838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -351,15 +351,6 @@ ActiveRecord::Schema.define(version: 20170612225825) do
     t.integer "quantity"
     t.float "minSecurityLevel"
     t.integer "factionID"
-  end
-
-  create_table "invPositions", primary_key: "itemID", id: :integer, default: nil, force: :cascade do |t|
-    t.float "x", null: false
-    t.float "y", null: false
-    t.float "z", null: false
-    t.float "yaw"
-    t.float "pitch"
-    t.float "roll"
   end
 
   create_table "invTraits", primary_key: "traitID", id: :serial, force: :cascade do |t|
@@ -881,6 +872,15 @@ ActiveRecord::Schema.define(version: 20170612225825) do
     t.index ["type_id"], name: "index_universe_items_on_type_id"
   end
 
+  create_table "universe_positions", primary_key: "item_id", id: :integer, default: nil, force: :cascade do |t|
+    t.float "x", null: false
+    t.float "y", null: false
+    t.float "z", null: false
+    t.float "yaw"
+    t.float "pitch"
+    t.float "roll"
+  end
+
   create_table "warCombatZoneSystems", primary_key: "solarSystemID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "combatZoneID"
   end
@@ -961,4 +961,5 @@ ActiveRecord::Schema.define(version: 20170612225825) do
   add_foreign_key "training_attributes", "icons", primary_key: "icon_id"
   add_foreign_key "universe_entities", "universe_items", column: "item_id", primary_key: "item_id"
   add_foreign_key "universe_items", "inventory_flags", column: "flag_id", primary_key: "flag_id"
+  add_foreign_key "universe_positions", "universe_items", column: "item_id", primary_key: "item_id"
 end
