@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612005024) do
+ActiveRecord::Schema.define(version: 20170612022813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,18 +144,6 @@ ActiveRecord::Schema.define(version: 20170612005024) do
     t.integer "typeID", null: false
   end
 
-  create_table "dgmExpressions", primary_key: "expressionID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "operandID"
-    t.integer "arg1"
-    t.integer "arg2"
-    t.string "expressionValue", limit: 100
-    t.string "description", limit: 1000
-    t.string "expressionName", limit: 500
-    t.integer "expressionTypeID"
-    t.integer "expressionGroupID"
-    t.integer "expressionAttributeID"
-  end
-
   create_table "dgmTypeAttributes", primary_key: ["typeID", "attributeID"], force: :cascade do |t|
     t.integer "typeID", null: false
     t.integer "attributeID", null: false
@@ -176,7 +164,7 @@ ActiveRecord::Schema.define(version: 20170612005024) do
   end
 
   create_table "dogma_attributes", primary_key: "attribute_id", id: :integer, default: nil, force: :cascade do |t|
-    t.string "attributeName", limit: 100
+    t.string "name", limit: 100
     t.string "description", limit: 1000
     t.integer "icon_id"
     t.float "default_value"
@@ -220,8 +208,25 @@ ActiveRecord::Schema.define(version: 20170612005024) do
     t.index ["discharge_attribute_id"], name: "index_dogma_effects_on_discharge_attribute_id"
     t.index ["duration_attribute_id"], name: "index_dogma_effects_on_duration_attribute_id"
     t.index ["falloff_attribute_id"], name: "index_dogma_effects_on_falloff_attribute_id"
+    t.index ["post_expression"], name: "index_dogma_effects_on_post_expression"
+    t.index ["pre_expression"], name: "index_dogma_effects_on_pre_expression"
     t.index ["range_attribute_id"], name: "index_dogma_effects_on_range_attribute_id"
     t.index ["tracking_speed_attribute_id"], name: "index_dogma_effects_on_tracking_speed_attribute_id"
+  end
+
+  create_table "dogma_expressions", primary_key: "expression_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "operand_id"
+    t.integer "arg1"
+    t.integer "arg2"
+    t.string "value", limit: 100
+    t.string "description", limit: 1000
+    t.string "name", limit: 500
+    t.integer "type_id"
+    t.integer "item_group_id"
+    t.integer "attribute_id"
+    t.index ["attribute_id"], name: "index_dogma_expressions_on_attribute_id"
+    t.index ["item_group_id"], name: "index_dogma_expressions_on_item_group_id"
+    t.index ["type_id"], name: "index_dogma_expressions_on_type_id"
   end
 
   create_table "eveGraphics", primary_key: "graphicID", id: :integer, default: nil, force: :cascade do |t|
@@ -861,6 +866,8 @@ ActiveRecord::Schema.define(version: 20170612005024) do
   add_foreign_key "dogma_effects", "dogma_attributes", column: "npc_usage_chance_attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_effects", "dogma_attributes", column: "range_attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_effects", "dogma_attributes", column: "tracking_speed_attribute_id", primary_key: "attribute_id"
+  add_foreign_key "dogma_effects", "dogma_expressions", column: "post_expression", primary_key: "expression_id"
+  add_foreign_key "dogma_effects", "dogma_expressions", column: "pre_expression", primary_key: "expression_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
   add_foreign_key "npc_corp_divisions", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "npc_corp_divisions", "corporations", primary_key: "corporation_id"

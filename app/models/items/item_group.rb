@@ -8,6 +8,9 @@ class ItemGroup < ApplicationRecord
   
   has_many :members, ->(item_group) { where(group_id: item_group.group_id) },
                                     class_name: "#{group_member_class}"
+  has_many :dogma_expressions, inverse_of: :item_group
+  
+  alias_attribute :expressions, :dogma_expressions
   
   private
   
