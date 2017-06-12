@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612053550) do
+ActiveRecord::Schema.define(version: 20170612055134) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -228,12 +228,6 @@ ActiveRecord::Schema.define(version: 20170612053550) do
     t.index ["attribute_id"], name: "index_dogma_expressions_on_attribute_id"
     t.index ["item_group_id"], name: "index_dogma_expressions_on_item_group_id"
     t.index ["type_id"], name: "index_dogma_expressions_on_type_id"
-  end
-
-  create_table "eveUnits", primary_key: "unitID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "unitName", limit: 100
-    t.string "displayName", limit: 50
-    t.string "description", limit: 1000
   end
 
   create_table "factions", primary_key: "faction_id", id: :integer, default: nil, force: :cascade do |t|
@@ -861,6 +855,12 @@ ActiveRecord::Schema.define(version: 20170612053550) do
     t.text "text", null: false
   end
 
+  create_table "units", primary_key: "unit_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.string "display_name", limit: 50
+    t.string "description", limit: 1000
+  end
+
   create_table "warCombatZoneSystems", primary_key: "solarSystemID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "combatZoneID"
   end
@@ -889,6 +889,7 @@ ActiveRecord::Schema.define(version: 20170612053550) do
   add_foreign_key "dogma_attribute_values", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "dogma_attributes", "dogma_attribute_categories", column: "category_id", primary_key: "category_id"
   add_foreign_key "dogma_attributes", "icons", primary_key: "icon_id"
+  add_foreign_key "dogma_attributes", "units", primary_key: "unit_id"
   add_foreign_key "dogma_effect_defaults", "dogma_effects", column: "effect_id", primary_key: "effect_id"
   add_foreign_key "dogma_effect_defaults", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "dogma_effects", "dogma_attributes", column: "discharge_attribute_id", primary_key: "attribute_id"
