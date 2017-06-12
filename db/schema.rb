@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612075707) do
+ActiveRecord::Schema.define(version: 20170612204556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,6 +128,18 @@ ActiveRecord::Schema.define(version: 20170612075707) do
     t.integer "group_id"
     t.string "name", limit: 255
     t.index ["group_id"], name: "index_certificates_on_group_id"
+  end
+
+  create_table "contraband", primary_key: ["faction_id", "type_id"], force: :cascade do |t|
+    t.integer "faction_id", null: false
+    t.integer "type_id", null: false
+    t.float "standing_loss"
+    t.float "confiscate"
+    t.float "fine_by_value"
+    t.float "attack"
+    t.index ["faction_id", "type_id"], name: "index_contraband_on_faction_id_and_type_id"
+    t.index ["faction_id"], name: "index_contraband_on_faction_id"
+    t.index ["type_id"], name: "ix_invContrabandTypes_typeID"
   end
 
   create_table "corp_division_details", primary_key: "division_id", id: :integer, default: nil, force: :cascade do |t|
@@ -326,16 +338,6 @@ ActiveRecord::Schema.define(version: 20170612075707) do
     t.integer "time"
     t.index ["activity_type"], name: "ix_industryActivity_activityID"
     t.index ["blueprint_id"], name: "index_industry_times_on_blueprint_id"
-  end
-
-  create_table "invContrabandTypes", primary_key: ["factionID", "typeID"], force: :cascade do |t|
-    t.integer "factionID", null: false
-    t.integer "typeID", null: false
-    t.float "standingLoss"
-    t.float "confiscateMinSec"
-    t.float "fineByValue"
-    t.float "attackMinSec"
-    t.index ["typeID"], name: "ix_invContrabandTypes_typeID"
   end
 
   create_table "invControlTowerResourcePurposes", primary_key: "purpose", id: :integer, default: nil, force: :cascade do |t|
@@ -889,6 +891,8 @@ ActiveRecord::Schema.define(version: 20170612075707) do
   add_foreign_key "certificate_skills", "certificates", column: "cert_id", primary_key: "cert_id"
   add_foreign_key "certificate_skills", "items", column: "skill_id", primary_key: "type_id"
   add_foreign_key "certificates", "item_groups", column: "group_id", primary_key: "group_id"
+  add_foreign_key "contraband", "factions", primary_key: "faction_id"
+  add_foreign_key "contraband", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
