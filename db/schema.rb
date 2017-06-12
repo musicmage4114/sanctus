@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612232838) do
+ActiveRecord::Schema.define(version: 20170612233721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,19 @@ ActiveRecord::Schema.define(version: 20170612232838) do
     t.index ["blueprint_id", "skill_id"], name: "index_blueprint_skills_on_blueprint_id_and_skill_id"
     t.index ["blueprint_id"], name: "ix_industryActivitySkills_typeID"
     t.index ["skill_id"], name: "ix_industryActivitySkills_skillID"
+  end
+
+  create_table "bonus_traits", primary_key: "trait_id", id: :integer, default: -> { "nextval('\"bonus_traits_traitID_seq\"'::regclass)" }, force: :cascade do |t|
+    t.integer "type_id"
+    t.integer "skill_id"
+    t.float "bonus"
+    t.text "description"
+    t.integer "unit_id"
+    t.index ["skill_id"], name: "index_bonus_traits_on_skill_id"
+    t.index ["trait_id", "skill_id"], name: "index_bonus_traits_on_trait_id_and_skill_id"
+    t.index ["type_id", "trait_id"], name: "index_bonus_traits_on_type_id_and_trait_id"
+    t.index ["type_id"], name: "index_bonus_traits_on_type_id"
+    t.index ["unit_id"], name: "index_bonus_traits_on_unit_id"
   end
 
   create_table "certificate_masteries", id: false, force: :cascade do |t|
@@ -351,14 +364,6 @@ ActiveRecord::Schema.define(version: 20170612232838) do
     t.integer "quantity"
     t.float "minSecurityLevel"
     t.integer "factionID"
-  end
-
-  create_table "invTraits", primary_key: "traitID", id: :serial, force: :cascade do |t|
-    t.integer "typeID"
-    t.integer "skillID"
-    t.float "bonus"
-    t.text "bonusText"
-    t.integer "unitID"
   end
 
   create_table "invTypeMaterials", primary_key: ["typeID", "materialTypeID"], force: :cascade do |t|
@@ -901,6 +906,9 @@ ActiveRecord::Schema.define(version: 20170612232838) do
   add_foreign_key "blueprint_products", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "blueprint_skills", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "blueprint_skills", "items", column: "skill_id", primary_key: "type_id"
+  add_foreign_key "bonus_traits", "items", column: "skill_id", primary_key: "type_id"
+  add_foreign_key "bonus_traits", "items", column: "type_id", primary_key: "type_id"
+  add_foreign_key "bonus_traits", "units", primary_key: "unit_id"
   add_foreign_key "certificate_masteries", "certificates", column: "cert_id", primary_key: "cert_id"
   add_foreign_key "certificate_masteries", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "certificate_skills", "certificates", column: "cert_id", primary_key: "cert_id"
