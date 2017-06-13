@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613003901) do
+ActiveRecord::Schema.define(version: 20170613012740) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,6 +141,19 @@ ActiveRecord::Schema.define(version: 20170613003901) do
     t.integer "group_id"
     t.string "name", limit: 255
     t.index ["group_id"], name: "index_certificates_on_group_id"
+  end
+
+  create_table "constellation_connections", primary_key: ["from_constellation_id", "to_constellation_id"], force: :cascade do |t|
+    t.integer "from_region_id"
+    t.integer "from_constellation_id", null: false
+    t.integer "to_constellation_id", null: false
+    t.integer "to_region_id"
+    t.index ["from_constellation_id", "to_region_id"], name: "from_constellation_to_region_index"
+    t.index ["from_constellation_id"], name: "index_constellation_connections_on_from_constellation_id"
+    t.index ["from_region_id", "to_constellation_id"], name: "from_region_to_constellation_index"
+    t.index ["from_region_id"], name: "index_constellation_connections_on_from_region_id"
+    t.index ["to_constellation_id"], name: "index_constellation_connections_on_to_constellation_id"
+    t.index ["to_region_id"], name: "index_constellation_connections_on_to_region_id"
   end
 
   create_table "contraband", primary_key: ["faction_id", "type_id"], force: :cascade do |t|
@@ -454,13 +467,6 @@ ActiveRecord::Schema.define(version: 20170613003901) do
     t.bigint "pressure"
     t.bigint "radius"
     t.integer "mass"
-  end
-
-  create_table "mapConstellationJumps", primary_key: ["fromConstellationID", "toConstellationID"], force: :cascade do |t|
-    t.integer "fromRegionID"
-    t.integer "fromConstellationID", null: false
-    t.integer "toConstellationID", null: false
-    t.integer "toRegionID"
   end
 
   create_table "mapConstellations", primary_key: "constellationID", id: :integer, default: nil, force: :cascade do |t|
