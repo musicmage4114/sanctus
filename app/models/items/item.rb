@@ -64,13 +64,25 @@ class Item < ApplicationRecord
                                     inverse_of:  :item
   has_many :component_materials,    through:     :item_material_types,
                                     source:      :material_type
-  has_many :included_as_material,   class_name:  'ItemMaterial',
+  has_many :items_as_material,      class_name:  'ItemMaterial',
                                     foreign_key: :material_type_id,
                                     inverse_of:  :item
   has_many :included_in_items,      through:     :included_as_material,
                                     source:      :type
   
   alias_attribute :components, :component_materials
+  
+  # join table/model - industry_reactions
+  has_many :reaction_formulas,      class_name:  'IndustryReaction',
+                                    foreign_key: :reaction_type_id,
+                                    inverse_of:  :item
+  has_many :reagents,               through:     :industry_reactions,
+                                    source:      :reagent
+  has_many :reactions_as_reagent,   class_name:  'IndustryReaction',
+                                    foreign_key: :reagent_id,
+                                    inverse_of:  :item
+  has_many :reactions,              through:     :reactions_as_reagent,
+                                    source:      :reaction_type
   
   has_many :fittings,               through: :fitting_items, source: :fitting
   has_many :killmails,              through: :killmail_items, source: :killmail

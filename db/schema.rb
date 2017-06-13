@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612235516) do
+ActiveRecord::Schema.define(version: 20170613001302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -345,6 +345,16 @@ ActiveRecord::Schema.define(version: 20170612235516) do
     t.index ["product_type_id"], name: "ix_industryActivityProbabilities_productTypeID"
   end
 
+  create_table "industry_reactions", primary_key: ["reaction_type_id", "input", "reagent_id"], force: :cascade do |t|
+    t.integer "reaction_type_id", null: false
+    t.boolean "input", null: false
+    t.integer "reagent_id", null: false
+    t.integer "quantity"
+    t.index ["reaction_type_id", "reagent_id"], name: "reaction_reagent_type_id_index"
+    t.index ["reaction_type_id"], name: "index_industry_reactions_on_reaction_type_id"
+    t.index ["reagent_id"], name: "index_industry_reactions_on_reagent_id"
+  end
+
   create_table "industry_times", primary_key: ["blueprint_id", "activity_type"], force: :cascade do |t|
     t.integer "blueprint_id", null: false
     t.integer "activity_type", null: false
@@ -364,13 +374,6 @@ ActiveRecord::Schema.define(version: 20170612235516) do
     t.integer "quantity"
     t.float "minSecurityLevel"
     t.integer "factionID"
-  end
-
-  create_table "invTypeReactions", primary_key: ["reactionTypeID", "input", "typeID"], force: :cascade do |t|
-    t.integer "reactionTypeID", null: false
-    t.boolean "input", null: false
-    t.integer "typeID", null: false
-    t.integer "quantity"
   end
 
   create_table "invUniqueNames", primary_key: "itemID", id: :integer, default: nil, force: :cascade do |t|
@@ -945,6 +948,8 @@ ActiveRecord::Schema.define(version: 20170612235516) do
   add_foreign_key "factions", "icons", primary_key: "icon_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
   add_foreign_key "industry_probabilities", "industry_activities", column: "activity_type", primary_key: "activity_id"
+  add_foreign_key "industry_reactions", "items", column: "reaction_type_id", primary_key: "type_id"
+  add_foreign_key "industry_reactions", "items", column: "reagent_id", primary_key: "type_id"
   add_foreign_key "industry_times", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "item_categories", "icons", primary_key: "icon_id"
   add_foreign_key "item_groups", "icons", primary_key: "icon_id"
