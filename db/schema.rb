@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613012740) do
+ActiveRecord::Schema.define(version: 20170613024034) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -154,6 +154,24 @@ ActiveRecord::Schema.define(version: 20170613012740) do
     t.index ["from_region_id"], name: "index_constellation_connections_on_from_region_id"
     t.index ["to_constellation_id"], name: "index_constellation_connections_on_to_constellation_id"
     t.index ["to_region_id"], name: "index_constellation_connections_on_to_region_id"
+  end
+
+  create_table "constellations", primary_key: "constellation_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "region_id"
+    t.string "name", limit: 100
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.float "x_min"
+    t.float "x_max"
+    t.float "y_min"
+    t.float "y_max"
+    t.float "z_min"
+    t.float "z_max"
+    t.integer "faction_id"
+    t.float "radius"
+    t.index ["faction_id"], name: "index_constellations_on_faction_id"
+    t.index ["region_id"], name: "index_constellations_on_region_id"
   end
 
   create_table "contraband", primary_key: ["faction_id", "type_id"], force: :cascade do |t|
@@ -467,22 +485,6 @@ ActiveRecord::Schema.define(version: 20170613012740) do
     t.bigint "pressure"
     t.bigint "radius"
     t.integer "mass"
-  end
-
-  create_table "mapConstellations", primary_key: "constellationID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "regionID"
-    t.string "constellationName", limit: 100
-    t.float "x"
-    t.float "y"
-    t.float "z"
-    t.float "xMin"
-    t.float "xMax"
-    t.float "yMin"
-    t.float "yMax"
-    t.float "zMin"
-    t.float "zMax"
-    t.integer "factionID"
-    t.float "radius"
   end
 
   create_table "mapDenormalize", primary_key: "itemID", id: :integer, default: nil, force: :cascade do |t|
@@ -926,6 +928,9 @@ ActiveRecord::Schema.define(version: 20170613012740) do
   add_foreign_key "certificate_skills", "certificates", column: "cert_id", primary_key: "cert_id"
   add_foreign_key "certificate_skills", "items", column: "skill_id", primary_key: "type_id"
   add_foreign_key "certificates", "item_groups", column: "group_id", primary_key: "group_id"
+  add_foreign_key "constellation_connections", "constellations", column: "from_constellation_id", primary_key: "constellation_id"
+  add_foreign_key "constellation_connections", "constellations", column: "to_constellation_id", primary_key: "constellation_id"
+  add_foreign_key "constellations", "factions", primary_key: "faction_id"
   add_foreign_key "contraband", "factions", primary_key: "faction_id"
   add_foreign_key "contraband", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
