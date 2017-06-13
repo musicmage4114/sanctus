@@ -5,4 +5,8 @@ class UniverseItem < ApplicationRecord
   belongs_to :inventory_flag, foreign_key: :flag_id, inverse_of: :universe_items
   belongs_to :owner,          polymorphic: true
   belongs_to :location,       polymorphic: true
+  
+  has_one :unique_name,       class_name:  'UniverseUniqueName',
+                              foreign_key: :item_id,
+                              inverse_of:  :universe_item
 end

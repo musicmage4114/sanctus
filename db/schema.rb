@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613001302) do
+ActiveRecord::Schema.define(version: 20170613002903) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -374,13 +374,6 @@ ActiveRecord::Schema.define(version: 20170613001302) do
     t.integer "quantity"
     t.float "minSecurityLevel"
     t.integer "factionID"
-  end
-
-  create_table "invUniqueNames", primary_key: "itemID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "itemName", limit: 200, null: false
-    t.integer "groupID"
-    t.index ["groupID", "itemName"], name: "invUniqueNames_IX_GroupName"
-    t.index ["itemName"], name: "ix_invUniqueNames_itemName", unique: true
   end
 
   create_table "invVolumes", primary_key: "typeID", id: :integer, default: nil, force: :cascade do |t|
@@ -891,6 +884,14 @@ ActiveRecord::Schema.define(version: 20170613001302) do
     t.float "roll"
   end
 
+  create_table "universe_unique_names", primary_key: "item_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 200, null: false
+    t.integer "group_id"
+    t.index ["group_id", "name"], name: "invUniqueNames_IX_GroupName"
+    t.index ["item_id", "name"], name: "index_universe_unique_names_on_item_id_and_name"
+    t.index ["name"], name: "ix_invUniqueNames_itemName", unique: true
+  end
+
   create_table "warCombatZoneSystems", primary_key: "solarSystemID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "combatZoneID"
   end
@@ -978,4 +979,6 @@ ActiveRecord::Schema.define(version: 20170613001302) do
   add_foreign_key "universe_entities", "universe_items", column: "item_id", primary_key: "item_id"
   add_foreign_key "universe_items", "inventory_flags", column: "flag_id", primary_key: "flag_id"
   add_foreign_key "universe_positions", "universe_items", column: "item_id", primary_key: "item_id"
+  add_foreign_key "universe_unique_names", "item_groups", column: "group_id", primary_key: "group_id"
+  add_foreign_key "universe_unique_names", "universe_items", column: "item_id", primary_key: "item_id"
 end
