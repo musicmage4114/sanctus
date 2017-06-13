@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612233721) do
+ActiveRecord::Schema.define(version: 20170612235516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -366,12 +366,6 @@ ActiveRecord::Schema.define(version: 20170612233721) do
     t.integer "factionID"
   end
 
-  create_table "invTypeMaterials", primary_key: ["typeID", "materialTypeID"], force: :cascade do |t|
-    t.integer "typeID", null: false
-    t.integer "materialTypeID", null: false
-    t.integer "quantity", null: false
-  end
-
   create_table "invTypeReactions", primary_key: ["reactionTypeID", "input", "typeID"], force: :cascade do |t|
     t.integer "reactionTypeID", null: false
     t.boolean "input", null: false
@@ -414,6 +408,14 @@ ActiveRecord::Schema.define(version: 20170612233721) do
     t.integer "data_export", default: 1, null: false
     t.index ["category_id"], name: "ix_invGroups_categoryID"
     t.index ["icon_id"], name: "index_item_groups_on_icon_id"
+  end
+
+  create_table "item_materials", primary_key: ["type_id", "material_type_id"], force: :cascade do |t|
+    t.integer "type_id", null: false
+    t.integer "material_type_id", null: false
+    t.integer "quantity", null: false
+    t.index ["material_type_id"], name: "index_item_materials_on_material_type_id"
+    t.index ["type_id"], name: "index_item_materials_on_type_id"
   end
 
   create_table "items", primary_key: "type_id", id: :integer, default: nil, force: :cascade do |t|
@@ -947,6 +949,7 @@ ActiveRecord::Schema.define(version: 20170612233721) do
   add_foreign_key "item_categories", "icons", primary_key: "icon_id"
   add_foreign_key "item_groups", "icons", primary_key: "icon_id"
   add_foreign_key "item_groups", "item_categories", column: "category_id", primary_key: "category_id"
+  add_foreign_key "item_materials", "items", column: "material_type_id", primary_key: "type_id"
   add_foreign_key "items", "graphics", primary_key: "graphic_id"
   add_foreign_key "items", "icons", primary_key: "icon_id"
   add_foreign_key "items", "item_groups", column: "group_id", primary_key: "group_id"

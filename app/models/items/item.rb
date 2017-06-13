@@ -58,7 +58,19 @@ class Item < ApplicationRecord
   has_many :base_variants,          through:     :base_meta_variants,
                                     source:      :base_type
   
-  alias_attribute :base_item, :base_variants
+  # join table/model - item_materials
+  has_many :item_material_types,    class_name:  'ItemMaterial',
+                                    foreign_key: :type_id,
+                                    inverse_of:  :item
+  has_many :component_materials,    through:     :item_material_types,
+                                    source:      :material_type
+  has_many :included_as_material,   class_name:  'ItemMaterial',
+                                    foreign_key: :material_type_id,
+                                    inverse_of:  :item
+  has_many :included_in_items,      through:     :included_as_material,
+                                    source:      :type
+  
+  alias_attribute :components, :component_materials
   
   has_many :fittings,               through: :fitting_items, source: :fitting
   has_many :killmails,              through: :killmail_items, source: :killmail
