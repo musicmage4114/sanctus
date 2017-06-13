@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613002903) do
+ActiveRecord::Schema.define(version: 20170613003901) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -376,10 +376,6 @@ ActiveRecord::Schema.define(version: 20170613002903) do
     t.integer "factionID"
   end
 
-  create_table "invVolumes", primary_key: "typeID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "volume"
-  end
-
   create_table "inventory_flags", primary_key: "flag_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "name", limit: 200
     t.string "description", limit: 100
@@ -412,6 +408,10 @@ ActiveRecord::Schema.define(version: 20170613002903) do
     t.integer "quantity", null: false
     t.index ["material_type_id"], name: "index_item_materials_on_material_type_id"
     t.index ["type_id"], name: "index_item_materials_on_type_id"
+  end
+
+  create_table "item_volumes", primary_key: "type_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "volume"
   end
 
   create_table "items", primary_key: "type_id", id: :integer, default: nil, force: :cascade do |t|
@@ -956,6 +956,7 @@ ActiveRecord::Schema.define(version: 20170613002903) do
   add_foreign_key "item_groups", "icons", primary_key: "icon_id"
   add_foreign_key "item_groups", "item_categories", column: "category_id", primary_key: "category_id"
   add_foreign_key "item_materials", "items", column: "material_type_id", primary_key: "type_id"
+  add_foreign_key "item_volumes", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "items", "graphics", primary_key: "graphic_id"
   add_foreign_key "items", "icons", primary_key: "icon_id"
   add_foreign_key "items", "item_groups", column: "group_id", primary_key: "group_id"

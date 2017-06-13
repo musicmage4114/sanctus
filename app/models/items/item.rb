@@ -1,13 +1,17 @@
 class Item < ApplicationRecord
   self.primary_key = 'type_id'
   
-  belongs_to :item_group,          foreign_key: :group_id, inverse_of: :items
-  belongs_to :race,                inverse_of:  :items
-  belongs_to :market_group,        inverse_of:  :items
-  belongs_to :icon,                inverse_of:  :items
-  belongs_to :graphic,             inverse_of:  :items
-  belongs_to :sound,               inverse_of:  :items
-
+  belongs_to :item_group,           foreign_key: :group_id, inverse_of: :items
+  belongs_to :race,                 inverse_of:  :items
+  belongs_to :market_group,         inverse_of:  :items
+  belongs_to :icon,                 inverse_of:  :items
+  belongs_to :graphic,              inverse_of:  :items
+  belongs_to :sound,                inverse_of:  :items
+  
+  has_one :alternate_volume,        class_name:  'ItemVolume',
+                                    foreign_key: :type_id,
+                                    inverse_of:  :item
+  
   has_many :item_assets,            foreign_key: :type_id, inverse_of: :item
   has_many :base_attribute_values,  class_name:  'DogmaAttributeValue',
                                     foreign_key: :type_id,
