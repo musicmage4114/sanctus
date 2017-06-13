@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613024034) do
+ActiveRecord::Schema.define(version: 20170613024910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,6 +114,28 @@ ActiveRecord::Schema.define(version: 20170613024034) do
     t.index ["type_id", "trait_id"], name: "index_bonus_traits_on_type_id_and_trait_id"
     t.index ["type_id"], name: "index_bonus_traits_on_type_id"
     t.index ["unit_id"], name: "index_bonus_traits_on_unit_id"
+  end
+
+  create_table "celestials", primary_key: "celestial_id", id: :integer, default: nil, force: :cascade do |t|
+    t.float "temperature"
+    t.string "spectral_class", limit: 10
+    t.float "luminosity"
+    t.float "age"
+    t.float "life"
+    t.float "orbit_radius"
+    t.float "eccentricity"
+    t.float "mass_dust"
+    t.float "mass_gas"
+    t.boolean "fragmented"
+    t.float "density"
+    t.float "surface_gravity"
+    t.float "escape_velocity"
+    t.float "orbit_period"
+    t.float "rotation_rate"
+    t.boolean "locked"
+    t.bigint "pressure"
+    t.bigint "radius"
+    t.integer "mass"
   end
 
   create_table "certificate_masteries", id: false, force: :cascade do |t|
@@ -463,28 +485,6 @@ ActiveRecord::Schema.define(version: 20170613024034) do
     t.integer "data_export", default: 1, null: false
     t.index ["group_id"], name: "ix_invTypes_groupID"
     t.index ["icon_id"], name: "index_items_on_icon_id"
-  end
-
-  create_table "mapCelestialStatistics", primary_key: "celestialID", id: :integer, default: nil, force: :cascade do |t|
-    t.float "temperature"
-    t.string "spectralClass", limit: 10
-    t.float "luminosity"
-    t.float "age"
-    t.float "life"
-    t.float "orbitRadius"
-    t.float "eccentricity"
-    t.float "massDust"
-    t.float "massGas"
-    t.boolean "fragmented"
-    t.float "density"
-    t.float "surfaceGravity"
-    t.float "escapeVelocity"
-    t.float "orbitPeriod"
-    t.float "rotationRate"
-    t.boolean "locked"
-    t.bigint "pressure"
-    t.bigint "radius"
-    t.integer "mass"
   end
 
   create_table "mapDenormalize", primary_key: "itemID", id: :integer, default: nil, force: :cascade do |t|
@@ -923,6 +923,7 @@ ActiveRecord::Schema.define(version: 20170613024034) do
   add_foreign_key "bonus_traits", "items", column: "skill_id", primary_key: "type_id"
   add_foreign_key "bonus_traits", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "bonus_traits", "units", primary_key: "unit_id"
+  add_foreign_key "celestials", "universe_items", column: "celestial_id", primary_key: "item_id"
   add_foreign_key "certificate_masteries", "certificates", column: "cert_id", primary_key: "cert_id"
   add_foreign_key "certificate_masteries", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "certificate_skills", "certificates", column: "cert_id", primary_key: "cert_id"
