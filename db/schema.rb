@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615065541) do
+ActiveRecord::Schema.define(version: 20170615070003) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -518,10 +518,6 @@ ActiveRecord::Schema.define(version: 20170615065541) do
     t.integer "icon_id"
   end
 
-  create_table "mapJumps", primary_key: "stargateID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "destinationID"
-  end
-
   create_table "market_groups", primary_key: "market_group_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "parent_group_id"
     t.string "name", limit: 100
@@ -810,6 +806,23 @@ ActiveRecord::Schema.define(version: 20170615065541) do
     t.index ["stationTypeID"], name: "ix_staStations_stationTypeID"
   end
 
+  create_table "stargates", primary_key: "stargate_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "destination_stargate_id"
+    t.bigint "destination_system_id"
+    t.bigint "solar_system_id"
+    t.bigint "stargate_type_id"
+    t.string "name"
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.index ["destination_stargate_id"], name: "index_stargates_on_destination_stargate_id"
+    t.index ["destination_system_id"], name: "index_stargates_on_destination_system_id"
+    t.index ["solar_system_id"], name: "index_stargates_on_solar_system_id"
+    t.index ["stargate_id", "destination_stargate_id"], name: "index_stargates_on_stargate_id_and_destination_stargate_id"
+    t.index ["stargate_id", "destination_system_id"], name: "index_stargates_on_stargate_id_and_destination_system_id"
+    t.index ["stargate_type_id"], name: "index_stargates_on_stargate_type_id"
+  end
+
   create_table "system_connections", primary_key: ["from_system_id", "to_system_id"], force: :cascade do |t|
     t.integer "from_system_id", null: false
     t.integer "to_system_id", null: false
@@ -1027,6 +1040,10 @@ ActiveRecord::Schema.define(version: 20170615065541) do
   add_foreign_key "solar_systems", "factions", primary_key: "faction_id"
   add_foreign_key "solar_systems", "items", column: "sun_type_id", primary_key: "type_id"
   add_foreign_key "solar_systems", "regions", primary_key: "region_id"
+  add_foreign_key "stargates", "items", column: "stargate_type_id", primary_key: "type_id"
+  add_foreign_key "stargates", "solar_systems", column: "destination_system_id", primary_key: "system_id"
+  add_foreign_key "stargates", "solar_systems", primary_key: "system_id"
+  add_foreign_key "stargates", "stargates", column: "destination_stargate_id", primary_key: "stargate_id"
   add_foreign_key "system_connections", "solar_systems", column: "from_system_id", primary_key: "system_id"
   add_foreign_key "system_connections", "solar_systems", column: "to_system_id", primary_key: "system_id"
   add_foreign_key "training_attributes", "icons", primary_key: "icon_id"

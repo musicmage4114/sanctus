@@ -14,7 +14,11 @@ class SolarSystem < ApplicationRecord
                                     inverse_of:  :solar_systems
   
   has_many :planets,                inverse_of:  :solar_system
-  has_many :stargates,              inverse_of:  :solar_system
+  has_many :outgoing_stargates,     class_name:  'Stargate',
+                                    inverse_of:  :solar_system
+  has_many :incoming_stargates,     class_name:  'Stargate',
+                                    foreign_key: :destination_system_id,
+                                    inverse_of:  :solar_system
   has_many :bookmarks,              inverse_of:  :solar_system
   has_many :fleet_memberships,      inverse_of:  :solar_system
   has_many :killmails,              inverse_of:  :solar_system
