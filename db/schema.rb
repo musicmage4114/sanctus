@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615020654) do
+ActiveRecord::Schema.define(version: 20170615024230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -527,10 +527,6 @@ ActiveRecord::Schema.define(version: 20170615020654) do
     t.integer "destinationID"
   end
 
-  create_table "mapLocationWormholeClasses", primary_key: "locationID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "wormholeClassID"
-  end
-
   create_table "mapRegionJumps", primary_key: ["fromRegionID", "toRegionID"], force: :cascade do |t|
     t.integer "fromRegionID", null: false
     t.integer "toRegionID", null: false
@@ -912,6 +908,12 @@ ActiveRecord::Schema.define(version: 20170615020654) do
     t.integer "factionID"
     t.integer "centerSystemID"
     t.string "description", limit: 500
+  end
+
+  create_table "wormhole_system_classes", primary_key: "location_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "class_id"
+    t.string "location_type"
+    t.index ["location_type", "location_id"], name: "wormhole_system_class_location_type_and_id"
   end
 
   add_foreign_key "agents", "corp_division_details", column: "division", primary_key: "division_id"
