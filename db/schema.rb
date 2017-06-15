@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615015752) do
+ActiveRecord::Schema.define(version: 20170615020654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -527,10 +527,6 @@ ActiveRecord::Schema.define(version: 20170615015752) do
     t.integer "destinationID"
   end
 
-  create_table "mapLocationScenes", primary_key: "locationID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "graphicID"
-  end
-
   create_table "mapLocationWormholeClasses", primary_key: "locationID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "wormholeClassID"
   end
@@ -724,6 +720,12 @@ ActiveRecord::Schema.define(version: 20170615015752) do
     t.integer "installationTypeID", null: false
     t.integer "assemblyLineTypeID", null: false
     t.integer "quantity"
+  end
+
+  create_table "region_scenes", primary_key: "region_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "graphic_id"
+    t.index ["graphic_id"], name: "index_region_scenes_on_graphic_id"
+    t.index ["region_id", "graphic_id"], name: "index_region_scenes_on_region_id_and_graphic_id"
   end
 
   create_table "research_agent_skills", primary_key: ["agent_id", "skill_type_id"], force: :cascade do |t|
@@ -993,6 +995,7 @@ ActiveRecord::Schema.define(version: 20170615015752) do
   add_foreign_key "npc_corp_research", "corporations", primary_key: "corporation_id"
   add_foreign_key "npc_corp_research", "items", column: "skill_type_id", primary_key: "type_id"
   add_foreign_key "races", "icons", primary_key: "icon_id"
+  add_foreign_key "region_scenes", "graphics", primary_key: "graphic_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
   add_foreign_key "research_agent_skills", "items", column: "skill_type_id", primary_key: "type_id"
   add_foreign_key "training_attributes", "icons", primary_key: "icon_id"
