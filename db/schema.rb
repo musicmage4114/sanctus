@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615024230) do
+ActiveRecord::Schema.define(version: 20170615042157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -166,16 +166,11 @@ ActiveRecord::Schema.define(version: 20170615024230) do
   end
 
   create_table "constellation_connections", primary_key: ["from_constellation_id", "to_constellation_id"], force: :cascade do |t|
-    t.integer "from_region_id"
     t.integer "from_constellation_id", null: false
     t.integer "to_constellation_id", null: false
-    t.integer "to_region_id"
-    t.index ["from_constellation_id", "to_region_id"], name: "from_constellation_to_region_index"
     t.index ["from_constellation_id"], name: "index_constellation_connections_on_from_constellation_id"
-    t.index ["from_region_id", "to_constellation_id"], name: "from_region_to_constellation_index"
-    t.index ["from_region_id"], name: "index_constellation_connections_on_from_region_id"
+    t.index ["to_constellation_id", "from_constellation_id"], name: "to_from_constellation_id_index"
     t.index ["to_constellation_id"], name: "index_constellation_connections_on_to_constellation_id"
-    t.index ["to_region_id"], name: "index_constellation_connections_on_to_region_id"
   end
 
   create_table "constellations", primary_key: "constellation_id", id: :integer, default: nil, force: :cascade do |t|
