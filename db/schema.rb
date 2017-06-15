@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615070003) do
+ActiveRecord::Schema.define(version: 20170615071759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -564,11 +564,6 @@ ActiveRecord::Schema.define(version: 20170615070003) do
     t.index ["skill_type_id"], name: "index_npc_corp_research_on_skill_type_id"
   end
 
-  create_table "planetSchematics", primary_key: "schematicID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "schematicName", limit: 255
-    t.integer "cycleTime"
-  end
-
   create_table "planetSchematicsPinMap", primary_key: ["schematicID", "pinTypeID"], force: :cascade do |t|
     t.integer "schematicID", null: false
     t.integer "pinTypeID", null: false
@@ -670,6 +665,11 @@ ActiveRecord::Schema.define(version: 20170615070003) do
     t.integer "skill_type_id", null: false
     t.index ["agent_id"], name: "index_research_agent_skills_on_agent_id"
     t.index ["skill_type_id"], name: "ix_agtResearchAgents_typeID"
+  end
+
+  create_table "schematics", primary_key: "schematic_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 255
+    t.integer "cycle_time"
   end
 
   create_table "skinLicense", primary_key: "licenseTypeID", id: :integer, default: nil, force: :cascade do |t|
