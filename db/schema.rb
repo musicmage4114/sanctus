@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615064609) do
+ActiveRecord::Schema.define(version: 20170615065541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -522,20 +522,6 @@ ActiveRecord::Schema.define(version: 20170615064609) do
     t.integer "destinationID"
   end
 
-  create_table "mapUniverse", primary_key: "universeID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "universeName", limit: 100
-    t.float "x"
-    t.float "y"
-    t.float "z"
-    t.float "xMin"
-    t.float "xMax"
-    t.float "yMin"
-    t.float "yMax"
-    t.float "zMin"
-    t.float "zMax"
-    t.float "radius"
-  end
-
   create_table "market_groups", primary_key: "market_group_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "parent_group_id"
     t.string "name", limit: 100
@@ -910,6 +896,20 @@ ActiveRecord::Schema.define(version: 20170615064609) do
     t.index ["group_id", "name"], name: "invUniqueNames_IX_GroupName"
     t.index ["item_id", "name"], name: "index_universe_unique_names_on_item_id_and_name"
     t.index ["name"], name: "ix_invUniqueNames_itemName", unique: true
+  end
+
+  create_table "universes", primary_key: "universe_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.float "x_min"
+    t.float "x_max"
+    t.float "y_min"
+    t.float "y_max"
+    t.float "z_min"
+    t.float "z_max"
+    t.float "radius"
   end
 
   create_table "warCombatZoneSystems", primary_key: "solarSystemID", id: :integer, default: nil, force: :cascade do |t|
