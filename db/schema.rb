@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615071759) do
+ActiveRecord::Schema.define(version: 20170615072159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -564,9 +564,9 @@ ActiveRecord::Schema.define(version: 20170615071759) do
     t.index ["skill_type_id"], name: "index_npc_corp_research_on_skill_type_id"
   end
 
-  create_table "planetSchematicsPinMap", primary_key: ["schematicID", "pinTypeID"], force: :cascade do |t|
-    t.integer "schematicID", null: false
-    t.integer "pinTypeID", null: false
+  create_table "pin_schematics", primary_key: ["schematic_id", "pin_type_id"], force: :cascade do |t|
+    t.integer "schematic_id", null: false
+    t.integer "pin_type_id", null: false
   end
 
   create_table "planetSchematicsTypeMap", primary_key: ["schematicID", "typeID"], force: :cascade do |t|
@@ -1028,6 +1028,8 @@ ActiveRecord::Schema.define(version: 20170615071759) do
   add_foreign_key "npc_corp_item_offers", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "npc_corp_research", "corporations", primary_key: "corporation_id"
   add_foreign_key "npc_corp_research", "items", column: "skill_type_id", primary_key: "type_id"
+  add_foreign_key "pin_schematics", "items", column: "pin_type_id", primary_key: "type_id"
+  add_foreign_key "pin_schematics", "schematics", primary_key: "schematic_id"
   add_foreign_key "races", "icons", primary_key: "icon_id"
   add_foreign_key "region_connections", "regions", column: "from_region_id", primary_key: "region_id"
   add_foreign_key "region_connections", "regions", column: "to_region_id", primary_key: "region_id"
