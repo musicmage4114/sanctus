@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615072159) do
+ActiveRecord::Schema.define(version: 20170615072919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -569,13 +569,6 @@ ActiveRecord::Schema.define(version: 20170615072159) do
     t.integer "pin_type_id", null: false
   end
 
-  create_table "planetSchematicsTypeMap", primary_key: ["schematicID", "typeID"], force: :cascade do |t|
-    t.integer "schematicID", null: false
-    t.integer "typeID", null: false
-    t.integer "quantity"
-    t.boolean "isInput"
-  end
-
   create_table "races", primary_key: "race_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "name", limit: 100
     t.string "description", limit: 1000
@@ -665,6 +658,13 @@ ActiveRecord::Schema.define(version: 20170615072159) do
     t.integer "skill_type_id", null: false
     t.index ["agent_id"], name: "index_research_agent_skills_on_agent_id"
     t.index ["skill_type_id"], name: "ix_agtResearchAgents_typeID"
+  end
+
+  create_table "schematic_materials", primary_key: ["schematic_id", "material_id"], force: :cascade do |t|
+    t.integer "schematic_id", null: false
+    t.integer "material_id", null: false
+    t.integer "quantity"
+    t.boolean "input"
   end
 
   create_table "schematics", primary_key: "schematic_id", id: :integer, default: nil, force: :cascade do |t|
@@ -1038,6 +1038,8 @@ ActiveRecord::Schema.define(version: 20170615072159) do
   add_foreign_key "regions", "factions", primary_key: "faction_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
   add_foreign_key "research_agent_skills", "items", column: "skill_type_id", primary_key: "type_id"
+  add_foreign_key "schematic_materials", "items", column: "material_id", primary_key: "type_id"
+  add_foreign_key "schematic_materials", "schematics", primary_key: "schematic_id"
   add_foreign_key "solar_systems", "constellations", primary_key: "constellation_id"
   add_foreign_key "solar_systems", "factions", primary_key: "faction_id"
   add_foreign_key "solar_systems", "items", column: "sun_type_id", primary_key: "type_id"
