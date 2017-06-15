@@ -14,6 +14,7 @@ class SolarSystem < ApplicationRecord
   has_many :factions,               inverse_of: :solar_system
   has_many :sovereignty_campaigns,  inverse_of: :solar_system
   has_many :denormalized_map_items, inverse_of: :solar_system
+  has_many :landmarks,              inverse_of: :solar_system
   has_many :characters,             as: :current_location
   
   has_one :current_incursion,       class_name: 'InfestedSystem',

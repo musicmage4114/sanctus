@@ -9,6 +9,7 @@ class Icon < ApplicationRecord
   has_many :factions,            inverse_of: :icon
   has_many :items,               inverse_of: :icon
   has_many :item_categories,     inverse_of: :icon
+  has_many :landmarks,           inverse_of: :icon
   has_many :races,               inverse_of: :icon
   has_many :training_attributes, inverse_of: :icon
 end
