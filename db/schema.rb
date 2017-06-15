@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615042157) do
+ActiveRecord::Schema.define(version: 20170615045014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -527,21 +527,6 @@ ActiveRecord::Schema.define(version: 20170615042157) do
     t.integer "toRegionID", null: false
   end
 
-  create_table "mapRegions", primary_key: "regionID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "regionName", limit: 100
-    t.float "x"
-    t.float "y"
-    t.float "z"
-    t.float "xMin"
-    t.float "xMax"
-    t.float "yMin"
-    t.float "yMax"
-    t.float "zMin"
-    t.float "zMax"
-    t.integer "factionID"
-    t.float "radius"
-  end
-
   create_table "mapSolarSystemJumps", primary_key: ["fromSolarSystemID", "toSolarSystemID"], force: :cascade do |t|
     t.integer "fromRegionID"
     t.integer "fromConstellationID"
@@ -717,6 +702,22 @@ ActiveRecord::Schema.define(version: 20170615042157) do
     t.integer "graphic_id"
     t.index ["graphic_id"], name: "index_region_scenes_on_graphic_id"
     t.index ["region_id", "graphic_id"], name: "index_region_scenes_on_region_id_and_graphic_id"
+  end
+
+  create_table "regions", primary_key: "region_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.float "x_min"
+    t.float "x_max"
+    t.float "y_min"
+    t.float "y_max"
+    t.float "z_min"
+    t.float "z_max"
+    t.integer "faction_id"
+    t.float "radius"
+    t.index ["faction_id"], name: "index_regions_on_faction_id"
   end
 
   create_table "research_agent_skills", primary_key: ["agent_id", "skill_type_id"], force: :cascade do |t|
@@ -932,6 +933,7 @@ ActiveRecord::Schema.define(version: 20170615042157) do
   add_foreign_key "constellation_connections", "constellations", column: "from_constellation_id", primary_key: "constellation_id"
   add_foreign_key "constellation_connections", "constellations", column: "to_constellation_id", primary_key: "constellation_id"
   add_foreign_key "constellations", "factions", primary_key: "faction_id"
+  add_foreign_key "constellations", "regions", primary_key: "region_id"
   add_foreign_key "contraband", "factions", primary_key: "faction_id"
   add_foreign_key "contraband", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
@@ -941,6 +943,7 @@ ActiveRecord::Schema.define(version: 20170615042157) do
   add_foreign_key "denormalized_map", "constellations", primary_key: "constellation_id"
   add_foreign_key "denormalized_map", "item_groups", column: "group_id", primary_key: "group_id"
   add_foreign_key "denormalized_map", "items", column: "type_id", primary_key: "type_id"
+  add_foreign_key "denormalized_map", "regions", primary_key: "region_id"
   add_foreign_key "denormalized_map", "universe_items", column: "item_id", primary_key: "item_id"
   add_foreign_key "denormalized_map", "universe_items", column: "orbit_id", primary_key: "item_id"
   add_foreign_key "dogma_attribute_values", "dogma_attributes", column: "attribute_id", primary_key: "attribute_id"
@@ -993,6 +996,8 @@ ActiveRecord::Schema.define(version: 20170615042157) do
   add_foreign_key "npc_corp_research", "items", column: "skill_type_id", primary_key: "type_id"
   add_foreign_key "races", "icons", primary_key: "icon_id"
   add_foreign_key "region_scenes", "graphics", primary_key: "graphic_id"
+  add_foreign_key "region_scenes", "regions", primary_key: "region_id"
+  add_foreign_key "regions", "factions", primary_key: "faction_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
   add_foreign_key "research_agent_skills", "items", column: "skill_type_id", primary_key: "type_id"
   add_foreign_key "training_attributes", "icons", primary_key: "icon_id"

@@ -9,6 +9,7 @@ class Constellation < ApplicationRecord
   has_many :denormalized_map_items,  inverse_of: :constellation
   has_many :wormhole_system_classes, as: :class_wormhole
   
+  # Adapted from gist at https://gist.github.com/srpouyet/4121517
   has_and_belongs_to_many :adjacent_constellations,
                           class_name: 'Constellation',
                           join_table: :constellation_connections,
