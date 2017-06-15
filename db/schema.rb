@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613024910) do
+ActiveRecord::Schema.define(version: 20170615012648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -257,6 +257,32 @@ ActiveRecord::Schema.define(version: 20170613024910) do
     t.string "description", limit: 1000
   end
 
+  create_table "denormalized_map", primary_key: "item_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "type_id"
+    t.integer "group_id"
+    t.integer "solar_system_id"
+    t.integer "constellation_id"
+    t.integer "region_id"
+    t.integer "orbit_id"
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.float "radius"
+    t.string "name", limit: 100
+    t.float "security"
+    t.integer "celestial_index"
+    t.integer "orbit_index"
+    t.index ["constellation_id"], name: "ix_mapDenormalize_constellationID"
+    t.index ["group_id", "constellation_id"], name: "mapDenormalize_IX_groupConstellation"
+    t.index ["group_id", "region_id"], name: "mapDenormalize_IX_groupRegion"
+    t.index ["group_id", "solar_system_id"], name: "mapDenormalize_IX_groupSystem"
+    t.index ["group_id"], name: "index_denormalized_map_on_group_id"
+    t.index ["orbit_id"], name: "ix_mapDenormalize_orbitID"
+    t.index ["region_id"], name: "ix_mapDenormalize_regionID"
+    t.index ["solar_system_id"], name: "ix_mapDenormalize_solarSystemID"
+    t.index ["type_id"], name: "ix_mapDenormalize_typeID"
+  end
+
   create_table "dogma_attribute_categories", primary_key: "category_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "name", limit: 50
     t.string "description", limit: 200
@@ -485,31 +511,6 @@ ActiveRecord::Schema.define(version: 20170613024910) do
     t.integer "data_export", default: 1, null: false
     t.index ["group_id"], name: "ix_invTypes_groupID"
     t.index ["icon_id"], name: "index_items_on_icon_id"
-  end
-
-  create_table "mapDenormalize", primary_key: "itemID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "typeID"
-    t.integer "groupID"
-    t.integer "solarSystemID"
-    t.integer "constellationID"
-    t.integer "regionID"
-    t.integer "orbitID"
-    t.float "x"
-    t.float "y"
-    t.float "z"
-    t.float "radius"
-    t.string "itemName", limit: 100
-    t.float "security"
-    t.integer "celestialIndex"
-    t.integer "orbitIndex"
-    t.index ["constellationID"], name: "ix_mapDenormalize_constellationID"
-    t.index ["groupID", "constellationID"], name: "mapDenormalize_IX_groupConstellation"
-    t.index ["groupID", "regionID"], name: "mapDenormalize_IX_groupRegion"
-    t.index ["groupID", "solarSystemID"], name: "mapDenormalize_IX_groupSystem"
-    t.index ["orbitID"], name: "ix_mapDenormalize_orbitID"
-    t.index ["regionID"], name: "ix_mapDenormalize_regionID"
-    t.index ["solarSystemID"], name: "ix_mapDenormalize_solarSystemID"
-    t.index ["typeID"], name: "ix_mapDenormalize_typeID"
   end
 
   create_table "mapJumps", primary_key: "stargateID", id: :integer, default: nil, force: :cascade do |t|
@@ -938,6 +939,11 @@ ActiveRecord::Schema.define(version: 20170613024910) do
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
   add_foreign_key "corporations", "icons", primary_key: "icon_id"
+  add_foreign_key "denormalized_map", "constellations", primary_key: "constellation_id"
+  add_foreign_key "denormalized_map", "item_groups", column: "group_id", primary_key: "group_id"
+  add_foreign_key "denormalized_map", "items", column: "type_id", primary_key: "type_id"
+  add_foreign_key "denormalized_map", "universe_items", column: "item_id", primary_key: "item_id"
+  add_foreign_key "denormalized_map", "universe_items", column: "orbit_id", primary_key: "item_id"
   add_foreign_key "dogma_attribute_values", "dogma_attributes", column: "attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_attribute_values", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "dogma_attributes", "dogma_attribute_categories", column: "category_id", primary_key: "category_id"

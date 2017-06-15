@@ -12,4 +12,9 @@ class UniverseItem < ApplicationRecord
   has_one :celestial_details, class_name:  'Celestial',
                               foreign_key: :celestial_id,
                               inverse_of:  :universe_item
+  
+  has_many :denormalized_map_items, foreign_key: :item_id,
+                                    inverse_of:  :universe_item
+  has_many :orbiting_items,         foreign_key: :orbit_id,
+                                    inverse_of:  :universe_item
 end

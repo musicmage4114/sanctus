@@ -49,6 +49,7 @@ class Item < ApplicationRecord
                                     foreign_key: :product_type_id,
                                     inverse_of:  :item
   has_many :universe_item,          foreign_key: :type_id, inverse_of: :item
+  has_many :denormalized_map_items, foreign_key: :type_id, inverse_of: :item
   
   # join table/model - meta_variations
   has_many :higher_meta_variants,   class_name:  'MetaVariation',
