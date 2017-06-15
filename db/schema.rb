@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615045014) do
+ActiveRecord::Schema.define(version: 20170615055538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -522,11 +522,6 @@ ActiveRecord::Schema.define(version: 20170615045014) do
     t.integer "destinationID"
   end
 
-  create_table "mapRegionJumps", primary_key: ["fromRegionID", "toRegionID"], force: :cascade do |t|
-    t.integer "fromRegionID", null: false
-    t.integer "toRegionID", null: false
-  end
-
   create_table "mapSolarSystemJumps", primary_key: ["fromSolarSystemID", "toSolarSystemID"], force: :cascade do |t|
     t.integer "fromRegionID"
     t.integer "fromConstellationID"
@@ -534,37 +529,6 @@ ActiveRecord::Schema.define(version: 20170615045014) do
     t.integer "toSolarSystemID", null: false
     t.integer "toConstellationID"
     t.integer "toRegionID"
-  end
-
-  create_table "mapSolarSystems", primary_key: "solarSystemID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "regionID"
-    t.integer "constellationID"
-    t.string "solarSystemName", limit: 100
-    t.float "x"
-    t.float "y"
-    t.float "z"
-    t.float "xMin"
-    t.float "xMax"
-    t.float "yMin"
-    t.float "yMax"
-    t.float "zMin"
-    t.float "zMax"
-    t.float "luminosity"
-    t.boolean "border"
-    t.boolean "fringe"
-    t.boolean "corridor"
-    t.boolean "hub"
-    t.boolean "international"
-    t.boolean "regional"
-    t.boolean "constellation"
-    t.float "security"
-    t.integer "factionID"
-    t.float "radius"
-    t.integer "sunTypeID"
-    t.string "securityClass", limit: 2
-    t.index ["constellationID"], name: "ix_mapSolarSystems_constellationID"
-    t.index ["regionID"], name: "ix_mapSolarSystems_regionID"
-    t.index ["security"], name: "ix_mapSolarSystems_security"
   end
 
   create_table "mapUniverse", primary_key: "universeID", id: :integer, default: nil, force: :cascade do |t|
@@ -698,6 +662,14 @@ ActiveRecord::Schema.define(version: 20170615045014) do
     t.integer "quantity"
   end
 
+  create_table "region_connections", primary_key: ["from_region_id", "to_region_id"], force: :cascade do |t|
+    t.integer "from_region_id", null: false
+    t.integer "to_region_id", null: false
+    t.index ["from_region_id"], name: "index_region_connections_on_from_region_id"
+    t.index ["to_region_id", "from_region_id"], name: "index_region_connections_on_to_region_id_and_from_region_id"
+    t.index ["to_region_id"], name: "index_region_connections_on_to_region_id"
+  end
+
   create_table "region_scenes", primary_key: "region_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "graphic_id"
     t.index ["graphic_id"], name: "index_region_scenes_on_graphic_id"
@@ -747,6 +719,53 @@ ActiveRecord::Schema.define(version: 20170615045014) do
   create_table "skins", primary_key: "skinID", id: :integer, default: nil, force: :cascade do |t|
     t.string "internalName", limit: 70
     t.integer "skinMaterialID"
+  end
+
+  create_table "solar_systems", primary_key: "system_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "region_id"
+    t.integer "constellation_id"
+    t.string "name", limit: 100
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.float "x_min"
+    t.float "x_max"
+    t.float "y_min"
+    t.float "y_max"
+    t.float "z_min"
+    t.float "z_max"
+    t.float "luminosity"
+    t.boolean "border"
+    t.boolean "international"
+    t.float "security_status"
+    t.integer "faction_id"
+    t.float "radius"
+    t.integer "sun_type_id"
+    t.string "security_class", limit: 2
+    t.integer "jumps_last_hour"
+    t.datetime "last_jumps_check"
+    t.integer "npc_kills_last_hour"
+    t.integer "pod_kills_last_hour"
+    t.integer "ship_kills_last_hour"
+    t.datetime "last_kills_check"
+    t.bigint "corporation_id"
+    t.bigint "alliance_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer "topography", default: 3, null: false
+    t.integer "links", default: 1, null: false
+    t.index ["alliance_id"], name: "index_solar_systems_on_alliance_id"
+    t.index ["constellation_id"], name: "ix_mapSolarSystems_constellationID"
+    t.index ["corporation_id"], name: "index_solar_systems_on_corporation_id"
+    t.index ["faction_id"], name: "index_solar_systems_on_faction_id"
+    t.index ["region_id"], name: "ix_mapSolarSystems_regionID"
+    t.index ["security_status"], name: "ix_mapSolarSystems_security"
+    t.index ["sun_type_id"], name: "index_solar_systems_on_sun_type_id"
+    t.index ["system_id", "alliance_id"], name: "index_solar_systems_on_system_id_and_alliance_id"
+    t.index ["system_id", "constellation_id"], name: "index_solar_systems_on_system_id_and_constellation_id"
+    t.index ["system_id", "corporation_id"], name: "index_solar_systems_on_system_id_and_corporation_id"
+    t.index ["system_id", "faction_id"], name: "index_solar_systems_on_system_id_and_faction_id"
+    t.index ["system_id", "region_id"], name: "index_solar_systems_on_system_id_and_region_id"
   end
 
   create_table "staOperationServices", primary_key: ["operationID", "serviceID"], force: :cascade do |t|
@@ -940,10 +959,12 @@ ActiveRecord::Schema.define(version: 20170615045014) do
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "factions", primary_key: "faction_id"
   add_foreign_key "corporations", "icons", primary_key: "icon_id"
+  add_foreign_key "corporations", "solar_systems", primary_key: "system_id"
   add_foreign_key "denormalized_map", "constellations", primary_key: "constellation_id"
   add_foreign_key "denormalized_map", "item_groups", column: "group_id", primary_key: "group_id"
   add_foreign_key "denormalized_map", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "denormalized_map", "regions", primary_key: "region_id"
+  add_foreign_key "denormalized_map", "solar_systems", primary_key: "system_id"
   add_foreign_key "denormalized_map", "universe_items", column: "item_id", primary_key: "item_id"
   add_foreign_key "denormalized_map", "universe_items", column: "orbit_id", primary_key: "item_id"
   add_foreign_key "dogma_attribute_values", "dogma_attributes", column: "attribute_id", primary_key: "attribute_id"
@@ -968,6 +989,7 @@ ActiveRecord::Schema.define(version: 20170615045014) do
   add_foreign_key "factions", "corporations", column: "militia_corporation_id", primary_key: "corporation_id"
   add_foreign_key "factions", "icons", primary_key: "icon_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
+  add_foreign_key "factions", "solar_systems", primary_key: "system_id"
   add_foreign_key "industry_probabilities", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "industry_reactions", "items", column: "reaction_type_id", primary_key: "type_id"
   add_foreign_key "industry_reactions", "items", column: "reagent_id", primary_key: "type_id"
@@ -982,6 +1004,7 @@ ActiveRecord::Schema.define(version: 20170615045014) do
   add_foreign_key "items", "item_groups", column: "group_id", primary_key: "group_id"
   add_foreign_key "items", "races", primary_key: "race_id"
   add_foreign_key "landmarks", "icons", primary_key: "icon_id"
+  add_foreign_key "landmarks", "solar_systems", primary_key: "system_id"
   add_foreign_key "market_groups", "icons", primary_key: "icon_id"
   add_foreign_key "market_groups", "market_groups", column: "parent_group_id", primary_key: "market_group_id"
   add_foreign_key "meta_item_groups", "icons", primary_key: "icon_id"
@@ -995,11 +1018,17 @@ ActiveRecord::Schema.define(version: 20170615045014) do
   add_foreign_key "npc_corp_research", "corporations", primary_key: "corporation_id"
   add_foreign_key "npc_corp_research", "items", column: "skill_type_id", primary_key: "type_id"
   add_foreign_key "races", "icons", primary_key: "icon_id"
+  add_foreign_key "region_connections", "regions", column: "from_region_id", primary_key: "region_id"
+  add_foreign_key "region_connections", "regions", column: "to_region_id", primary_key: "region_id"
   add_foreign_key "region_scenes", "graphics", primary_key: "graphic_id"
   add_foreign_key "region_scenes", "regions", primary_key: "region_id"
   add_foreign_key "regions", "factions", primary_key: "faction_id"
   add_foreign_key "research_agent_skills", "agents", primary_key: "agent_id"
   add_foreign_key "research_agent_skills", "items", column: "skill_type_id", primary_key: "type_id"
+  add_foreign_key "solar_systems", "constellations", primary_key: "constellation_id"
+  add_foreign_key "solar_systems", "factions", primary_key: "faction_id"
+  add_foreign_key "solar_systems", "items", column: "sun_type_id", primary_key: "type_id"
+  add_foreign_key "solar_systems", "regions", primary_key: "region_id"
   add_foreign_key "training_attributes", "icons", primary_key: "icon_id"
   add_foreign_key "universe_entities", "universe_items", column: "item_id", primary_key: "item_id"
   add_foreign_key "universe_items", "inventory_flags", column: "flag_id", primary_key: "flag_id"
