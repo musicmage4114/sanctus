@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615055538) do
+ActiveRecord::Schema.define(version: 20170615064609) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -522,15 +522,6 @@ ActiveRecord::Schema.define(version: 20170615055538) do
     t.integer "destinationID"
   end
 
-  create_table "mapSolarSystemJumps", primary_key: ["fromSolarSystemID", "toSolarSystemID"], force: :cascade do |t|
-    t.integer "fromRegionID"
-    t.integer "fromConstellationID"
-    t.integer "fromSolarSystemID", null: false
-    t.integer "toSolarSystemID", null: false
-    t.integer "toConstellationID"
-    t.integer "toRegionID"
-  end
-
   create_table "mapUniverse", primary_key: "universeID", id: :integer, default: nil, force: :cascade do |t|
     t.string "universeName", limit: 100
     t.float "x"
@@ -833,6 +824,13 @@ ActiveRecord::Schema.define(version: 20170615055538) do
     t.index ["stationTypeID"], name: "ix_staStations_stationTypeID"
   end
 
+  create_table "system_connections", primary_key: ["from_system_id", "to_system_id"], force: :cascade do |t|
+    t.integer "from_system_id", null: false
+    t.integer "to_system_id", null: false
+    t.index ["from_system_id"], name: "index_system_connections_on_from_system_id"
+    t.index ["to_system_id"], name: "index_system_connections_on_to_system_id"
+  end
+
   create_table "training_attributes", primary_key: "attribute_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "name", limit: 100
     t.string "description", limit: 1000
@@ -1029,6 +1027,8 @@ ActiveRecord::Schema.define(version: 20170615055538) do
   add_foreign_key "solar_systems", "factions", primary_key: "faction_id"
   add_foreign_key "solar_systems", "items", column: "sun_type_id", primary_key: "type_id"
   add_foreign_key "solar_systems", "regions", primary_key: "region_id"
+  add_foreign_key "system_connections", "solar_systems", column: "from_system_id", primary_key: "system_id"
+  add_foreign_key "system_connections", "solar_systems", column: "to_system_id", primary_key: "system_id"
   add_foreign_key "training_attributes", "icons", primary_key: "icon_id"
   add_foreign_key "universe_entities", "universe_items", column: "item_id", primary_key: "item_id"
   add_foreign_key "universe_items", "inventory_flags", column: "flag_id", primary_key: "flag_id"
