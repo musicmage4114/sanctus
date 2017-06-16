@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615072919) do
+ActiveRecord::Schema.define(version: 20170615233211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -408,6 +408,20 @@ ActiveRecord::Schema.define(version: 20170615072919) do
     t.integer "data_export", default: 1, null: false
   end
 
+  create_table "industry_facilities", primary_key: ["facility_id", "industry_type_id"], force: :cascade do |t|
+    t.integer "facility_id", null: false
+    t.integer "industry_type_id", null: false
+    t.integer "quantity"
+    t.integer "station_type_id"
+    t.integer "owner_id"
+    t.integer "solar_system_id"
+    t.integer "region_id"
+    t.float "tax"
+    t.index ["owner_id"], name: "ix_ramAssemblyLineStations_ownerID"
+    t.index ["region_id"], name: "ix_ramAssemblyLineStations_regionID"
+    t.index ["solar_system_id"], name: "ix_ramAssemblyLineStations_solarSystemID"
+  end
+
   create_table "industry_probabilities", id: false, force: :cascade do |t|
     t.integer "blueprint_id"
     t.integer "activity_type"
@@ -575,19 +589,6 @@ ActiveRecord::Schema.define(version: 20170615072919) do
     t.integer "icon_id"
     t.string "short_description", limit: 500
     t.index ["icon_id"], name: "index_races_on_icon_id"
-  end
-
-  create_table "ramAssemblyLineStations", primary_key: ["stationID", "assemblyLineTypeID"], force: :cascade do |t|
-    t.integer "stationID", null: false
-    t.integer "assemblyLineTypeID", null: false
-    t.integer "quantity"
-    t.integer "stationTypeID"
-    t.integer "ownerID"
-    t.integer "solarSystemID"
-    t.integer "regionID"
-    t.index ["ownerID"], name: "ix_ramAssemblyLineStations_ownerID"
-    t.index ["regionID"], name: "ix_ramAssemblyLineStations_regionID"
-    t.index ["solarSystemID"], name: "ix_ramAssemblyLineStations_solarSystemID"
   end
 
   create_table "ramAssemblyLineTypeDetailPerCategory", primary_key: ["assemblyLineTypeID", "categoryID"], force: :cascade do |t|
@@ -1001,6 +1002,10 @@ ActiveRecord::Schema.define(version: 20170615072919) do
   add_foreign_key "factions", "icons", primary_key: "icon_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
   add_foreign_key "factions", "solar_systems", primary_key: "system_id"
+  add_foreign_key "industry_facilities", "corporations", column: "owner_id", primary_key: "corporation_id"
+  add_foreign_key "industry_facilities", "items", column: "station_type_id", primary_key: "type_id"
+  add_foreign_key "industry_facilities", "regions", primary_key: "region_id"
+  add_foreign_key "industry_facilities", "solar_systems", primary_key: "system_id"
   add_foreign_key "industry_probabilities", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "industry_reactions", "items", column: "reaction_type_id", primary_key: "type_id"
   add_foreign_key "industry_reactions", "items", column: "reagent_id", primary_key: "type_id"
