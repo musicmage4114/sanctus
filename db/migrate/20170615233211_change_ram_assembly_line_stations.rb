@@ -1,4 +1,4 @@
-class CreateIndustryFacilities < ActiveRecord::Migration[5.1]
+class ChangeRamAssemblyLineStations < ActiveRecord::Migration[5.1]
   def change
     rename_table :ramAssemblyLineStations, :industry_facilities
     change_table :industry_facilities do |t|
