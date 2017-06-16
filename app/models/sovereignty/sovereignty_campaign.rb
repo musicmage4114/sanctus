@@ -7,9 +7,12 @@ class SovereigntyCampaign < ApplicationRecord
                      station_defense: 3,
                      station_freeport: 4 }
   
-  belongs_to :constellation,         inverse_of: :sovereignty_campaigns
-  belongs_to :solar_system,          inverse_of: :sovereignty_campaigns
-  belongs_to :sovereignty_structure, inverse_of: :sovereignty_campaigns
+  belongs_to :constellation,         primary_key: :constellation_id,
+                                     inverse_of:  :sovereignty_campaigns
+  belongs_to :solar_system,          primary_key: :system_id,
+                                     inverse_of:  :sovereignty_campaigns
+  belongs_to :sovereignty_structure, primary_key: :sov_structure_id,
+                                     inverse_of:  :sovereignty_campaigns
   
   has_many :participants, class_name:  'CampaignParticipant',
                           foreign_key: :campaign_id,

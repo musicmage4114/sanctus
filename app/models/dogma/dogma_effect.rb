@@ -7,22 +7,38 @@ class DogmaEffect < ApplicationRecord
   enum data_export: [:unpublished, :published]
   enum warp_safety: [:unsafe, :safe]
   
-  belongs_to :duration_attribute,              class_name: 'DogmaAttribute',
-                                               inverse_of: :dogma_effects
-  belongs_to :tracking_speed_attribute,        class_name: 'DogmaAttribute',
-                                               inverse_of: :dogma_effects
-  belongs_to :discharge_attribute,             class_name: 'DogmaAttribute',
-                                               inverse_of: :dogma_effects
-  belongs_to :range_attribute,                 class_name: 'DogmaAttribute',
-                                               inverse_of: :dogma_effects
-  belongs_to :falloff_attribute,               class_name: 'DogmaAttribute',
-                                               inverse_of: :dogma_effects
-  belongs_to :npc_usage_chance_attribute,      class_name: 'DogmaAttribute',
-                                               inverse_of: :dogma_effects
-  belongs_to :npc_activation_chance_attribute, class_name: 'DogmaAttribute',
-                                               inverse_of: :dogma_effects
-  belongs_to :fitting_usage_chance_attribute,  class_name: 'DogmaAttribute',
-                                               inverse_of: :dogma_effects
+  belongs_to :duration_attribute,              class_name:  'DogmaAttribute',
+                                               primary_key: :attribute_id,
+                                               inverse_of:  :dogma_effects,
+                                               optional:    true
+  belongs_to :tracking_speed_attribute,        class_name:  'DogmaAttribute',
+                                               primary_key: :attribute_id,
+                                               inverse_of:  :dogma_effects,
+                                               optional:    true
+  belongs_to :discharge_attribute,             class_name:  'DogmaAttribute',
+                                               primary_key: :attribute_id,
+                                               inverse_of:  :dogma_effects,
+                                               optional:    true
+  belongs_to :range_attribute,                 class_name:  'DogmaAttribute',
+                                               primary_key: :attribute_id,
+                                               inverse_of:  :dogma_effects,
+                                               optional:    true
+  belongs_to :falloff_attribute,               class_name:  'DogmaAttribute',
+                                               primary_key: :attribute_id,
+                                               inverse_of:  :dogma_effects,
+                                               optional:    true
+  belongs_to :npc_usage_chance_attribute,      class_name:  'DogmaAttribute',
+                                               primary_key: :attribute_id,
+                                               inverse_of:  :dogma_effects,
+                                               optional:    true
+  belongs_to :npc_activation_chance_attribute, class_name:  'DogmaAttribute',
+                                               primary_key: :attribute_id,
+                                               inverse_of:  :dogma_effects,
+                                               optional:    true
+  belongs_to :fitting_usage_chance_attribute,  class_name:  'DogmaAttribute',
+                                               primary_key: :attribute_id,
+                                               inverse_of:  :dogma_effects,
+                                               optional:    true
   
   has_many :modifications,     class_name:  'DogmaEffectModification',
                                foreign_key: :effect_id,

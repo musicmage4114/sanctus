@@ -9,7 +9,10 @@ class IndustryTime < ApplicationRecord
                         reverse_engineering: 7,
                         invention: 8 }
   
-  belongs_to :blueprint,         class_name:  'Item', inverse_of: :industry_times
+  belongs_to :blueprint,         class_name:  'Item',
+                                 primary_key: :type_id,
+                                 inverse_of:  :industry_times
   belongs_to :industry_activity, foreign_key: :activity_type,
+                                 primary_key: :activity_id,
                                  inverse_of:  :industry_times
 end

@@ -10,10 +10,13 @@ class IndustryProbability < ApplicationRecord
                         invention: 8 }
   
   belongs_to :blueprint,         class_name:  'Item',
+                                 primary_key: :type_id,
                                  inverse_of:  :industry_probabilities
   belongs_to :product,           class_name:  'Item',
                                  foreign_key: :product_type_id,
+                                 primary_key: :type_id,
                                  inverse_of:  :industry_probabilities
   belongs_to :industry_activity, foreign_key: :activity_type,
+                                 primary_key: :activity_id,
                                  inverse_of:  :industry_probabilities
 end

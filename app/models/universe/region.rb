@@ -1,7 +1,9 @@
 class Region < ApplicationRecord
   self.primary_key = 'region_id'
   
-  belongs_to :faction,   inverse_of: :regions, optional: true
+  belongs_to :faction, primary_key: :faction_id,
+                       inverse_of:  :regions,
+                       optional:    true
   
   has_one :region_scene, inverse_of: :region
   

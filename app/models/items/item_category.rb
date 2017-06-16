@@ -4,7 +4,7 @@ class ItemCategory < ApplicationRecord
   # API data: boolean - published
   enum data_export: [:unpublished, :published]
   
-  belongs_to :icon, inverse_of: :item_categories
+  belongs_to :icon, primary_key: :icon_id, inverse_of: :item_categories
   
   has_many :item_groups, foreign_key: :category_id, inverse_of: :item_category
   

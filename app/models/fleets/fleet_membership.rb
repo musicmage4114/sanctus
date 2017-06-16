@@ -7,12 +7,20 @@ class FleetMembership < ApplicationRecord
                squad_commander: 3,
                squad_member:    4 }
 
-  belongs_to :solar_system, inverse_of:  :fleet_memberships
-  belongs_to :character,    inverse_of:  :fleet_memberships
-  belongs_to :fleet,        inverse_of:  :fleet_memberships
-  belongs_to :wing,         inverse_of:  :fleet_memberships, optional: true
-  belongs_to :squad,        inverse_of:  :fleet_memberships, optional: true
-  belongs_to :ship,         foreign_key: :ship_type_id,
+  belongs_to :solar_system, primary_key: :system_id,
+                            inverse_of:  :fleet_memberships
+  belongs_to :character,    primary_key: :character_id,
+                            inverse_of:  :fleet_memberships
+  belongs_to :fleet,        primary_key: :fleet_id, inverse_of: :fleet_memberships
+  belongs_to :wing,         primary_key: :wing_id,
+                            inverse_of:  :fleet_memberships,
+                            optional:    true
+  belongs_to :squad,        primary_key: :squad_id,
+                            inverse_of:  :fleet_memberships,
+                            optional:    true
+  belongs_to :ship,         class_name:  'Item',
+                            foreign_key: :ship_type_id,
+                            primary_key: :type_id,
                             inverse_of:  :fleet_memberships
   belongs_to :dock,         polymorphic: true, optional: true
 end

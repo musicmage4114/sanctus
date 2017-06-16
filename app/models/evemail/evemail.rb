@@ -1,9 +1,10 @@
 class Evemail < ApplicationRecord
   self.primary_key = 'mail_id'
   
-  belongs_to :sender,        class_name:  'Character',
-                             foreign_key: :from_id,
-                             inverse_of:  :evemails
+  belongs_to :sender, class_name:  'Character',
+                      foreign_key: :from_id,
+                      primary_key: :character_id,
+                      inverse_of:  :evemails
   
   has_many :recipients,      class_name:  'MailRecipient',
                              foreign_key: :mail_id,

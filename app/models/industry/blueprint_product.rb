@@ -10,9 +10,12 @@ class BlueprintProduct < ApplicationRecord
                         invention: 8 }
   
   belongs_to :blueprint,         class_name:  'Item',
+                                 primary_key: :type_id,
                                  inverse_of:  :blueprint_products
   belongs_to :product,           class_name:  'Item',
+                                 primary_key: :type_id,
                                  foreign_key: :product_type_id
   belongs_to :industry_activity, foreign_key: :activity_type,
+                                 primary_key: :activity_id,
                                  inverse_of:  :blueprint_products
 end

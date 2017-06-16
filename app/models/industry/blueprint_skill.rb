@@ -9,9 +9,14 @@ class BlueprintSkill < ApplicationRecord
                         reverse_engineering: 7,
                         invention: 8 }
   
-  belongs_to :blueprint,         class_name: 'Item', inverse_of: :blueprint_skills
-  belongs_to :skill,             class_name: 'Item', inverse_of: :blueprint_skills
+  belongs_to :blueprint,         class_name:  'Item',
+                                 primary_key: :type_id,
+                                 inverse_of:  :blueprint_skills
+  belongs_to :skill,             class_name:  'Item',
+                                 primary_key: :type_id,
+                                 inverse_of:  :blueprint_skills
   belongs_to :industry_activity, foreign_key: :activity_type,
+                                 primary_key: :activity_id,
                                  inverse_of:  :blueprint_skills
   
   alias_attribute :level, :required_level

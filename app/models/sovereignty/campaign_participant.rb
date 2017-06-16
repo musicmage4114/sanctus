@@ -4,6 +4,8 @@ class CampaignParticipant < ApplicationRecord
   
   belongs_to :campaign, class_name:  'SovereigntyCampaign',
                         foreign_key: :campaign_id,
+                        primary_key: :campaign_id,
                         inverse_of:  :campaign_participants
-  belongs_to :alliance, inverse_of:  :campaign_participants
+  belongs_to :alliance, primary_key: :alliance_id,
+                        inverse_of:  :campaign_participants
 end

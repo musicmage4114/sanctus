@@ -1,8 +1,8 @@
 class Constellation < ApplicationRecord
   self.primary_key = 'constellation_id'
   
-  belongs_to :region,  inverse_of: :constellations
-  belongs_to :faction, inverse_of: :constellations
+  belongs_to :region,  primary_key: :region_id,  inverse_of: :constellations
+  belongs_to :faction, primary_key: :faction_id, inverse_of: :constellations
   
   has_many :solar_systems,             inverse_of:  :constellation
   has_many :sovereignty_campaigns,     inverse_of:  :constellation

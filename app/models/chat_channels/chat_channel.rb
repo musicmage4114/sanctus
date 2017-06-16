@@ -4,6 +4,7 @@ class ChatChannel < ApplicationRecord
   enum password: [:no_password, :has_password]
   
   belongs_to :owner,           class_name:  'Character',
+                               primary_key: :character_id,
                                inverse_of:  :chat_channels
   
   has_many :channel_operators, class_name:  'ChannelOperator',

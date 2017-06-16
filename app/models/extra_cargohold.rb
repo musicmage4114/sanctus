@@ -11,5 +11,8 @@ class ExtraCargohold < ApplicationRecord
                     command_center_hold: 9,
                     corpse_hold: 10 }
   
-  belongs_to :ship, foreign_key: :ship_id, inverse_of: :extra_cargoholds
+  belongs_to :ship, class_name:  'Item',
+                    foreign_key: :ship_id,
+                    primary_key: :type_id,
+                    inverse_of:  :extra_cargoholds
 end

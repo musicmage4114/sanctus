@@ -9,10 +9,13 @@ class DogmaAttribute < ApplicationRecord
   enum good: [:low, :high]
   
   belongs_to :category,        class_name:  'DogmaAttributeCategory',
+                               primary_key: :category_id,
                                inverse_of:  :dogma_attributes
 
-  has_many :dogma_effects,     foreign_key: :attribute_id, inverse_of: :dogma_attribute
-  has_many :dogma_expressions, foreign_key: :attribute_id, inverse_of: :dogma_attribute
+  has_many :dogma_effects,     foreign_key: :attribute_id,
+                               inverse_of:  :dogma_attribute
+  has_many :dogma_expressions, foreign_key: :attribute_id,
+                               inverse_of:  :dogma_attribute
   has_many :possible_values,   class_name:  'DogmaAttributeValue',
                                foreign_key: :attribute_id,
                                inverse_of:  :dogma_attribute

@@ -24,9 +24,10 @@ class Agent < ApplicationRecord
                      aura: 11,
                      career: 12 }
   
-  belongs_to :corporation,      inverse_of:  :agents
+  belongs_to :corporation,      primary_key: :corporation_id, inverse_of: :agents
   belongs_to :division_details, class_name:  'CorpDivisionDetail',
                                 foreign_key: :division,
+                                primary_key: :division_id,
                                 inverse_of:  :agents
   belongs_to :location,         polymorphic: true
   

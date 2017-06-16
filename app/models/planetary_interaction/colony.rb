@@ -10,9 +10,11 @@ class Colony < ApplicationRecord
                       storm: 7,
                       temperate: 8 }
   
-  belongs_to :planet,       inverse_of: :colonies
-  belongs_to :owner,        class_name: 'Character', inverse_of: :colonies
-  belongs_to :solar_system, inverse_of: :colonies
+  belongs_to :planet,       primary_key: :planet_id, inverse_of: :colonies
+  belongs_to :solar_system, primary_key: :system_id, inverse_of: :colonies
+  belongs_to :owner,        class_name:  'Character',
+                            primary_key: :character_id,
+                            inverse_of:  :colonies
   
   has_many :links,  class_name: 'ColonyLink',
                     inverse_of: :colony,

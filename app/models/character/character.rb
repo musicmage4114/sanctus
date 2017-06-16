@@ -7,40 +7,49 @@ class Character < ApplicationRecord
   enum gender: { male: 1, female: 2 }
 
   # AssetsApi
-  has_many :assets, as: :asset_owner
+  has_many :assets, as: :owner
   
   # BookmarksApi
-  has_many :bookmarks_folders, as: :folder_owner,   dependent: :destroy
-  has_many :bookmarks,         as: :bookmark_owner, dependent: :destroy
-  has_many :created_bookmarks, class_name:  'Bookmark',
+  has_many :created_bookmarks, class_name: 'Bookmark',
                                foreign_key: :creator_id,
-                               inverse_of:  :character
+                               inverse_of: :character
+  has_many :bookmarks_folders, as: :folder_owner, dependent: :destroy
+  has_many :owned_bookmarks,   class_name: 'Bookmark',
+                               as: :bookmark_owner,
+                               dependent: :destroy
   
-  alias_attribute :owned_bookmarks, :bookmarks
+  alias_attribute :bookmarks, :owned_bookmarks
   
   # CalendarApi
-  has_many :event_responses,          inverse_of:  :character
-  has_many :hosted_events,            class_name:  'Event',
-                                      foreign_key: :owner_id,
-                                      inverse_of:  :character
+  has_many :event_responses, inverse_of:  :character
+  has_many :hosted_events,   class_name:  'Event',
+                             foreign_key: :owner_id,
+                             inverse_of:  :character
   
   # CharacterApi
-  belongs_to :alliance,               inverse_of: :characters, optional: true
-  belongs_to :ancestry,               inverse_of: :characters, optional: true
-  belongs_to :bloodline,              inverse_of: :characters
-  belongs_to :corporation,            inverse_of: :characters
-  belongs_to :race,                   inverse_of: :characters
+  belongs_to :alliance,    primary_key: :alliance_id,
+                           inverse_of:  :characters,
+                           optional:    true
+  belongs_to :ancestry,    primary_key: :ancestry_id,
+                           inverse_of:  :characters,
+                           optional:    true
+  belongs_to :bloodline,   primary_key: :bloodline_id,
+                           inverse_of:  :characters
+  belongs_to :corporation, primary_key: :corporation_id,
+                           inverse_of:  :characters
+  belongs_to :race,        primary_key: :race_id,
+                           inverse_of:  :characters
 
-  has_many :medals,                   through:       :medal_awards, source: :medal
-  has_many :blueprints,               through:       :personal_blueprints,
-                                      source:        :type
-  has_many :personal_blueprints,      inverse_of:    :character, dependent: :destroy
-  has_many :personal_research_agents, inverse_of:    :character, dependent: :destroy
-  has_many :research_agents,          through:       :personal_research_agents,
-                                      source:        :agent
-  has_many :corporation_histories,    inverse_of:    :corporation, dependent: :destroy
-  has_many :standings,                inverse_of:    :character, dependent: :destroy
-  has_many :chat_channels,            foreign_key:   :owner_id, inverse_of: :character
+  has_many :medal_awards,             inverse_of: :character
+  has_many :medals,                   through: :medal_awards, source: :medal
+  has_many :blueprints,               through: :personal_blueprints, source: :type
+  has_many :personal_blueprints,      inverse_of: :character, dependent: :destroy
+  has_many :personal_research_agents, inverse_of: :character, dependent: :destroy
+  has_many :research_agents,          through: :personal_research_agents,
+                                      source: :agent
+  has_many :corporation_histories,    inverse_of: :corporation, dependent: :destroy
+  has_many :standings,                inverse_of: :character, dependent: :destroy
+  has_many :chat_channels,            foreign_key: :owner_id, inverse_of: :character
   has_many :allowed_channels,         as: :allowed,  dependent: :destroy
   has_many :blocked_channels,         as: :blocked,  dependent: :destroy
   has_many :muted_channels,           as: :muted,    dependent: :destroy
@@ -82,7 +91,7 @@ class Character < ApplicationRecord
   alias_attribute :fleet, :fleet_membership
   
   # FittingsApi
-  has_many :fittings, dependent: :destroy
+  has_many :fittings
   
   # IndustryApi
   has_many :installed_jobs, foreign_key: :installer_id,
@@ -92,11 +101,10 @@ class Character < ApplicationRecord
                             inverse_of:  :character,
                             dependent:   :destroy
                             
-  
   # KillmailApi
-  has_many :final_blows,        as:          :final_blow
-  has_many :killmail_attacks,   as:          :attacker
-  has_many :kills,              through:     :killmail_attacks,
+  has_many :final_blows,        class_name:  'Killmail',         as: :final_blow
+  has_many :attacks,            class_name:  'KillmailAttacker', as: :attacker
+  has_many :kills,              through:     :attacks,
                                 source:      :killmail,
                                 source_type: 'Character'
   has_many :losses,             class_name:  'Killmail',
@@ -107,7 +115,7 @@ class Character < ApplicationRecord
   
   # LocationApi
   belongs_to :current_location, polymorphic: true, optional: true
-  has_one :current_ship,        inverse_of: :character
+  has_one :current_ship, inverse_of: :character
   
   # LoyaltyApi
   has_many :loyalty_amounts, inverse_of: :character, dependent: :destroy
@@ -134,10 +142,13 @@ class Character < ApplicationRecord
   has_many :market_orders, as: :order_placement, dependent: :destroy
   
   # OpportunitiesApi
-  has_many :opportunities, class_name: 'CharacterOpportunity', inverse_of: :character
+  has_many :opportunities, class_name: 'CharacterOpportunity',
+                           inverse_of: :character
   
   # PlanetaryInteractionApi
-  has_many :colonies, foreign_key: :owner_id, inverse_of: :character, dependent: :destroy
+  has_many :colonies, foreign_key: :owner_id,
+                      inverse_of:  :character,
+                      dependent:   :destroy
   
   # SkillsApi
   has_many :skill_queue_entries, inverse_of: :character, dependent: :destroy
