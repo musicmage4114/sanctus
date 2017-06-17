@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170617234547) do
+ActiveRecord::Schema.define(version: 20170617235228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -702,11 +702,6 @@ ActiveRecord::Schema.define(version: 20170617234547) do
     t.integer "cycle_time"
   end
 
-  create_table "skinMaterials", primary_key: "skinMaterialID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "displayNameID"
-    t.integer "materialSetID"
-  end
-
   create_table "skinShip", id: false, force: :cascade do |t|
     t.integer "skinID"
     t.integer "typeID"
@@ -718,6 +713,11 @@ ActiveRecord::Schema.define(version: 20170617234547) do
     t.integer "duration"
     t.integer "skin_id"
     t.index ["skin_id"], name: "index_skin_licenses_on_skin_id"
+  end
+
+  create_table "skin_materials", primary_key: "skin_material_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "display_name_id"
+    t.integer "material_set_id"
   end
 
   create_table "skins", primary_key: "skinID", id: :integer, default: nil, force: :cascade do |t|
