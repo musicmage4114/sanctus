@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170617012214) do
+ActiveRecord::Schema.define(version: 20170617012855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,14 @@ ActiveRecord::Schema.define(version: 20170617012214) do
   create_table "assembly_categories", primary_key: ["assembly_line_id", "category_id"], force: :cascade do |t|
     t.integer "assembly_line_id", null: false
     t.integer "category_id", null: false
+    t.float "time_multiplier"
+    t.float "material_multiplier"
+    t.float "cost_multiplier"
+  end
+
+  create_table "assembly_groups", primary_key: ["assembly_line_id", "group_id"], force: :cascade do |t|
+    t.integer "assembly_line_id", null: false
+    t.integer "group_id", null: false
     t.float "time_multiplier"
     t.float "material_multiplier"
     t.float "cost_multiplier"
@@ -610,14 +618,6 @@ ActiveRecord::Schema.define(version: 20170617012214) do
     t.index ["icon_id"], name: "index_races_on_icon_id"
   end
 
-  create_table "ramAssemblyLineTypeDetailPerGroup", primary_key: ["assemblyLineTypeID", "groupID"], force: :cascade do |t|
-    t.integer "assemblyLineTypeID", null: false
-    t.integer "groupID", null: false
-    t.float "timeMultiplier"
-    t.float "materialMultiplier"
-    t.float "costMultiplier"
-  end
-
   create_table "ramInstallationTypeContents", primary_key: ["installationTypeID", "assemblyLineTypeID"], force: :cascade do |t|
     t.integer "installationTypeID", null: false
     t.integer "assemblyLineTypeID", null: false
@@ -947,6 +947,8 @@ ActiveRecord::Schema.define(version: 20170617012214) do
   add_foreign_key "ancestries", "bloodlines", primary_key: "bloodline_id"
   add_foreign_key "assembly_categories", "assembly_lines", primary_key: "assembly_line_id"
   add_foreign_key "assembly_categories", "item_categories", column: "category_id", primary_key: "category_id"
+  add_foreign_key "assembly_groups", "assembly_lines", primary_key: "assembly_line_id"
+  add_foreign_key "assembly_groups", "item_groups", column: "group_id", primary_key: "group_id"
   add_foreign_key "assembly_lines", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "bloodlines", "icons", primary_key: "icon_id"
   add_foreign_key "bloodlines", "items", column: "ship_type_id", primary_key: "type_id"

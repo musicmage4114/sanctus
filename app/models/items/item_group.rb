@@ -20,6 +20,8 @@ class ItemGroup < ApplicationRecord
                                     inverse_of:  :item_group
   has_many :denormalized_map_items, foreign_key: :group_id,
                                     inverse_of:  :item_group
+  has_many :assembly_groups,        foreign_key: :group_id,
+                                    inverse_of:  :item_group
   
   alias_attribute :members, :items
   alias_attribute :expressions, :dogma_expressions

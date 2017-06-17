@@ -16,4 +16,6 @@ class AssemblyLine < ApplicationRecord
                                  inverse_of:  :assembly_lines
   
   has_many :industry_facilities, inverse_of: :assembly_line
+  has_many :assembly_categories, inverse_of: :assembly_line
+  has_many :assembly_groups,     inverse_of: :assembly_line
 end
