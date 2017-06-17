@@ -3,7 +3,7 @@ class ChangeRamAssemblyLineStations < ActiveRecord::Migration[5.1]
     rename_table :ramAssemblyLineStations, :industry_facilities
     change_table :industry_facilities do |t|
       t.rename :stationID, :facility_id
-      t.rename :assemblyLineTypeID, :industry_type_id
+      t.rename :assemblyLineTypeID, :assembly_line_id
       t.rename :stationTypeID, :station_type_id
       t.rename :ownerID, :owner_id
       t.rename :solarSystemID, :solar_system_id

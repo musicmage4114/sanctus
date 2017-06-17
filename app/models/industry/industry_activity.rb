@@ -11,4 +11,6 @@ class IndustryActivity < ApplicationRecord
                                     inverse_of:  :industry_activity
   has_many :blueprint_skills,       foreign_key: :activity_type,
                                     inverse_of:  :industry_activity
+  has_many :assembly_lines,         foreign_key: :activity_type,
+                                    inverse_of:  :industry_activity
 end

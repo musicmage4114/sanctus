@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615233211) do
+ActiveRecord::Schema.define(version: 20170617011042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,17 @@ ActiveRecord::Schema.define(version: 20170615233211) do
     t.integer "icon_id"
     t.string "short_description", limit: 500
     t.index ["icon_id"], name: "index_ancestries_on_icon_id"
+  end
+
+  create_table "assembly_lines", primary_key: "assembly_line_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.string "description", limit: 1000
+    t.float "base_time_multiplier"
+    t.float "base_material_multiplier"
+    t.float "base_cost_multiplier"
+    t.float "volume"
+    t.integer "activity_type"
+    t.float "min_cost_per_hour"
   end
 
   create_table "bloodlines", primary_key: "bloodline_id", id: :integer, default: nil, force: :cascade do |t|
@@ -408,9 +419,9 @@ ActiveRecord::Schema.define(version: 20170615233211) do
     t.integer "data_export", default: 1, null: false
   end
 
-  create_table "industry_facilities", primary_key: ["facility_id", "industry_type_id"], force: :cascade do |t|
+  create_table "industry_facilities", primary_key: ["facility_id", "assembly_line_id"], force: :cascade do |t|
     t.integer "facility_id", null: false
-    t.integer "industry_type_id", null: false
+    t.integer "assembly_line_id", null: false
     t.integer "quantity"
     t.integer "station_type_id"
     t.integer "owner_id"
@@ -605,17 +616,6 @@ ActiveRecord::Schema.define(version: 20170615233211) do
     t.float "timeMultiplier"
     t.float "materialMultiplier"
     t.float "costMultiplier"
-  end
-
-  create_table "ramAssemblyLineTypes", primary_key: "assemblyLineTypeID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "assemblyLineTypeName", limit: 100
-    t.string "description", limit: 1000
-    t.float "baseTimeMultiplier"
-    t.float "baseMaterialMultiplier"
-    t.float "baseCostMultiplier"
-    t.float "volume"
-    t.integer "activityID"
-    t.float "minCostPerHour"
   end
 
   create_table "ramInstallationTypeContents", primary_key: ["installationTypeID", "assemblyLineTypeID"], force: :cascade do |t|
@@ -945,6 +945,7 @@ ActiveRecord::Schema.define(version: 20170615233211) do
 
   add_foreign_key "agents", "corp_division_details", column: "division", primary_key: "division_id"
   add_foreign_key "ancestries", "bloodlines", primary_key: "bloodline_id"
+  add_foreign_key "assembly_lines", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "bloodlines", "icons", primary_key: "icon_id"
   add_foreign_key "bloodlines", "items", column: "ship_type_id", primary_key: "type_id"
   add_foreign_key "bloodlines", "races", primary_key: "race_id"
@@ -1002,6 +1003,7 @@ ActiveRecord::Schema.define(version: 20170615233211) do
   add_foreign_key "factions", "icons", primary_key: "icon_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
   add_foreign_key "factions", "solar_systems", primary_key: "system_id"
+  add_foreign_key "industry_facilities", "assembly_lines", primary_key: "assembly_line_id"
   add_foreign_key "industry_facilities", "corporations", column: "owner_id", primary_key: "corporation_id"
   add_foreign_key "industry_facilities", "items", column: "station_type_id", primary_key: "type_id"
   add_foreign_key "industry_facilities", "regions", primary_key: "region_id"
