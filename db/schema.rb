@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170617012855) do
+ActiveRecord::Schema.define(version: 20170617225716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,7 +23,10 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.integer "agent_type"
     t.string "location_type"
     t.integer "locator_agent", default: 0
+    t.index ["agent_type"], name: "index_agents_on_agent_type"
     t.index ["corporation_id"], name: "ix_agtAgents_corporationID"
+    t.index ["division"], name: "index_agents_on_division"
+    t.index ["location_id"], name: "index_agents_on_location_id"
     t.index ["location_type", "location_id"], name: "index_agents_on_location_type_and_location_id"
   end
 
@@ -38,6 +41,7 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.integer "intelligence"
     t.integer "icon_id"
     t.string "short_description", limit: 500
+    t.index ["bloodline_id"], name: "index_ancestries_on_bloodline_id"
     t.index ["icon_id"], name: "index_ancestries_on_icon_id"
   end
 
@@ -47,6 +51,8 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.float "time_multiplier"
     t.float "material_multiplier"
     t.float "cost_multiplier"
+    t.index ["assembly_line_id"], name: "index_assembly_categories_on_assembly_line_id"
+    t.index ["category_id"], name: "index_assembly_categories_on_category_id"
   end
 
   create_table "assembly_groups", primary_key: ["assembly_line_id", "group_id"], force: :cascade do |t|
@@ -55,6 +61,8 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.float "time_multiplier"
     t.float "material_multiplier"
     t.float "cost_multiplier"
+    t.index ["assembly_line_id"], name: "index_assembly_groups_on_assembly_line_id"
+    t.index ["group_id"], name: "index_assembly_groups_on_group_id"
   end
 
   create_table "assembly_lines", primary_key: "assembly_line_id", id: :integer, default: nil, force: :cascade do |t|
@@ -66,6 +74,7 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.float "volume"
     t.integer "activity_type"
     t.float "min_cost_per_hour"
+    t.index ["activity_type"], name: "index_assembly_lines_on_activity_type"
   end
 
   create_table "bloodlines", primary_key: "bloodline_id", id: :integer, default: nil, force: :cascade do |t|
@@ -137,8 +146,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.text "description"
     t.integer "unit_id"
     t.index ["skill_id"], name: "index_bonus_traits_on_skill_id"
-    t.index ["trait_id", "skill_id"], name: "index_bonus_traits_on_trait_id_and_skill_id"
-    t.index ["type_id", "trait_id"], name: "index_bonus_traits_on_type_id_and_trait_id"
     t.index ["type_id"], name: "index_bonus_traits_on_type_id"
     t.index ["unit_id"], name: "index_bonus_traits_on_unit_id"
   end
@@ -170,7 +177,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.integer "mastery_level"
     t.integer "cert_id"
     t.index ["cert_id"], name: "index_certificate_masteries_on_cert_id"
-    t.index ["type_id", "cert_id"], name: "index_certificate_masteries_on_type_id_and_cert_id"
     t.index ["type_id"], name: "index_certificate_masteries_on_type_id"
   end
 
@@ -180,8 +186,8 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.integer "certificate_level"
     t.integer "skill_level"
     t.integer "level_name"
-    t.index ["cert_id", "skill_id"], name: "index_certificate_skills_on_cert_id_and_skill_id"
     t.index ["cert_id"], name: "index_certificate_skills_on_cert_id"
+    t.index ["level_name"], name: "index_certificate_skills_on_level_name"
     t.index ["skill_id"], name: "ix_certSkills_skillID"
   end
 
@@ -225,7 +231,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.float "confiscate"
     t.float "fine_by_value"
     t.float "attack"
-    t.index ["faction_id", "type_id"], name: "index_contraband_on_faction_id_and_type_id"
     t.index ["faction_id"], name: "index_contraband_on_faction_id"
     t.index ["type_id"], name: "ix_invContrabandTypes_typeID"
   end
@@ -246,7 +251,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.string "description", limit: 4000
     t.integer "icon_id"
     t.bigint "ceo_id"
-    t.bigint "integer_id"
     t.decimal "tax_rate", precision: 4, scale: 3
     t.decimal "decimal", precision: 4, scale: 3
     t.string "ticker", limit: 5
@@ -270,7 +274,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.index ["faction_id"], name: "index_corporations_on_faction_id"
     t.index ["friend_id"], name: "index_corporations_on_friend_id"
     t.index ["icon_id"], name: "index_corporations_on_icon_id"
-    t.index ["integer_id"], name: "index_corporations_on_integer_id"
     t.index ["solar_system_id"], name: "index_corporations_on_solar_system_id"
   end
 
@@ -331,7 +334,11 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.integer "stacking", default: 1, null: false
     t.integer "good", default: 1, null: false
     t.index ["category_id"], name: "index_dogma_attributes_on_category_id"
+    t.index ["data_export"], name: "index_dogma_attributes_on_data_export"
+    t.index ["good"], name: "index_dogma_attributes_on_good"
     t.index ["icon_id"], name: "index_dogma_attributes_on_icon_id"
+    t.index ["stacking"], name: "index_dogma_attributes_on_stacking"
+    t.index ["unit_id"], name: "index_dogma_attributes_on_unit_id"
   end
 
   create_table "dogma_effect_defaults", primary_key: ["type_id", "effect_id"], force: :cascade do |t|
@@ -343,7 +350,7 @@ ActiveRecord::Schema.define(version: 20170617012855) do
   end
 
   create_table "dogma_effects", primary_key: "effect_id", id: :integer, default: nil, force: :cascade do |t|
-    t.string "effectName", limit: 400
+    t.string "name", limit: 400
     t.integer "effect_category"
     t.integer "pre_expression"
     t.integer "post_expression"
@@ -357,7 +364,7 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.integer "discharge_attribute_id"
     t.integer "range_attribute_id"
     t.integer "falloff_attribute_id"
-    t.string "displayName", limit: 100
+    t.string "display_name", limit: 100
     t.boolean "range_chance"
     t.boolean "electronic_chance"
     t.boolean "propulsion_chance"
@@ -370,14 +377,21 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.integer "auto_repeat", default: 0, null: false
     t.integer "data_export", default: 1, null: false
     t.integer "warp_safety", default: 0, null: false
+    t.index ["auto_repeat"], name: "index_dogma_effects_on_auto_repeat"
+    t.index ["data_export"], name: "index_dogma_effects_on_data_export"
     t.index ["discharge_attribute_id"], name: "index_dogma_effects_on_discharge_attribute_id"
     t.index ["duration_attribute_id"], name: "index_dogma_effects_on_duration_attribute_id"
     t.index ["falloff_attribute_id"], name: "index_dogma_effects_on_falloff_attribute_id"
+    t.index ["fitting_usage_chance_attribute_id"], name: "fitting_usage_chance_index"
+    t.index ["guid"], name: "index_dogma_effects_on_guid"
     t.index ["icon_id"], name: "index_dogma_effects_on_icon_id"
+    t.index ["npc_activation_chance_attribute_id"], name: "npc_activation_chance_index"
+    t.index ["npc_usage_chance_attribute_id"], name: "npc_usage_change_index"
     t.index ["post_expression"], name: "index_dogma_effects_on_post_expression"
     t.index ["pre_expression"], name: "index_dogma_effects_on_pre_expression"
     t.index ["range_attribute_id"], name: "index_dogma_effects_on_range_attribute_id"
     t.index ["tracking_speed_attribute_id"], name: "index_dogma_effects_on_tracking_speed_attribute_id"
+    t.index ["warp_safety"], name: "index_dogma_effects_on_warp_safety"
   end
 
   create_table "dogma_expressions", primary_key: "expression_id", id: :integer, default: nil, force: :cascade do |t|
@@ -413,6 +427,7 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.index ["militia_corporation_id"], name: "index_factions_on_militia_corporation_id"
     t.index ["race_id"], name: "index_factions_on_race_id"
     t.index ["solar_system_id"], name: "index_factions_on_solar_system_id"
+    t.index ["uniqueness"], name: "index_factions_on_uniqueness"
   end
 
   create_table "graphics", primary_key: "graphic_id", id: :integer, default: nil, force: :cascade do |t|
@@ -433,6 +448,7 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.string "icon_number", limit: 5
     t.string "description", limit: 1000
     t.integer "data_export", default: 1, null: false
+    t.index ["data_export"], name: "index_industry_activities_on_data_export"
   end
 
   create_table "industry_facilities", primary_key: ["facility_id", "assembly_line_id"], force: :cascade do |t|
@@ -444,9 +460,20 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.integer "solar_system_id"
     t.integer "region_id"
     t.float "tax"
+    t.index ["assembly_line_id"], name: "index_industry_facilities_on_assembly_line_id"
+    t.index ["facility_id"], name: "index_industry_facilities_on_facility_id"
     t.index ["owner_id"], name: "ix_ramAssemblyLineStations_ownerID"
     t.index ["region_id"], name: "ix_ramAssemblyLineStations_regionID"
     t.index ["solar_system_id"], name: "ix_ramAssemblyLineStations_solarSystemID"
+    t.index ["station_type_id"], name: "index_industry_facilities_on_station_type_id"
+  end
+
+  create_table "industry_installations", primary_key: ["installation_type_id", "assembly_line_id"], force: :cascade do |t|
+    t.integer "installation_type_id", null: false
+    t.integer "assembly_line_id", null: false
+    t.integer "quantity"
+    t.index ["assembly_line_id"], name: "index_industry_installations_on_assembly_line_id"
+    t.index ["installation_type_id"], name: "index_industry_installations_on_installation_type_id"
   end
 
   create_table "industry_probabilities", id: false, force: :cascade do |t|
@@ -455,7 +482,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.integer "product_type_id"
     t.decimal "probability", precision: 3, scale: 2
     t.index ["activity_type"], name: "index_industry_probabilities_on_activity_type"
-    t.index ["blueprint_id", "product_type_id"], name: "blueprint_product_type_id_index"
     t.index ["blueprint_id"], name: "ix_industryActivityProbabilities_typeID"
     t.index ["product_type_id"], name: "ix_industryActivityProbabilities_productTypeID"
   end
@@ -465,7 +491,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.boolean "input", null: false
     t.integer "reagent_id", null: false
     t.integer "quantity"
-    t.index ["reaction_type_id", "reagent_id"], name: "reaction_reagent_type_id_index"
     t.index ["reaction_type_id"], name: "index_industry_reactions_on_reaction_type_id"
     t.index ["reagent_id"], name: "index_industry_reactions_on_reagent_id"
   end
@@ -501,6 +526,7 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.string "name", limit: 100
     t.integer "icon_id"
     t.integer "data_export", default: 1, null: false
+    t.index ["data_export"], name: "index_item_categories_on_data_export"
     t.index ["icon_id"], name: "index_item_categories_on_icon_id"
   end
 
@@ -514,6 +540,7 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.boolean "fit_multiple"
     t.integer "data_export", default: 1, null: false
     t.index ["category_id"], name: "ix_invGroups_categoryID"
+    t.index ["data_export"], name: "index_item_groups_on_data_export"
     t.index ["icon_id"], name: "index_item_groups_on_icon_id"
   end
 
@@ -545,8 +572,12 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.integer "graphic_id"
     t.string "type"
     t.integer "data_export", default: 1, null: false
+    t.index ["data_export"], name: "index_items_on_data_export"
+    t.index ["graphic_id"], name: "index_items_on_graphic_id"
     t.index ["group_id"], name: "ix_invTypes_groupID"
     t.index ["icon_id"], name: "index_items_on_icon_id"
+    t.index ["market_group_id"], name: "index_items_on_market_group_id"
+    t.index ["race_id"], name: "index_items_on_race_id"
   end
 
   create_table "landmarks", primary_key: "landmark_id", id: :integer, default: nil, force: :cascade do |t|
@@ -557,6 +588,8 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.float "y"
     t.float "z"
     t.integer "icon_id"
+    t.index ["icon_id"], name: "index_landmarks_on_icon_id"
+    t.index ["solar_system_id"], name: "index_landmarks_on_solar_system_id"
   end
 
   create_table "market_groups", primary_key: "market_group_id", id: :integer, default: nil, force: :cascade do |t|
@@ -579,16 +612,15 @@ ActiveRecord::Schema.define(version: 20170617012855) do
   create_table "meta_variations", primary_key: "meta_type_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "base_type_id"
     t.integer "meta_group_id"
-    t.index ["base_type_id", "meta_type_id"], name: "meta_base_type_id_index"
     t.index ["base_type_id"], name: "index_meta_variations_on_base_type_id"
     t.index ["meta_group_id"], name: "index_meta_variations_on_meta_group_id"
-    t.index ["meta_type_id", "meta_group_id"], name: "meta_group_type_id_index"
   end
 
   create_table "npc_corp_divisions", primary_key: ["corporation_id", "division"], force: :cascade do |t|
     t.integer "corporation_id", null: false
     t.integer "division", null: false
     t.integer "size"
+    t.index ["corporation_id"], name: "index_npc_corp_divisions_on_corporation_id"
   end
 
   create_table "npc_corp_item_offers", primary_key: ["corporation_id", "type_id"], force: :cascade do |t|
@@ -608,6 +640,8 @@ ActiveRecord::Schema.define(version: 20170617012855) do
   create_table "pin_schematics", primary_key: ["schematic_id", "pin_type_id"], force: :cascade do |t|
     t.integer "schematic_id", null: false
     t.integer "pin_type_id", null: false
+    t.index ["pin_type_id"], name: "index_pin_schematics_on_pin_type_id"
+    t.index ["schematic_id"], name: "index_pin_schematics_on_schematic_id"
   end
 
   create_table "races", primary_key: "race_id", id: :integer, default: nil, force: :cascade do |t|
@@ -616,12 +650,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.integer "icon_id"
     t.string "short_description", limit: 500
     t.index ["icon_id"], name: "index_races_on_icon_id"
-  end
-
-  create_table "ramInstallationTypeContents", primary_key: ["installationTypeID", "assemblyLineTypeID"], force: :cascade do |t|
-    t.integer "installationTypeID", null: false
-    t.integer "assemblyLineTypeID", null: false
-    t.integer "quantity"
   end
 
   create_table "region_connections", primary_key: ["from_region_id", "to_region_id"], force: :cascade do |t|
@@ -635,7 +663,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
   create_table "region_scenes", primary_key: "region_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "graphic_id"
     t.index ["graphic_id"], name: "index_region_scenes_on_graphic_id"
-    t.index ["region_id", "graphic_id"], name: "index_region_scenes_on_region_id_and_graphic_id"
   end
 
   create_table "regions", primary_key: "region_id", id: :integer, default: nil, force: :cascade do |t|
@@ -666,6 +693,8 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.integer "material_id", null: false
     t.integer "quantity"
     t.boolean "input"
+    t.index ["material_id"], name: "index_schematic_materials_on_material_id"
+    t.index ["schematic_id"], name: "index_schematic_materials_on_schematic_id"
   end
 
   create_table "schematics", primary_key: "schematic_id", id: :integer, default: nil, force: :cascade do |t|
@@ -735,11 +764,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.index ["region_id"], name: "ix_mapSolarSystems_regionID"
     t.index ["security_status"], name: "ix_mapSolarSystems_security"
     t.index ["sun_type_id"], name: "index_solar_systems_on_sun_type_id"
-    t.index ["system_id", "alliance_id"], name: "index_solar_systems_on_system_id_and_alliance_id"
-    t.index ["system_id", "constellation_id"], name: "index_solar_systems_on_system_id_and_constellation_id"
-    t.index ["system_id", "corporation_id"], name: "index_solar_systems_on_system_id_and_corporation_id"
-    t.index ["system_id", "faction_id"], name: "index_solar_systems_on_system_id_and_faction_id"
-    t.index ["system_id", "region_id"], name: "index_solar_systems_on_system_id_and_region_id"
   end
 
   create_table "staOperationServices", primary_key: ["operationID", "serviceID"], force: :cascade do |t|
@@ -819,8 +843,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.index ["destination_stargate_id"], name: "index_stargates_on_destination_stargate_id"
     t.index ["destination_system_id"], name: "index_stargates_on_destination_system_id"
     t.index ["solar_system_id"], name: "index_stargates_on_solar_system_id"
-    t.index ["stargate_id", "destination_stargate_id"], name: "index_stargates_on_stargate_id_and_destination_stargate_id"
-    t.index ["stargate_id", "destination_system_id"], name: "index_stargates_on_stargate_id_and_destination_system_id"
     t.index ["stargate_type_id"], name: "index_stargates_on_stargate_type_id"
   end
 
@@ -886,7 +908,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.string "location_type"
     t.string "owner_type", default: "UniverseEntity"
     t.index ["flag_id"], name: "index_universe_items_on_flag_id"
-    t.index ["item_id", "type_id"], name: "index_universe_items_on_item_id_and_type_id"
     t.index ["location_id"], name: "ix_invItems_locationID"
     t.index ["location_type", "location_id"], name: "index_universe_items_on_location_type_and_location_id"
     t.index ["owner_id", "location_id"], name: "items_IX_OwnerLocation"
@@ -908,7 +929,6 @@ ActiveRecord::Schema.define(version: 20170617012855) do
     t.string "name", limit: 200, null: false
     t.integer "group_id"
     t.index ["group_id", "name"], name: "invUniqueNames_IX_GroupName"
-    t.index ["item_id", "name"], name: "index_universe_unique_names_on_item_id_and_name"
     t.index ["name"], name: "ix_invUniqueNames_itemName", unique: true
   end
 
@@ -940,6 +960,7 @@ ActiveRecord::Schema.define(version: 20170617012855) do
   create_table "wormhole_system_classes", primary_key: "location_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "class_id"
     t.string "location_type"
+    t.index ["class_id"], name: "index_wormhole_system_classes_on_class_id"
     t.index ["location_type", "location_id"], name: "wormhole_system_class_location_type_and_id"
   end
 
@@ -1012,6 +1033,8 @@ ActiveRecord::Schema.define(version: 20170617012855) do
   add_foreign_key "industry_facilities", "items", column: "station_type_id", primary_key: "type_id"
   add_foreign_key "industry_facilities", "regions", primary_key: "region_id"
   add_foreign_key "industry_facilities", "solar_systems", primary_key: "system_id"
+  add_foreign_key "industry_installations", "assembly_lines", primary_key: "assembly_line_id"
+  add_foreign_key "industry_installations", "items", column: "installation_type_id", primary_key: "type_id"
   add_foreign_key "industry_probabilities", "industry_activities", column: "activity_type", primary_key: "activity_id"
   add_foreign_key "industry_reactions", "items", column: "reaction_type_id", primary_key: "type_id"
   add_foreign_key "industry_reactions", "items", column: "reagent_id", primary_key: "type_id"

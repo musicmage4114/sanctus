@@ -17,7 +17,7 @@ class ChangeCrpNpcCorporations < ActiveRecord::Migration[5.1]
       t.rename :stationCount, :station_count
       t.rename :stationSystemCount, :station_system_count
       t.rename :iconID, :icon_id
-      t.belongs_to :ceo, :integer, index: true
+      t.belongs_to :ceo, index: true
       t.decimal :tax_rate, :decimal, precision: 4, scale: 3
       t.string :ticker, limit: 5
       t.string :name
