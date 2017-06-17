@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170617225716) do
+ActiveRecord::Schema.define(version: 20170617234547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -702,11 +702,6 @@ ActiveRecord::Schema.define(version: 20170617225716) do
     t.integer "cycle_time"
   end
 
-  create_table "skinLicense", primary_key: "licenseTypeID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "duration"
-    t.integer "skinID"
-  end
-
   create_table "skinMaterials", primary_key: "skinMaterialID", id: :integer, default: nil, force: :cascade do |t|
     t.integer "displayNameID"
     t.integer "materialSetID"
@@ -717,6 +712,12 @@ ActiveRecord::Schema.define(version: 20170617225716) do
     t.integer "typeID"
     t.index ["skinID"], name: "ix_skinShip_skinID"
     t.index ["typeID"], name: "ix_skinShip_typeID"
+  end
+
+  create_table "skin_licenses", primary_key: "license_type_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "duration"
+    t.integer "skin_id"
+    t.index ["skin_id"], name: "index_skin_licenses_on_skin_id"
   end
 
   create_table "skins", primary_key: "skinID", id: :integer, default: nil, force: :cascade do |t|
@@ -1074,6 +1075,7 @@ ActiveRecord::Schema.define(version: 20170617225716) do
   add_foreign_key "research_agent_skills", "items", column: "skill_type_id", primary_key: "type_id"
   add_foreign_key "schematic_materials", "items", column: "material_id", primary_key: "type_id"
   add_foreign_key "schematic_materials", "schematics", primary_key: "schematic_id"
+  add_foreign_key "skin_licenses", "items", column: "license_type_id", primary_key: "type_id"
   add_foreign_key "solar_systems", "constellations", primary_key: "constellation_id"
   add_foreign_key "solar_systems", "factions", primary_key: "faction_id"
   add_foreign_key "solar_systems", "items", column: "sun_type_id", primary_key: "type_id"
