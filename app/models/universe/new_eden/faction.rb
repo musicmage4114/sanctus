@@ -29,16 +29,16 @@ class Faction < ApplicationRecord
                            primary_key: :corporation_id,
                            inverse_of:  :factions
   
-  has_many :corporations,  inverse_of:  :faction
-  has_many :losses,        class_name:  'Killmail',
-                           foreign_key: :victim_faction_id,
-                           inverse_of:  :faction
-  has_many :attacks,       class_name:  'KillmailAttacker',
-                           foreign_key: :attacker_faction_id,
-                           inverse_of:  :faction
-  has_many :kills,         through:     :attacks,
-                           source:      :killmail
-  has_many :solar_systems, inverse_of:  :faction
+  has_many :corporations,    inverse_of:  :faction
+  has_many :losses,          class_name:  'Killmail',
+                             foreign_key: :victim_faction_id,
+                             inverse_of:  :faction
+  has_many :attacks,         class_name:  'KillmailAttacker',
+                             foreign_key: :attacker_faction_id,
+                             inverse_of:  :faction
+  has_many :kills,           through:     :attacks, source: :killmail
+  has_many :solar_systems,   inverse_of:  :faction
+  has_many :tower_resources, inverse_of:  :faction
   
   # TODO: scope :killmails - returns all killmails involving members
 end

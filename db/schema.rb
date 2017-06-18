@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170618025325) do
+ActiveRecord::Schema.define(version: 20170618030541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -528,19 +528,6 @@ ActiveRecord::Schema.define(version: 20170618025325) do
     t.index ["blueprint_id"], name: "index_industry_times_on_blueprint_id"
   end
 
-  create_table "invControlTowerResourcePurposes", primary_key: "purpose", id: :integer, default: nil, force: :cascade do |t|
-    t.string "purposeText", limit: 100
-  end
-
-  create_table "invControlTowerResources", primary_key: ["controlTowerTypeID", "resourceTypeID"], force: :cascade do |t|
-    t.integer "controlTowerTypeID", null: false
-    t.integer "resourceTypeID", null: false
-    t.integer "purpose"
-    t.integer "quantity"
-    t.float "minSecurityLevel"
-    t.integer "factionID"
-  end
-
   create_table "inventory_flags", primary_key: "flag_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "name", limit: 200
     t.string "description", limit: 100
@@ -870,6 +857,18 @@ ActiveRecord::Schema.define(version: 20170618025325) do
     t.index ["to_system_id"], name: "index_system_connections_on_to_system_id"
   end
 
+  create_table "tower_resources", primary_key: ["tower_type_id", "resource_type_id"], force: :cascade do |t|
+    t.integer "tower_type_id", null: false
+    t.integer "resource_type_id", null: false
+    t.integer "purpose"
+    t.integer "quantity"
+    t.float "min_security_level"
+    t.integer "faction_id"
+    t.index ["faction_id"], name: "index_tower_resources_on_faction_id"
+    t.index ["resource_type_id"], name: "index_tower_resources_on_resource_type_id"
+    t.index ["tower_type_id"], name: "index_tower_resources_on_tower_type_id"
+  end
+
   create_table "training_attributes", primary_key: "attribute_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "name", limit: 100
     t.string "description", limit: 1000
@@ -1084,6 +1083,9 @@ ActiveRecord::Schema.define(version: 20170618025325) do
   add_foreign_key "structure_operations", "items", column: "minmatar_station_type_id", primary_key: "type_id"
   add_foreign_key "system_connections", "solar_systems", column: "from_system_id", primary_key: "system_id"
   add_foreign_key "system_connections", "solar_systems", column: "to_system_id", primary_key: "system_id"
+  add_foreign_key "tower_resources", "factions", primary_key: "faction_id"
+  add_foreign_key "tower_resources", "items", column: "resource_type_id", primary_key: "type_id"
+  add_foreign_key "tower_resources", "items", column: "tower_type_id", primary_key: "type_id"
   add_foreign_key "training_attributes", "icons", primary_key: "icon_id"
   add_foreign_key "universe_entities", "universe_items", column: "item_id", primary_key: "item_id"
   add_foreign_key "universe_items", "inventory_flags", column: "flag_id", primary_key: "flag_id"
