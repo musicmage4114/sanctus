@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170618022441) do
+ActiveRecord::Schema.define(version: 20170618024454) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -320,6 +320,7 @@ ActiveRecord::Schema.define(version: 20170618022441) do
     t.float "reprocessing_efficiency"
     t.float "reprocessing_take"
     t.integer "reprocessing_hangar_flag"
+    t.string "type"
     t.index ["constellation_id"], name: "ix_staStations_constellationID"
     t.index ["operation_id"], name: "ix_staStations_operationID"
     t.index ["owner_id"], name: "ix_staStations_corporationID"
@@ -612,6 +613,11 @@ ActiveRecord::Schema.define(version: 20170618022441) do
     t.index ["solar_system_id"], name: "index_landmarks_on_solar_system_id"
   end
 
+  create_table "languages", primary_key: "numeric_language_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "string_language_id", limit: 50
+    t.string "name", limit: 200
+  end
+
   create_table "market_groups", primary_key: "market_group_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "parent_group_id"
     t.string "name", limit: 100
@@ -867,33 +873,6 @@ ActiveRecord::Schema.define(version: 20170618022441) do
     t.string "short_description", limit: 500
     t.string "notes", limit: 500
     t.index ["icon_id"], name: "index_training_attributes_on_icon_id"
-  end
-
-  create_table "translationTables", primary_key: ["sourceTable", "translatedKey"], force: :cascade do |t|
-    t.string "sourceTable", limit: 200, null: false
-    t.string "destinationTable", limit: 200
-    t.string "translatedKey", limit: 200, null: false
-    t.integer "tcGroupID"
-    t.integer "tcID"
-  end
-
-  create_table "trnTranslationColumns", primary_key: "tcID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "tcGroupID"
-    t.string "tableName", limit: 256, null: false
-    t.string "columnName", limit: 128, null: false
-    t.string "masterID", limit: 128
-  end
-
-  create_table "trnTranslationLanguages", primary_key: "numericLanguageID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "languageID", limit: 50
-    t.string "languageName", limit: 200
-  end
-
-  create_table "trnTranslations", primary_key: ["tcID", "keyID", "languageID"], force: :cascade do |t|
-    t.integer "tcID", null: false
-    t.integer "keyID", null: false
-    t.string "languageID", limit: 50, null: false
-    t.text "text", null: false
   end
 
   create_table "units", primary_key: "unit_id", id: :integer, default: nil, force: :cascade do |t|
