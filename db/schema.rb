@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170618021411) do
+ActiveRecord::Schema.define(version: 20170618022441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -660,6 +660,8 @@ ActiveRecord::Schema.define(version: 20170618021411) do
   create_table "operation_services", primary_key: ["operation_id", "service_id"], force: :cascade do |t|
     t.integer "operation_id", null: false
     t.integer "service_id", null: false
+    t.index ["operation_id"], name: "index_operation_services_on_operation_id"
+    t.index ["service_id"], name: "index_operation_services_on_service_id"
   end
 
   create_table "pin_schematics", primary_key: ["schematic_id", "pin_type_id"], force: :cascade do |t|
@@ -795,19 +797,6 @@ ActiveRecord::Schema.define(version: 20170618021411) do
     t.index ["sun_type_id"], name: "index_solar_systems_on_sun_type_id"
   end
 
-  create_table "staStationTypes", primary_key: "stationTypeID", id: :integer, default: nil, force: :cascade do |t|
-    t.float "dockEntryX"
-    t.float "dockEntryY"
-    t.float "dockEntryZ"
-    t.float "dockOrientationX"
-    t.float "dockOrientationY"
-    t.float "dockOrientationZ"
-    t.integer "operationID"
-    t.integer "officeSlots"
-    t.float "reprocessingEfficiency"
-    t.boolean "conquerable"
-  end
-
   create_table "stargates", primary_key: "stargate_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "destination_stargate_id"
     t.bigint "destination_system_id"
@@ -821,6 +810,20 @@ ActiveRecord::Schema.define(version: 20170618021411) do
     t.index ["destination_system_id"], name: "index_stargates_on_destination_system_id"
     t.index ["solar_system_id"], name: "index_stargates_on_solar_system_id"
     t.index ["stargate_type_id"], name: "index_stargates_on_stargate_type_id"
+  end
+
+  create_table "station_details", primary_key: "station_type_id", id: :integer, default: nil, force: :cascade do |t|
+    t.float "dock_entry_x"
+    t.float "dock_entry_y"
+    t.float "dock_entry_z"
+    t.float "dock_orientation_x"
+    t.float "dock_orientation_y"
+    t.float "dock_orientation_z"
+    t.integer "operation_id"
+    t.integer "office_slots"
+    t.float "reprocessing_efficiency"
+    t.boolean "conquerable"
+    t.index ["operation_id"], name: "index_station_details_on_operation_id"
   end
 
   create_table "structure_operations", primary_key: "operation_id", id: :integer, default: nil, force: :cascade do |t|
@@ -1099,6 +1102,8 @@ ActiveRecord::Schema.define(version: 20170618021411) do
   add_foreign_key "stargates", "solar_systems", column: "destination_system_id", primary_key: "system_id"
   add_foreign_key "stargates", "solar_systems", primary_key: "system_id"
   add_foreign_key "stargates", "stargates", column: "destination_stargate_id", primary_key: "stargate_id"
+  add_foreign_key "station_details", "items", column: "station_type_id", primary_key: "type_id"
+  add_foreign_key "station_details", "structure_operations", column: "operation_id", primary_key: "operation_id"
   add_foreign_key "structure_operations", "items", column: "amarr_station_type_id", primary_key: "type_id"
   add_foreign_key "structure_operations", "items", column: "caldari_station_type_id", primary_key: "type_id"
   add_foreign_key "structure_operations", "items", column: "gallente_station_type_id", primary_key: "type_id"
