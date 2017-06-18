@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170618024454) do
+ActiveRecord::Schema.define(version: 20170618025325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -428,6 +428,10 @@ ActiveRecord::Schema.define(version: 20170618024454) do
     t.index ["attribute_id"], name: "index_dogma_expressions_on_attribute_id"
     t.index ["item_group_id"], name: "index_dogma_expressions_on_item_group_id"
     t.index ["type_id"], name: "index_dogma_expressions_on_type_id"
+  end
+
+  create_table "faction_warfare_systems", primary_key: "system_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "combat_zone"
   end
 
   create_table "factions", primary_key: "faction_id", id: :integer, default: nil, force: :cascade do |t|
@@ -932,17 +936,6 @@ ActiveRecord::Schema.define(version: 20170618024454) do
     t.float "radius"
   end
 
-  create_table "warCombatZoneSystems", primary_key: "solarSystemID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "combatZoneID"
-  end
-
-  create_table "warCombatZones", primary_key: "combatZoneID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "combatZoneName", limit: 100
-    t.integer "factionID"
-    t.integer "centerSystemID"
-    t.string "description", limit: 500
-  end
-
   create_table "wormhole_system_classes", primary_key: "location_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "class_id"
     t.string "location_type"
@@ -1016,6 +1009,7 @@ ActiveRecord::Schema.define(version: 20170618024454) do
   add_foreign_key "dogma_effects", "dogma_expressions", column: "pre_expression", primary_key: "expression_id"
   add_foreign_key "dogma_effects", "icons", primary_key: "icon_id"
   add_foreign_key "dogma_expressions", "item_groups", primary_key: "group_id"
+  add_foreign_key "faction_warfare_systems", "solar_systems", column: "system_id", primary_key: "system_id"
   add_foreign_key "factions", "corporations", column: "militia_corporation_id", primary_key: "corporation_id"
   add_foreign_key "factions", "icons", primary_key: "icon_id"
   add_foreign_key "factions", "races", primary_key: "race_id"
