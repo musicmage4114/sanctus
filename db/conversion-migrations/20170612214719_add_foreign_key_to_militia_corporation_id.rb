@@ -10,8 +10,8 @@ class AddForeignKeyToMilitiaCorporationId < ActiveRecord::Migration[5.1]
   end
   
   def down
-    remove_foreign_key :factions, :corporations, column: :militia_corporation_id,
-                                                 primary_key: :corporation_id
+    remove_foreign_key :factions, :corporations
+    
     Faction.reset_column_information
     Faction.find(500024).update(militia_corporation_id: 0)
   end

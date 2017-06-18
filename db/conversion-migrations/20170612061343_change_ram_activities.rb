@@ -1,4 +1,7 @@
 class ChangeRamActivities < ActiveRecord::Migration[5.1]
+  class IndustryActivity < ActiveRecord::Base
+  end
+  
   def change
     rename_table :ramActivities, :industry_activities
     change_table :industry_activities do |t|

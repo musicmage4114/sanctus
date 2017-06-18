@@ -6,7 +6,6 @@ class AddAndRemoveIndicesOnTables < ActiveRecord::Migration[5.1]
     add_index :assembly_groups, :group_id
     add_index :assembly_lines, :activity_type
     add_index :agents, :division
-    add_index :agents, :location_id
     add_index :agents, :agent_type
     add_index :ancestries, :bloodline_id
     add_index :certificate_skills, :level_name

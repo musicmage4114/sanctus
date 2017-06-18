@@ -22,7 +22,7 @@ class ChangeCrpNpcCorporations < ActiveRecord::Migration[5.1]
       t.string :ticker, limit: 5
       t.string :name
       t.belongs_to :creator, index: true
-      t.belongs_to :alliance_id, index: true
+      t.belongs_to :alliance, index: true
       t.datetime :creation_date
       t.integer :member_count
       t.string :url
@@ -63,12 +63,10 @@ class ChangeCrpNpcCorporations < ActiveRecord::Migration[5.1]
     Corporation.reset_column_information
     Corporation.update_all(corporation_type: 1)
     Corporation.where(faction_id: 500021).update_all(faction_id: nil)
-    add_foreign_key :corporations, :factions, primary_key: :faction_id
   end
   
   def rollback
     Corporation.reset_column_information
     Corporation.find(1000193).update(faction_id: 500021)
-    remove_foreign_key :crpNPCCorporations, :factions, primary_key: :faction_id
   end
 end

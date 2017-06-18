@@ -23,11 +23,13 @@ class ChangeInvTraits < ActiveRecord::Migration[5.1]
   def data
     BonusTrait.reset_column_information
     BonusTrait.where(skill_id: -1).update_all(skill_id: nil)
+    
     add_foreign_key :bonus_traits, :items, column: :skill_id, primary_key: :type_id
   end
   
   def rollback
-    remove_foreign_key :bonus_traits, :items, column: :skill_id, primary_key: :type_id
+    remove_foreign_key :bonus_traits, :items
+    
     BonusTrait.reset_column_information
     BonusTrait.where(skill_id: nil).update_all(skill_id: -1)
   end

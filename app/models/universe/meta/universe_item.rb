@@ -13,7 +13,7 @@ class UniverseItem < ApplicationRecord
   has_one :unique_name,       class_name:  'UniverseUniqueName',
                               foreign_key: :item_id,
                               inverse_of:  :universe_item
-  has_one :celestial_details, class_name:  'Celestial',
+  has_one :celestial_details, class_name:  'CelestialDetail',
                               foreign_key: :celestial_id,
                               inverse_of:  :universe_item
   

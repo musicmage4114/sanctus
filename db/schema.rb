@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170618030541) do
+ActiveRecord::Schema.define(version: 20170618054317) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,7 +26,6 @@ ActiveRecord::Schema.define(version: 20170618030541) do
     t.index ["agent_type"], name: "index_agents_on_agent_type"
     t.index ["corporation_id"], name: "ix_agtAgents_corporationID"
     t.index ["division"], name: "index_agents_on_division"
-    t.index ["location_id"], name: "index_agents_on_location_id"
     t.index ["location_type", "location_id"], name: "index_agents_on_location_type_and_location_id"
   end
 
@@ -448,7 +447,6 @@ ActiveRecord::Schema.define(version: 20170618030541) do
     t.integer "uniqueness", default: 1, null: false
     t.integer "member_race"
     t.index ["icon_id"], name: "index_factions_on_icon_id"
-    t.index ["member_race"], name: "index_factions_on_member_race"
     t.index ["militia_corporation_id"], name: "index_factions_on_militia_corporation_id"
     t.index ["race_id"], name: "index_factions_on_race_id"
     t.index ["solar_system_id"], name: "index_factions_on_solar_system_id"
@@ -638,6 +636,7 @@ ActiveRecord::Schema.define(version: 20170618030541) do
     t.integer "division", null: false
     t.integer "size"
     t.index ["corporation_id"], name: "index_npc_corp_divisions_on_corporation_id"
+    t.index ["division"], name: "index_npc_corp_divisions_on_division"
   end
 
   create_table "npc_corp_item_offers", primary_key: ["corporation_id", "type_id"], force: :cascade do |t|
@@ -973,7 +972,6 @@ ActiveRecord::Schema.define(version: 20170618030541) do
   add_foreign_key "contraband", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "corporations", "corporations", column: "enemy_id", primary_key: "corporation_id"
   add_foreign_key "corporations", "corporations", column: "friend_id", primary_key: "corporation_id"
-  add_foreign_key "corporations", "factions", primary_key: "faction_id"
   add_foreign_key "corporations", "icons", primary_key: "icon_id"
   add_foreign_key "corporations", "solar_systems", primary_key: "system_id"
   add_foreign_key "denormalized_map", "constellations", primary_key: "constellation_id"

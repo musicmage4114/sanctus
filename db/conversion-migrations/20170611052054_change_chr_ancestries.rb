@@ -1,6 +1,6 @@
 class ChangeChrAncestries < ActiveRecord::Migration[5.1]
   def change
-    rename_table "chrAncestries", :ancestries
+    rename_table :chrAncestries, :ancestries
     change_table :ancestries do |t|
       t.rename :ancestryID, :ancestry_id
       t.rename :ancestryName, :name
