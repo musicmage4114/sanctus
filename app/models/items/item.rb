@@ -58,6 +58,8 @@ class Item < ApplicationRecord
   has_many :stargates,              foreign_key: :stargate_type_id,
                                     inverse_of:  :item
   has_many :suns,                   foreign_key: :sun_type_id, inverse_of: :item
+  has_many :skin_licenses,          foreign_key: :license_type_id,
+                                    inverse_of:  :type_id
   
   # join table/model - meta_variations
   has_many :higher_meta_variants,   class_name:  'MetaVariation',

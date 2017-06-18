@@ -5,6 +5,6 @@ class SkinLicense < ApplicationRecord
                             foreign_key: :license_type_id,
                             primary_key: :type_id,
                             inverse_of:  :skin_licenses
-  belongs_to :skin,         primary_key: :skin_id
+  belongs_to :skin,         primary_key: :skin_id,
                             inverse_of:  :skin_licenses
 end

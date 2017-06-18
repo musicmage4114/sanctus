@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170617235228) do
+ActiveRecord::Schema.define(version: 20170618000221) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -702,13 +702,6 @@ ActiveRecord::Schema.define(version: 20170617235228) do
     t.integer "cycle_time"
   end
 
-  create_table "skinShip", id: false, force: :cascade do |t|
-    t.integer "skinID"
-    t.integer "typeID"
-    t.index ["skinID"], name: "ix_skinShip_skinID"
-    t.index ["typeID"], name: "ix_skinShip_typeID"
-  end
-
   create_table "skin_licenses", primary_key: "license_type_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "duration"
     t.integer "skin_id"
@@ -718,11 +711,21 @@ ActiveRecord::Schema.define(version: 20170617235228) do
   create_table "skin_materials", primary_key: "skin_material_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "display_name_id"
     t.integer "material_set_id"
+    t.index ["display_name_id"], name: "index_skin_materials_on_display_name_id"
+    t.index ["material_set_id"], name: "index_skin_materials_on_material_set_id"
   end
 
-  create_table "skins", primary_key: "skinID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "internalName", limit: 70
-    t.integer "skinMaterialID"
+  create_table "skin_ships", id: false, force: :cascade do |t|
+    t.integer "skin_id"
+    t.integer "type_id"
+    t.index ["skin_id"], name: "ix_skinShip_skinID"
+    t.index ["type_id"], name: "ix_skinShip_typeID"
+  end
+
+  create_table "skins", primary_key: "skin_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "internal_name", limit: 70
+    t.integer "skin_material_id"
+    t.index ["skin_material_id"], name: "index_skins_on_skin_material_id"
   end
 
   create_table "solar_systems", primary_key: "system_id", id: :integer, default: nil, force: :cascade do |t|
@@ -1076,6 +1079,10 @@ ActiveRecord::Schema.define(version: 20170617235228) do
   add_foreign_key "schematic_materials", "items", column: "material_id", primary_key: "type_id"
   add_foreign_key "schematic_materials", "schematics", primary_key: "schematic_id"
   add_foreign_key "skin_licenses", "items", column: "license_type_id", primary_key: "type_id"
+  add_foreign_key "skin_licenses", "skins", primary_key: "skin_id"
+  add_foreign_key "skin_ships", "items", column: "type_id", primary_key: "type_id"
+  add_foreign_key "skin_ships", "skins", primary_key: "skin_id"
+  add_foreign_key "skins", "skin_materials", primary_key: "skin_material_id"
   add_foreign_key "solar_systems", "constellations", primary_key: "constellation_id"
   add_foreign_key "solar_systems", "factions", primary_key: "faction_id"
   add_foreign_key "solar_systems", "items", column: "sun_type_id", primary_key: "type_id"
