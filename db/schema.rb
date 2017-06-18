@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170618000221) do
+ActiveRecord::Schema.define(version: 20170618001937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -306,6 +306,31 @@ ActiveRecord::Schema.define(version: 20170618000221) do
     t.index ["region_id"], name: "ix_mapDenormalize_regionID"
     t.index ["solar_system_id"], name: "ix_mapDenormalize_solarSystemID"
     t.index ["type_id"], name: "ix_mapDenormalize_typeID"
+  end
+
+  create_table "dockable_structures", primary_key: "dockable_id", id: :bigint, default: nil, force: :cascade do |t|
+    t.integer "security"
+    t.float "max_ship_volume"
+    t.integer "office_rental_cost"
+    t.integer "operation_id"
+    t.integer "station_type_id"
+    t.integer "owner_id"
+    t.integer "solar_system_id"
+    t.integer "constellation_id"
+    t.integer "region_id"
+    t.string "name", limit: 100
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.float "reprocessing_efficiency"
+    t.float "reprocessing_take"
+    t.integer "reprocessing_hangar_flag"
+    t.index ["constellation_id"], name: "ix_staStations_constellationID"
+    t.index ["operation_id"], name: "ix_staStations_operationID"
+    t.index ["owner_id"], name: "ix_staStations_corporationID"
+    t.index ["region_id"], name: "ix_staStations_regionID"
+    t.index ["solar_system_id"], name: "ix_staStations_solarSystemID"
+    t.index ["station_type_id"], name: "ix_staStations_stationTypeID"
   end
 
   create_table "dogma_attribute_categories", primary_key: "category_id", id: :integer, default: nil, force: :cascade do |t|
@@ -809,32 +834,6 @@ ActiveRecord::Schema.define(version: 20170618000221) do
     t.boolean "conquerable"
   end
 
-  create_table "staStations", primary_key: "stationID", id: :bigint, default: nil, force: :cascade do |t|
-    t.integer "security"
-    t.float "dockingCostPerVolume"
-    t.float "maxShipVolumeDockable"
-    t.integer "officeRentalCost"
-    t.integer "operationID"
-    t.integer "stationTypeID"
-    t.integer "corporationID"
-    t.integer "solarSystemID"
-    t.integer "constellationID"
-    t.integer "regionID"
-    t.string "stationName", limit: 100
-    t.float "x"
-    t.float "y"
-    t.float "z"
-    t.float "reprocessingEfficiency"
-    t.float "reprocessingStationsTake"
-    t.integer "reprocessingHangarFlag"
-    t.index ["constellationID"], name: "ix_staStations_constellationID"
-    t.index ["corporationID"], name: "ix_staStations_corporationID"
-    t.index ["operationID"], name: "ix_staStations_operationID"
-    t.index ["regionID"], name: "ix_staStations_regionID"
-    t.index ["solarSystemID"], name: "ix_staStations_solarSystemID"
-    t.index ["stationTypeID"], name: "ix_staStations_stationTypeID"
-  end
-
   create_table "stargates", primary_key: "stargate_id", id: :integer, default: nil, force: :cascade do |t|
     t.integer "destination_stargate_id"
     t.bigint "destination_system_id"
@@ -1009,6 +1008,11 @@ ActiveRecord::Schema.define(version: 20170618000221) do
   add_foreign_key "denormalized_map", "solar_systems", primary_key: "system_id"
   add_foreign_key "denormalized_map", "universe_items", column: "item_id", primary_key: "item_id"
   add_foreign_key "denormalized_map", "universe_items", column: "orbit_id", primary_key: "item_id"
+  add_foreign_key "dockable_structures", "constellations", primary_key: "constellation_id"
+  add_foreign_key "dockable_structures", "corporations", column: "owner_id", primary_key: "corporation_id"
+  add_foreign_key "dockable_structures", "items", column: "station_type_id", primary_key: "type_id"
+  add_foreign_key "dockable_structures", "regions", primary_key: "region_id"
+  add_foreign_key "dockable_structures", "solar_systems", primary_key: "system_id"
   add_foreign_key "dogma_attribute_values", "dogma_attributes", column: "attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_attribute_values", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "dogma_attributes", "dogma_attribute_categories", column: "category_id", primary_key: "category_id"
