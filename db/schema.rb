@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170618015842) do
+ActiveRecord::Schema.define(version: 20170618021411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -657,6 +657,11 @@ ActiveRecord::Schema.define(version: 20170618015842) do
     t.index ["skill_type_id"], name: "index_npc_corp_research_on_skill_type_id"
   end
 
+  create_table "operation_services", primary_key: ["operation_id", "service_id"], force: :cascade do |t|
+    t.integer "operation_id", null: false
+    t.integer "service_id", null: false
+  end
+
   create_table "pin_schematics", primary_key: ["schematic_id", "pin_type_id"], force: :cascade do |t|
     t.integer "schematic_id", null: false
     t.integer "pin_type_id", null: false
@@ -790,16 +795,6 @@ ActiveRecord::Schema.define(version: 20170618015842) do
     t.index ["sun_type_id"], name: "index_solar_systems_on_sun_type_id"
   end
 
-  create_table "staOperationServices", primary_key: ["operationID", "serviceID"], force: :cascade do |t|
-    t.integer "operationID", null: false
-    t.integer "serviceID", null: false
-  end
-
-  create_table "staServices", primary_key: "serviceID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "serviceName", limit: 100
-    t.string "description", limit: 1000
-  end
-
   create_table "staStationTypes", primary_key: "stationTypeID", id: :integer, default: nil, force: :cascade do |t|
     t.float "dockEntryX"
     t.float "dockEntryY"
@@ -848,6 +843,11 @@ ActiveRecord::Schema.define(version: 20170618015842) do
     t.index ["gallente_station_type_id"], name: "gallente_station_index"
     t.index ["jove_station_type_id"], name: "jove_station_index"
     t.index ["minmatar_station_type_id"], name: "minmatar_station_index"
+  end
+
+  create_table "structure_services", primary_key: "service_id", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.string "description", limit: 1000
   end
 
   create_table "system_connections", primary_key: ["from_system_id", "to_system_id"], force: :cascade do |t|
@@ -1072,6 +1072,8 @@ ActiveRecord::Schema.define(version: 20170618015842) do
   add_foreign_key "npc_corp_item_offers", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "npc_corp_research", "corporations", primary_key: "corporation_id"
   add_foreign_key "npc_corp_research", "items", column: "skill_type_id", primary_key: "type_id"
+  add_foreign_key "operation_services", "structure_operations", column: "operation_id", primary_key: "operation_id"
+  add_foreign_key "operation_services", "structure_services", column: "service_id", primary_key: "service_id"
   add_foreign_key "pin_schematics", "items", column: "pin_type_id", primary_key: "type_id"
   add_foreign_key "pin_schematics", "schematics", primary_key: "schematic_id"
   add_foreign_key "races", "icons", primary_key: "icon_id"

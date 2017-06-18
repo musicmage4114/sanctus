@@ -24,6 +24,9 @@ class StructureOperation < ApplicationRecord
   
   has_many :dockable_structures, foreign_key: :operation_id,
                                  inverse_of:  :structure_operation
+  has_many :operation_services,  foreign_key: :operation_id,
+                                 inverse_of:  :structure_operation
+  has_many :services, through: :operation_services, source: :service
   
   belongs_to :caldari_station_type,  class_name:  'Item',
                                      primary_key: :type_id,
