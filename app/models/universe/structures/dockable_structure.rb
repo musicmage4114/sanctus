@@ -15,7 +15,7 @@ class DockableStructure < ApplicationRecord
                              foreign_key: :corporation_id,
                              primary_key: :corporation_id,
                              inverse_of:  :dockable_structures
-  belongs_to :operation,     class_name:  'StationOperation',
+  belongs_to :operation,     class_name:  'StructureOperation',
                              primary_key: :operation_id,
                              inverse_of:  :dockable_structures
   belongs_to :universe_item, foreign_key: :dockable_id,

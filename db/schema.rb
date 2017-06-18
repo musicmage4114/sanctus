@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170618001937) do
+ActiveRecord::Schema.define(version: 20170618005605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -800,22 +800,6 @@ ActiveRecord::Schema.define(version: 20170618001937) do
     t.integer "serviceID", null: false
   end
 
-  create_table "staOperations", primary_key: "operationID", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "activityID"
-    t.string "operationName", limit: 100
-    t.string "description", limit: 1000
-    t.integer "fringe"
-    t.integer "corridor"
-    t.integer "hub"
-    t.integer "border"
-    t.integer "ratio"
-    t.integer "caldariStationTypeID"
-    t.integer "minmatarStationTypeID"
-    t.integer "amarrStationTypeID"
-    t.integer "gallenteStationTypeID"
-    t.integer "joveStationTypeID"
-  end
-
   create_table "staServices", primary_key: "serviceID", id: :integer, default: nil, force: :cascade do |t|
     t.string "serviceName", limit: 100
     t.string "description", limit: 1000
@@ -847,6 +831,28 @@ ActiveRecord::Schema.define(version: 20170618001937) do
     t.index ["destination_system_id"], name: "index_stargates_on_destination_system_id"
     t.index ["solar_system_id"], name: "index_stargates_on_solar_system_id"
     t.index ["stargate_type_id"], name: "index_stargates_on_stargate_type_id"
+  end
+
+  create_table "structure_operations", primary_key: "operation_id", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "activity_type"
+    t.string "name", limit: 100
+    t.string "description", limit: 1000
+    t.integer "fringe"
+    t.integer "corridor"
+    t.integer "hub"
+    t.integer "border"
+    t.integer "ratio"
+    t.integer "caldari_station_type_id"
+    t.integer "minmatar_station_type_id"
+    t.integer "amarr_station_type_id"
+    t.integer "gallente_station_type_id"
+    t.integer "jove_station_type_id"
+    t.index ["activity_type"], name: "index_structure_operations_on_activity_type"
+    t.index ["amarr_station_type_id"], name: "amarr_station_index"
+    t.index ["caldari_station_type_id"], name: "caldari_station_index"
+    t.index ["gallente_station_type_id"], name: "gallente_station_index"
+    t.index ["jove_station_type_id"], name: "jove_station_index"
+    t.index ["minmatar_station_type_id"], name: "minmatar_station_index"
   end
 
   create_table "system_connections", primary_key: ["from_system_id", "to_system_id"], force: :cascade do |t|
@@ -1013,6 +1019,7 @@ ActiveRecord::Schema.define(version: 20170618001937) do
   add_foreign_key "dockable_structures", "items", column: "station_type_id", primary_key: "type_id"
   add_foreign_key "dockable_structures", "regions", primary_key: "region_id"
   add_foreign_key "dockable_structures", "solar_systems", primary_key: "system_id"
+  add_foreign_key "dockable_structures", "structure_operations", column: "operation_id", primary_key: "operation_id"
   add_foreign_key "dogma_attribute_values", "dogma_attributes", column: "attribute_id", primary_key: "attribute_id"
   add_foreign_key "dogma_attribute_values", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "dogma_attributes", "dogma_attribute_categories", column: "category_id", primary_key: "category_id"
@@ -1095,6 +1102,11 @@ ActiveRecord::Schema.define(version: 20170618001937) do
   add_foreign_key "stargates", "solar_systems", column: "destination_system_id", primary_key: "system_id"
   add_foreign_key "stargates", "solar_systems", primary_key: "system_id"
   add_foreign_key "stargates", "stargates", column: "destination_stargate_id", primary_key: "stargate_id"
+  add_foreign_key "structure_operations", "items", column: "amarr_station_type_id", primary_key: "type_id"
+  add_foreign_key "structure_operations", "items", column: "caldari_station_type_id", primary_key: "type_id"
+  add_foreign_key "structure_operations", "items", column: "gallente_station_type_id", primary_key: "type_id"
+  add_foreign_key "structure_operations", "items", column: "jove_station_type_id", primary_key: "type_id"
+  add_foreign_key "structure_operations", "items", column: "minmatar_station_type_id", primary_key: "type_id"
   add_foreign_key "system_connections", "solar_systems", column: "from_system_id", primary_key: "system_id"
   add_foreign_key "system_connections", "solar_systems", column: "to_system_id", primary_key: "system_id"
   add_foreign_key "training_attributes", "icons", primary_key: "icon_id"
