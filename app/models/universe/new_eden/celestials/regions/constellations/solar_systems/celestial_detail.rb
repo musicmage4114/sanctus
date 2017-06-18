@@ -1,4 +1,4 @@
-class Celestial < ApplicationRecord
+class CelestialDetail < ApplicationRecord
   self.primary_key = 'celestial_id'
   
   belongs_to :universe_item, foreign_key: :celestial_id,

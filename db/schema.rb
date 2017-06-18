@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170618005605) do
+ActiveRecord::Schema.define(version: 20170618015842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,7 +150,7 @@ ActiveRecord::Schema.define(version: 20170618005605) do
     t.index ["unit_id"], name: "index_bonus_traits_on_unit_id"
   end
 
-  create_table "celestials", primary_key: "celestial_id", id: :integer, default: nil, force: :cascade do |t|
+  create_table "celestial_details", primary_key: "celestial_id", id: :integer, default: nil, force: :cascade do |t|
     t.float "temperature"
     t.string "spectral_class", limit: 10
     t.float "luminosity"
@@ -275,11 +275,6 @@ ActiveRecord::Schema.define(version: 20170618005605) do
     t.index ["friend_id"], name: "index_corporations_on_friend_id"
     t.index ["icon_id"], name: "index_corporations_on_icon_id"
     t.index ["solar_system_id"], name: "index_corporations_on_solar_system_id"
-  end
-
-  create_table "crpActivities", primary_key: "activityID", id: :integer, default: nil, force: :cascade do |t|
-    t.string "activityName", limit: 100
-    t.string "description", limit: 1000
   end
 
   create_table "denormalized_map", primary_key: "item_id", id: :integer, default: nil, force: :cascade do |t|
@@ -990,7 +985,7 @@ ActiveRecord::Schema.define(version: 20170618005605) do
   add_foreign_key "bonus_traits", "items", column: "skill_id", primary_key: "type_id"
   add_foreign_key "bonus_traits", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "bonus_traits", "units", primary_key: "unit_id"
-  add_foreign_key "celestials", "universe_items", column: "celestial_id", primary_key: "item_id"
+  add_foreign_key "celestial_details", "universe_items", column: "celestial_id", primary_key: "item_id"
   add_foreign_key "certificate_masteries", "certificates", column: "cert_id", primary_key: "cert_id"
   add_foreign_key "certificate_masteries", "items", column: "type_id", primary_key: "type_id"
   add_foreign_key "certificate_skills", "certificates", column: "cert_id", primary_key: "cert_id"
