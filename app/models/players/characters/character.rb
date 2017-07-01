@@ -7,7 +7,7 @@ class Character < ApplicationRecord
   enum gender: { male: 1, female: 2 }
 
   # AssetsApi
-  has_many :assets, as: :owner
+  has_many :asset_items, as: :owner
   
   # BookmarksApi
   has_many :created_bookmarks, class_name: 'Bookmark',

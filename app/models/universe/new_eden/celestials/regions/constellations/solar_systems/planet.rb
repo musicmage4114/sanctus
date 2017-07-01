@@ -15,9 +15,7 @@ class Planet < ApplicationRecord
                temperate: 8 }
   
   belongs_to :solar_system, primary_key: :system_id, inverse_of: :planets
-  belongs_to :item_group,   foreign_key: :group_id,
-                            primary_key: :group_id,
-                            inverse_of:  :planets
+  belongs_to :type,         primary_key: :type_id,   inverse_of: :planets
   
   has_many :moons,    inverse_of: :planet
   has_many :colonies, inverse_of: :planet

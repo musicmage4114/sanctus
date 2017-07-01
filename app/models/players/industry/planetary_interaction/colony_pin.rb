@@ -11,6 +11,10 @@ class ColonyPin < ApplicationRecord
   belongs_to :schematic, primary_key: :schematic_id,
                          inverse_of:  :colony_pins,
                          optional:    true
+  belongs_to :product,   class_name:  'Item',
+                         foreign_key: :product_type_id,
+                         primary_key: :type_id,
+                         inverse_of:  :colony_pins
   
   has_many :extractor_heads, inverse_of:  :colony_pin, dependent: :destroy
   has_many :waypoints,       class_name:  'ColonyWaypoint',
